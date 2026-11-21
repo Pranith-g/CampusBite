@@ -1,0 +1,691 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-21T11:23:31+00:00",
+  "title": "Design System: CampusBite",
+  "extensions": {
+    "colorMeta": {
+      "ground": {
+        "role": "neutral",
+        "displayName": "Tawa Ground",
+        "canonical": "#15100c",
+        "oklch": "oklch(17.8% 0.012 61)",
+        "tonalRamp": [
+          "#0f0a07",
+          "#29241f",
+          "#47413c",
+          "#66605b",
+          "#88817b",
+          "#aba39e",
+          "#cfc8c2",
+          "#f5ede7"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Surface",
+        "canonical": "#1e1813",
+        "oklch": "oklch(21.4% 0.014 62)",
+        "tonalRamp": [
+          "#0f0a06",
+          "#2a241e",
+          "#47413b",
+          "#67605a",
+          "#89817a",
+          "#aca39d",
+          "#d0c7c0",
+          "#f5ede6"
+        ]
+      },
+      "surface-2": {
+        "role": "neutral",
+        "displayName": "Surface 2",
+        "canonical": "#272019",
+        "oklch": "oklch(24.9% 0.017 67)",
+        "tonalRamp": [
+          "#100a05",
+          "#2b241d",
+          "#484039",
+          "#686057",
+          "#898178",
+          "#aca39a",
+          "#d1c7be",
+          "#f6ede3"
+        ]
+      },
+      "surface-3": {
+        "role": "neutral",
+        "displayName": "Surface 3",
+        "canonical": "#31281f",
+        "oklch": "oklch(28.4% 0.021 67)",
+        "tonalRamp": [
+          "#110903",
+          "#2c231a",
+          "#4a4036",
+          "#6a5f55",
+          "#8b8076",
+          "#aea398",
+          "#d3c7bb",
+          "#f8ece0"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Warm Steel Line",
+        "canonical": "#3a2f25",
+        "oklch": "oklch(31.4% 0.023 64)",
+        "tonalRamp": [
+          "#120903",
+          "#2d2319",
+          "#4b4035",
+          "#6b5f54",
+          "#8d8074",
+          "#b0a296",
+          "#d4c6ba",
+          "#faecdf"
+        ]
+      },
+      "line-strong": {
+        "role": "neutral",
+        "displayName": "Line Strong",
+        "canonical": "#54463a",
+        "oklch": "oklch(40.5% 0.027 63)",
+        "tonalRamp": [
+          "#130802",
+          "#2f2217",
+          "#4d3f33",
+          "#6d5e52",
+          "#8f7f72",
+          "#b2a294",
+          "#d7c6b8",
+          "#fcebdc"
+        ]
+      },
+      "line-hover": {
+        "role": "neutral",
+        "displayName": "Line Hover",
+        "canonical": "#6a5a4b",
+        "oklch": "oklch(47.9% 0.031 65)",
+        "tonalRamp": [
+          "#140801",
+          "#302214",
+          "#4e3f30",
+          "#6e5e4f",
+          "#907f6f",
+          "#b3a191",
+          "#d8c6b4",
+          "#feebd9"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Cream Ink",
+        "canonical": "#f4eadb",
+        "oklch": "oklch(94.1% 0.023 78)",
+        "tonalRamp": [
+          "#100a02",
+          "#2b2418",
+          "#494135",
+          "#686053",
+          "#8a8173",
+          "#ada496",
+          "#d1c8b9",
+          "#f7edde"
+        ]
+      },
+      "ink-2": {
+        "role": "neutral",
+        "displayName": "Ink 2",
+        "canonical": "#cdbfaa",
+        "oklch": "oklch(81.1% 0.033 78)",
+        "tonalRamp": [
+          "#120900",
+          "#2e2312",
+          "#4c402e",
+          "#6c5f4c",
+          "#8d806d",
+          "#b1a38f",
+          "#d5c7b2",
+          "#fbecd7"
+        ]
+      },
+      "ink-3": {
+        "role": "neutral",
+        "displayName": "Ink 3",
+        "canonical": "#a3937e",
+        "oklch": "oklch(67.2% 0.035 75)",
+        "tonalRamp": [
+          "#130900",
+          "#2f2210",
+          "#4d3f2d",
+          "#6d5f4b",
+          "#8f806b",
+          "#b3a28d",
+          "#d7c6b0",
+          "#fdecd5"
+        ]
+      },
+      "turmeric": {
+        "role": "primary",
+        "displayName": "Turmeric Amber",
+        "canonical": "#f0a531",
+        "oklch": "oklch(77.7% 0.151 73)",
+        "tonalRamp": [
+          "#130900",
+          "#352002",
+          "#5b3a05",
+          "#855600",
+          "#b07401",
+          "#dd9311",
+          "#ffba5b",
+          "#ffebd4"
+        ]
+      },
+      "turmeric-hover": {
+        "role": "primary",
+        "displayName": "Turmeric Hover",
+        "canonical": "#f6b44c",
+        "oklch": "oklch(81.3% 0.140 76)",
+        "tonalRamp": [
+          "#130900",
+          "#342000",
+          "#5a3b00",
+          "#835701",
+          "#ad7604",
+          "#d79727",
+          "#febb54",
+          "#ffebd1"
+        ]
+      },
+      "turmeric-soft": {
+        "role": "primary",
+        "displayName": "Turmeric Soft",
+        "canonical": "#3a2a12",
+        "oklch": "oklch(29.8% 0.044 76)",
+        "tonalRamp": [
+          "#130900",
+          "#312209",
+          "#503f27",
+          "#705e45",
+          "#927f65",
+          "#b5a287",
+          "#dac6aa",
+          "#feebd2"
+        ]
+      },
+      "turmeric-ink": {
+        "role": "primary",
+        "displayName": "Turmeric Ink",
+        "canonical": "#2a1a04",
+        "oklch": "oklch(23.3% 0.043 73)",
+        "tonalRamp": [
+          "#130900",
+          "#32210b",
+          "#503e28",
+          "#715e46",
+          "#937f66",
+          "#b6a188",
+          "#dbc5ab",
+          "#feebd4"
+        ]
+      },
+      "leaf": {
+        "role": "secondary",
+        "displayName": "Curry-Leaf Green",
+        "canonical": "#8cc764",
+        "oklch": "oklch(76.7% 0.144 134)",
+        "tonalRamp": [
+          "#040f00",
+          "#152c01",
+          "#284d03",
+          "#3e7109",
+          "#5c9430",
+          "#7eb856",
+          "#a1de7a",
+          "#d1ffb6"
+        ]
+      },
+      "leaf-soft": {
+        "role": "secondary",
+        "displayName": "Leaf Soft",
+        "canonical": "#1f2c15",
+        "oklch": "oklch(27.4% 0.044 133)",
+        "tonalRamp": [
+          "#050f00",
+          "#1d2a13",
+          "#39472f",
+          "#58674d",
+          "#78886d",
+          "#9bab8f",
+          "#bed0b3",
+          "#e3f5d7"
+        ]
+      },
+      "leaf-soft-hover": {
+        "role": "secondary",
+        "displayName": "Leaf Soft Hover",
+        "canonical": "#283a1b",
+        "oklch": "oklch(32.4% 0.056 133)",
+        "tonalRamp": [
+          "#040f00",
+          "#1a2b0c",
+          "#364929",
+          "#546847",
+          "#758a67",
+          "#97ad89",
+          "#bbd2ac",
+          "#e0f7d1"
+        ]
+      },
+      "leaf-line": {
+        "role": "secondary",
+        "displayName": "Leaf Line",
+        "canonical": "#3d5a29",
+        "oklch": "oklch(43.2% 0.082 134)",
+        "tonalRamp": [
+          "#040f00",
+          "#152c01",
+          "#2f4b1a",
+          "#4e6b3a",
+          "#6e8d5a",
+          "#90b17c",
+          "#b3d59f",
+          "#d8fbc3"
+        ]
+      },
+      "chilli": {
+        "role": "tertiary",
+        "displayName": "Chilli Red",
+        "canonical": "#ec5b42",
+        "oklch": "oklch(65.7% 0.184 32)",
+        "tonalRamp": [
+          "#1e0100",
+          "#4a0700",
+          "#7c1201",
+          "#b21f03",
+          "#da4a32",
+          "#fb785f",
+          "#feb4a5",
+          "#ffe9e4"
+        ]
+      },
+      "chilli-text": {
+        "role": "tertiary",
+        "displayName": "Chilli Text",
+        "canonical": "#ff9a86",
+        "oklch": "oklch(78.6% 0.125 32)",
+        "tonalRamp": [
+          "#1e0100",
+          "#490801",
+          "#761e0f",
+          "#9c4130",
+          "#c26351",
+          "#e98672",
+          "#fdb5a6",
+          "#fee9e4"
+        ]
+      },
+      "dial-face": {
+        "role": "neutral",
+        "displayName": "Dial Face",
+        "canonical": "#1a1410",
+        "oklch": "oklch(19.7% 0.013 56)",
+        "tonalRamp": [
+          "#0f0a06",
+          "#2a241f",
+          "#48403c",
+          "#67605b",
+          "#89817b",
+          "#aca39e",
+          "#d0c7c1",
+          "#f6ece7"
+        ]
+      },
+      "dial-ring": {
+        "role": "neutral",
+        "displayName": "Dial Ring",
+        "canonical": "#2c241c",
+        "oklch": "oklch(26.7% 0.019 67)",
+        "tonalRamp": [
+          "#100a04",
+          "#2b231b",
+          "#494038",
+          "#695f56",
+          "#8a8077",
+          "#ada399",
+          "#d2c7bd",
+          "#f7ece2"
+        ]
+      },
+      "tick-empty": {
+        "role": "neutral",
+        "displayName": "Tick Empty",
+        "canonical": "#3e3329",
+        "oklch": "oklch(33.0% 0.023 64)",
+        "tonalRamp": [
+          "#120903",
+          "#2d2319",
+          "#4b4035",
+          "#6b5f54",
+          "#8d8074",
+          "#b0a296",
+          "#d4c6ba",
+          "#faecdf"
+        ]
+      },
+      "tick-filled": {
+        "role": "primary",
+        "displayName": "Tick Filled",
+        "canonical": "#c98a2a",
+        "oklch": "oklch(68.1% 0.131 73)",
+        "tonalRamp": [
+          "#130900",
+          "#352001",
+          "#5b3a04",
+          "#84570b",
+          "#af7513",
+          "#d6973a",
+          "#fdbb61",
+          "#ffebd3"
+        ]
+      },
+      "tick-full": {
+        "role": "tertiary",
+        "displayName": "Tick Full",
+        "canonical": "#c8432e",
+        "oklch": "oklch(56.8% 0.173 32)",
+        "tonalRamp": [
+          "#1e0100",
+          "#4a0701",
+          "#7c1303",
+          "#ae2814",
+          "#d6503a",
+          "#fe755d",
+          "#fdb4a5",
+          "#ffe9e4"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "token-display": {
+        "displayName": "Token Display",
+        "purpose": "Calling-banner number on the student board."
+      },
+      "token-dial": {
+        "displayName": "Token Dial",
+        "purpose": "Next token inside the dial; 50px under 860px."
+      },
+      "token-board": {
+        "displayName": "Token Board",
+        "purpose": "Preparing and Ready board tiles; 40px under 860px."
+      },
+      "token-row": {
+        "displayName": "Token Row",
+        "purpose": "Shelf row token numbers."
+      },
+      "token-chip": {
+        "displayName": "Token Chip",
+        "purpose": "Front-to-rear strip chips."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Calling banner sentence."
+      },
+      "headline-sm": {
+        "displayName": "Headline Small",
+        "purpose": "Board column headings."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Panel headings and top-bar readout values."
+      },
+      "brand": {
+        "displayName": "Brand",
+        "purpose": "Wordmark in the top bar."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Running text."
+      },
+      "ui": {
+        "displayName": "UI",
+        "purpose": "Buttons, inputs, tabs, menu item names."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Field labels, panel counts, readout captions."
+      },
+      "meta": {
+        "displayName": "Meta",
+        "purpose": "Prices, prep times, slot indexes, queue position."
+      },
+      "mono": {
+        "displayName": "Mono",
+        "purpose": "C operation readout only."
+      }
+    },
+    "shadows": [
+      {
+        "name": "plate",
+        "value": "0 1px 0 rgba(255, 240, 220, .05) inset, 0 14px 28px -10px rgba(0, 0, 0, .85), 0 2px 4px rgba(0, 0, 0, .45)",
+        "purpose": "Every panel and the calling banner."
+      },
+      {
+        "name": "tab-selected",
+        "value": "0 1px 2px rgba(0,0,0,.4)",
+        "purpose": "Active tab inside the tab track."
+      },
+      {
+        "name": "focus-ring",
+        "value": "0 0 0 3px rgba(240, 165, 49, .18)",
+        "purpose": "Text input focus; hard spread, no blur."
+      },
+      {
+        "name": "focus-ring-invalid",
+        "value": "0 0 0 3px rgba(236, 91, 66, .2)",
+        "purpose": "Focus on an invalid text input."
+      }
+    ],
+    "focus": {
+      "outline": "2px solid #f0a531",
+      "outlineOffset": "2px",
+      "purpose": "Global :focus-visible outline for every control."
+    },
+    "motion": [
+      {
+        "name": "ease",
+        "value": "cubic-bezier(.2, .8, .2, 1)",
+        "purpose": "Ease-out curve for the dial hands."
+      },
+      {
+        "name": "hand-sweep",
+        "value": "transform 200ms cubic-bezier(.2, .8, .2, 1)",
+        "purpose": "FRONT and REAR rotate one slot per operation, always forward, wrapping past slot 0."
+      },
+      {
+        "name": "tick-recolour",
+        "value": "stroke 200ms, stroke-width 200ms",
+        "purpose": "Slot ticks fill, empty and turn full."
+      },
+      {
+        "name": "control",
+        "value": "background 150ms, border-color 150ms, color 150ms",
+        "purpose": "Buttons, tabs, inputs."
+      },
+      {
+        "name": "press",
+        "value": "transform 100ms; translateY(1px)",
+        "purpose": "Button active state."
+      },
+      {
+        "name": "readout-colour",
+        "value": "color 200ms",
+        "purpose": "Readouts and counts shifting to busy or full."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "transition: none on hands and ticks",
+        "purpose": "prefers-reduced-motion: reduce."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "lg",
+        "value": "1320px",
+        "purpose": "Below: two-column counter, right column spans as two panels, Served/Revenue hidden."
+      },
+      {
+        "name": "md",
+        "value": "1100px",
+        "purpose": "Below: top-bar search hidden."
+      },
+      {
+        "name": "sm",
+        "value": "860px",
+        "purpose": "Below: single column (dial, form, shelf), wrapped top bar, smaller tokens, dial numerals every 10."
+      }
+    ],
+    "icons": {
+      "set": "Tabler Icons (outline, 2px stroke)",
+      "sizes": "17px in buttons, 16px in messages, 15px in steppers",
+      "note": "Production should import SVG icons (e.g. @tabler/icons-react); the preview's CDN webfont is a delivery shortcut, not part of the system."
+    }
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one turmeric action per view: Issue token. Blocked state relabels and drops to surface-3.",
+      "html": "<button class=\"ds-btn ds-btn-primary\" type=\"button\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M15 5v2\"/><path d=\"M15 11v2\"/><path d=\"M15 17v2\"/><path d=\"M5 5h14a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-3a2 2 0 0 0 0 -4v-3a2 2 0 0 1 2 -2\"/></svg><span>Issue token #214</span></button> <button class=\"ds-btn ds-btn-primary\" type=\"button\" disabled><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M15 5v2\"/><path d=\"M15 11v2\"/><path d=\"M15 17v2\"/><path d=\"M5 5h14a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-3a2 2 0 0 0 0 -4v-3a2 2 0 0 1 2 -2\"/></svg><span>Kitchen full</span></button>",
+      "css": ":host{--ground:#15100c;--surface:#1e1813;--surface-2:#272019;--surface-3:#31281f;--line:#3a2f25;--line-strong:#54463a;--line-hover:#6a5a4b;--ink:#f4eadb;--ink-2:#cdbfaa;--ink-3:#a3937e;--turmeric:#f0a531;--turmeric-hover:#f6b44c;--turmeric-soft:#3a2a12;--turmeric-ink:#2a1a04;--leaf:#8cc764;--leaf-soft:#1f2c15;--leaf-soft-hover:#283a1b;--leaf-line:#3d5a29;--chilli:#ec5b42;--chilli-text:#ff9a86;--shadow:0 1px 0 rgba(255,240,220,.05) inset,0 14px 28px -10px rgba(0,0,0,.85),0 2px 4px rgba(0,0,0,.45);--ease:cubic-bezier(.2,.8,.2,1);font-family:Archivo,system-ui,sans-serif;color:var(--ink);} .ds-btn{appearance:none;font:inherit;font-family:Archivo,system-ui,sans-serif;font-size:14px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:38px;padding:0 14px;border-radius:8px;border:1px solid var(--line-strong);background:var(--surface-2);color:var(--ink);cursor:pointer;transition:background .15s,border-color .15s,color .15s,transform .1s;white-space:nowrap;} .ds-btn:hover{background:var(--surface-3);border-color:var(--line-hover);} .ds-btn:active{transform:translateY(1px);} .ds-btn:focus-visible{outline:2px solid var(--turmeric);outline-offset:2px;} .ds-btn[disabled]{cursor:not-allowed;background:var(--surface-2);border-color:var(--line);color:var(--ink-3);transform:none;} .ds-btn svg{width:17px;height:17px;} .ds-btn-primary{background:var(--turmeric);color:var(--turmeric-ink);border-color:var(--turmeric);height:46px;font-size:15px;font-weight:700;} .ds-btn-primary:hover{background:var(--turmeric-hover);border-color:var(--turmeric);} .ds-btn-primary[disabled]{background:var(--surface-3);border-color:var(--line-strong);color:var(--ink-3);}"
+    },
+    {
+      "name": "Default and Danger Buttons",
+      "kind": "button",
+      "refersTo": "button",
+      "description": "Surface-2 tool buttons; danger keeps the shape and turns the label chilli.",
+      "html": "<button class=\"ds-btn\" type=\"button\">Find token</button> <button class=\"ds-btn ds-btn-danger\" type=\"button\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M18 6l-12 12\"/><path d=\"M6 6l12 12\"/></svg>Cancel token</button>",
+      "css": ":host{--ground:#15100c;--surface:#1e1813;--surface-2:#272019;--surface-3:#31281f;--line:#3a2f25;--line-strong:#54463a;--line-hover:#6a5a4b;--ink:#f4eadb;--ink-2:#cdbfaa;--ink-3:#a3937e;--turmeric:#f0a531;--turmeric-hover:#f6b44c;--turmeric-soft:#3a2a12;--turmeric-ink:#2a1a04;--leaf:#8cc764;--leaf-soft:#1f2c15;--leaf-soft-hover:#283a1b;--leaf-line:#3d5a29;--chilli:#ec5b42;--chilli-text:#ff9a86;--shadow:0 1px 0 rgba(255,240,220,.05) inset,0 14px 28px -10px rgba(0,0,0,.85),0 2px 4px rgba(0,0,0,.45);--ease:cubic-bezier(.2,.8,.2,1);font-family:Archivo,system-ui,sans-serif;color:var(--ink);} .ds-btn{appearance:none;font:inherit;font-family:Archivo,system-ui,sans-serif;font-size:14px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:38px;padding:0 14px;border-radius:8px;border:1px solid var(--line-strong);background:var(--surface-2);color:var(--ink);cursor:pointer;transition:background .15s,border-color .15s,color .15s,transform .1s;white-space:nowrap;} .ds-btn:hover{background:var(--surface-3);border-color:var(--line-hover);} .ds-btn:active{transform:translateY(1px);} .ds-btn:focus-visible{outline:2px solid var(--turmeric);outline-offset:2px;} .ds-btn[disabled]{cursor:not-allowed;background:var(--surface-2);border-color:var(--line);color:var(--ink-3);transform:none;} .ds-btn svg{width:17px;height:17px;} .ds-btn-danger{color:var(--chilli);}"
+    },
+    {
+      "name": "Go Button",
+      "kind": "button",
+      "refersTo": "button-go",
+      "description": "Leaf action that moves an order forward: Mark ready, Hand over.",
+      "html": "<button class=\"ds-btn ds-btn-go\" type=\"button\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12l5 5l10 -10\"/></svg>Mark ready</button> <button class=\"ds-btn ds-btn-go\" type=\"button\">Hand over</button>",
+      "css": ":host{--ground:#15100c;--surface:#1e1813;--surface-2:#272019;--surface-3:#31281f;--line:#3a2f25;--line-strong:#54463a;--line-hover:#6a5a4b;--ink:#f4eadb;--ink-2:#cdbfaa;--ink-3:#a3937e;--turmeric:#f0a531;--turmeric-hover:#f6b44c;--turmeric-soft:#3a2a12;--turmeric-ink:#2a1a04;--leaf:#8cc764;--leaf-soft:#1f2c15;--leaf-soft-hover:#283a1b;--leaf-line:#3d5a29;--chilli:#ec5b42;--chilli-text:#ff9a86;--shadow:0 1px 0 rgba(255,240,220,.05) inset,0 14px 28px -10px rgba(0,0,0,.85),0 2px 4px rgba(0,0,0,.45);--ease:cubic-bezier(.2,.8,.2,1);font-family:Archivo,system-ui,sans-serif;color:var(--ink);} .ds-btn{appearance:none;font:inherit;font-family:Archivo,system-ui,sans-serif;font-size:14px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:38px;padding:0 14px;border-radius:8px;border:1px solid var(--line-strong);background:var(--surface-2);color:var(--ink);cursor:pointer;transition:background .15s,border-color .15s,color .15s,transform .1s;white-space:nowrap;} .ds-btn:hover{background:var(--surface-3);border-color:var(--line-hover);} .ds-btn:active{transform:translateY(1px);} .ds-btn:focus-visible{outline:2px solid var(--turmeric);outline-offset:2px;} .ds-btn[disabled]{cursor:not-allowed;background:var(--surface-2);border-color:var(--line);color:var(--ink-3);transform:none;} .ds-btn svg{width:17px;height:17px;} .ds-btn-go{background:var(--leaf-soft);border-color:var(--leaf-line);color:var(--leaf);} .ds-btn-go:hover{background:var(--leaf-soft-hover);border-color:var(--leaf-line);}"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Secondary tools in the queue toolbar: Rush hour, End of day, Reset.",
+      "html": "<button class=\"ds-btn ds-btn-ghost\" type=\"button\">Rush hour</button> <button class=\"ds-btn ds-btn-ghost\" type=\"button\">End of day</button>",
+      "css": ":host{--ground:#15100c;--surface:#1e1813;--surface-2:#272019;--surface-3:#31281f;--line:#3a2f25;--line-strong:#54463a;--line-hover:#6a5a4b;--ink:#f4eadb;--ink-2:#cdbfaa;--ink-3:#a3937e;--turmeric:#f0a531;--turmeric-hover:#f6b44c;--turmeric-soft:#3a2a12;--turmeric-ink:#2a1a04;--leaf:#8cc764;--leaf-soft:#1f2c15;--leaf-soft-hover:#283a1b;--leaf-line:#3d5a29;--chilli:#ec5b42;--chilli-text:#ff9a86;--shadow:0 1px 0 rgba(255,240,220,.05) inset,0 14px 28px -10px rgba(0,0,0,.85),0 2px 4px rgba(0,0,0,.45);--ease:cubic-bezier(.2,.8,.2,1);font-family:Archivo,system-ui,sans-serif;color:var(--ink);} .ds-btn{appearance:none;font:inherit;font-family:Archivo,system-ui,sans-serif;font-size:14px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:38px;padding:0 14px;border-radius:8px;border:1px solid var(--line-strong);background:var(--surface-2);color:var(--ink);cursor:pointer;transition:background .15s,border-color .15s,color .15s,transform .1s;white-space:nowrap;} .ds-btn:hover{background:var(--surface-3);border-color:var(--line-hover);} .ds-btn:active{transform:translateY(1px);} .ds-btn:focus-visible{outline:2px solid var(--turmeric);outline-offset:2px;} .ds-btn[disabled]{cursor:not-allowed;background:var(--surface-2);border-color:var(--line);color:var(--ink-3);transform:none;} .ds-btn svg{width:17px;height:17px;} .ds-btn-ghost{background:none;border-color:transparent;color:var(--ink-2);} .ds-btn-ghost:hover{background:var(--surface-2);border-color:transparent;color:var(--ink);}"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "input-text",
+      "description": "Ground well with turmeric focus spread; invalid state adds a chilli border and a message that names the fix.",
+      "html": "<div class=\"ds-field\"><label for=\"ds-n\">Student name</label><input class=\"ds-input\" id=\"ds-n\" type=\"text\" value=\"Ananya Rao\"></div><div class=\"ds-field\"><label for=\"ds-u\">USN</label><input class=\"ds-input ds-invalid\" id=\"ds-u\" type=\"text\" value=\"1DS24CS0\" aria-invalid=\"true\"><div class=\"ds-msg\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0\"/><path d=\"M12 8v4\"/><path d=\"M12 16h.01\"/></svg><span>1DS24CS0 isn't a valid USN. Use 10 characters like 1DS24CS017.</span></div></div>",
+      "css": ":host{--ground:#15100c;--surface:#1e1813;--surface-2:#272019;--surface-3:#31281f;--line:#3a2f25;--line-strong:#54463a;--line-hover:#6a5a4b;--ink:#f4eadb;--ink-2:#cdbfaa;--ink-3:#a3937e;--turmeric:#f0a531;--turmeric-hover:#f6b44c;--turmeric-soft:#3a2a12;--turmeric-ink:#2a1a04;--leaf:#8cc764;--leaf-soft:#1f2c15;--leaf-soft-hover:#283a1b;--leaf-line:#3d5a29;--chilli:#ec5b42;--chilli-text:#ff9a86;--shadow:0 1px 0 rgba(255,240,220,.05) inset,0 14px 28px -10px rgba(0,0,0,.85),0 2px 4px rgba(0,0,0,.45);--ease:cubic-bezier(.2,.8,.2,1);font-family:Archivo,system-ui,sans-serif;color:var(--ink);} .ds-field{display:grid;gap:6px;margin-bottom:12px;width:300px;} .ds-field label{font-size:13px;color:var(--ink-2);font-weight:500;} .ds-input{font:inherit;font-size:14px;color:var(--ink);background:var(--ground);border:1px solid var(--line-strong);border-radius:8px;height:38px;padding:0 12px;width:100%;transition:border-color .15s,box-shadow .15s;font-variant-numeric:tabular-nums;} .ds-input::placeholder{color:var(--ink-3);} .ds-input:hover{border-color:var(--line-hover);} .ds-input:focus{outline:none;border-color:var(--turmeric);box-shadow:0 0 0 3px rgba(240,165,49,.18);} .ds-input.ds-invalid{border-color:var(--chilli);} .ds-input.ds-invalid:focus{border-color:var(--chilli);box-shadow:0 0 0 3px rgba(236,91,66,.2);} .ds-msg{display:flex;gap:8px;font-size:13px;line-height:1.4;color:var(--chilli-text);} .ds-msg svg{width:16px;height:16px;flex:none;margin-top:1px;color:var(--chilli);}"
+    },
+    {
+      "name": "View Tabs",
+      "kind": "nav",
+      "refersTo": "tab",
+      "description": "Counter / Student board switch in a ground track.",
+      "html": "<div class=\"ds-tabs\" role=\"tablist\"><button class=\"ds-tab\" role=\"tab\" aria-selected=\"true\">Counter</button><button class=\"ds-tab\" role=\"tab\" aria-selected=\"false\">Student board</button></div>",
+      "css": ":host{--ground:#15100c;--surface:#1e1813;--surface-2:#272019;--surface-3:#31281f;--line:#3a2f25;--line-strong:#54463a;--line-hover:#6a5a4b;--ink:#f4eadb;--ink-2:#cdbfaa;--ink-3:#a3937e;--turmeric:#f0a531;--turmeric-hover:#f6b44c;--turmeric-soft:#3a2a12;--turmeric-ink:#2a1a04;--leaf:#8cc764;--leaf-soft:#1f2c15;--leaf-soft-hover:#283a1b;--leaf-line:#3d5a29;--chilli:#ec5b42;--chilli-text:#ff9a86;--shadow:0 1px 0 rgba(255,240,220,.05) inset,0 14px 28px -10px rgba(0,0,0,.85),0 2px 4px rgba(0,0,0,.45);--ease:cubic-bezier(.2,.8,.2,1);font-family:Archivo,system-ui,sans-serif;color:var(--ink);} .ds-tabs{display:inline-flex;gap:2px;background:var(--ground);padding:3px;border-radius:9px;border:1px solid var(--line);} .ds-tab{appearance:none;border:0;background:none;color:var(--ink-2);font:inherit;font-size:14px;font-weight:500;padding:7px 14px;border-radius:7px;cursor:pointer;transition:background .15s,color .15s;} .ds-tab:hover{color:var(--ink);} .ds-tab:focus-visible{outline:2px solid var(--turmeric);outline-offset:2px;} .ds-tab[aria-selected=true]{background:var(--surface-3);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.4);}"
+    },
+    {
+      "name": "Token Chips",
+      "kind": "chip",
+      "refersTo": "token-chip",
+      "description": "Front-to-rear strip; the front chip carries turmeric.",
+      "html": "<div class=\"ds-strip\"><div class=\"ds-chip ds-front\"><div class=\"ds-ix\">slot 44</div><div class=\"ds-t\">198</div><div class=\"ds-n\">Ravi Kumar</div></div><div class=\"ds-chip\"><div class=\"ds-ix\">slot 45</div><div class=\"ds-t\">199</div><div class=\"ds-n\">Ananya Rao</div></div><div class=\"ds-chip ds-more\">+14 more</div></div>",
+      "css": ":host{--ground:#15100c;--surface:#1e1813;--surface-2:#272019;--surface-3:#31281f;--line:#3a2f25;--line-strong:#54463a;--line-hover:#6a5a4b;--ink:#f4eadb;--ink-2:#cdbfaa;--ink-3:#a3937e;--turmeric:#f0a531;--turmeric-hover:#f6b44c;--turmeric-soft:#3a2a12;--turmeric-ink:#2a1a04;--leaf:#8cc764;--leaf-soft:#1f2c15;--leaf-soft-hover:#283a1b;--leaf-line:#3d5a29;--chilli:#ec5b42;--chilli-text:#ff9a86;--shadow:0 1px 0 rgba(255,240,220,.05) inset,0 14px 28px -10px rgba(0,0,0,.85),0 2px 4px rgba(0,0,0,.45);--ease:cubic-bezier(.2,.8,.2,1);font-family:Archivo,system-ui,sans-serif;color:var(--ink);} .ds-strip{display:flex;gap:8px;} .ds-chip{flex:none;min-width:96px;background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-variant-numeric:tabular-nums;} .ds-ix{font-size:12px;color:var(--ink-3);} .ds-t{font-size:26px;line-height:1.05;font-stretch:68%;font-weight:800;letter-spacing:-.01em;} .ds-n{font-size:12.5px;color:var(--ink-2);white-space:nowrap;} .ds-front{border-color:var(--turmeric);background:var(--turmeric-soft);} .ds-front .ds-t{color:var(--turmeric);} .ds-more{display:grid;place-items:center;color:var(--ink-3);font-size:13px;}"
+    },
+    {
+      "name": "Panel with C Readout",
+      "kind": "card",
+      "refersTo": "panel",
+      "description": "Iron-plate panel with heading row; the C operation readout is the only mono text.",
+      "html": "<section class=\"ds-panel\"><div class=\"ds-ph\"><h2>Last operation</h2><span>from the C program</span></div><div class=\"ds-pad\"><div class=\"ds-cur\"><span class=\"ds-o\">O(1)</span><b>enqueue</b>(&amp;kitchen, #213)\nrear  = (8 + 1) % 50 = 9\ncount = 15 + 1 = 16</div></div></section>",
+      "css": ":host{--ground:#15100c;--surface:#1e1813;--surface-2:#272019;--surface-3:#31281f;--line:#3a2f25;--line-strong:#54463a;--line-hover:#6a5a4b;--ink:#f4eadb;--ink-2:#cdbfaa;--ink-3:#a3937e;--turmeric:#f0a531;--turmeric-hover:#f6b44c;--turmeric-soft:#3a2a12;--turmeric-ink:#2a1a04;--leaf:#8cc764;--leaf-soft:#1f2c15;--leaf-soft-hover:#283a1b;--leaf-line:#3d5a29;--chilli:#ec5b42;--chilli-text:#ff9a86;--shadow:0 1px 0 rgba(255,240,220,.05) inset,0 14px 28px -10px rgba(0,0,0,.85),0 2px 4px rgba(0,0,0,.45);--ease:cubic-bezier(.2,.8,.2,1);font-family:Archivo,system-ui,sans-serif;color:var(--ink);} .ds-panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);width:360px;} .ds-ph{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:16px 18px 0;} .ds-ph h2{font-size:17px;font-weight:700;margin:0;} .ds-ph span{font-size:13px;color:var(--ink-3);} .ds-pad{padding:16px 18px 18px;} .ds-cur{font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.75;background:var(--ground);border:1px solid var(--line);border-radius:10px;padding:12px 14px;color:var(--ink-2);white-space:pre-wrap;} .ds-cur b{color:var(--turmeric);font-weight:600;} .ds-o{float:right;color:var(--leaf);}"
+    },
+    {
+      "name": "Board Tiles",
+      "kind": "card",
+      "refersTo": "board-tile",
+      "description": "Student board token tiles: Next in turmeric, Ready in leaf.",
+      "html": "<div class=\"ds-big\"><div class=\"ds-next\"><small>Next</small>198</div><div>199</div><div>200</div><div class=\"ds-ready\">194</div><div class=\"ds-ready\">195</div></div>",
+      "css": ":host{--ground:#15100c;--surface:#1e1813;--surface-2:#272019;--surface-3:#31281f;--line:#3a2f25;--line-strong:#54463a;--line-hover:#6a5a4b;--ink:#f4eadb;--ink-2:#cdbfaa;--ink-3:#a3937e;--turmeric:#f0a531;--turmeric-hover:#f6b44c;--turmeric-soft:#3a2a12;--turmeric-ink:#2a1a04;--leaf:#8cc764;--leaf-soft:#1f2c15;--leaf-soft-hover:#283a1b;--leaf-line:#3d5a29;--chilli:#ec5b42;--chilli-text:#ff9a86;--shadow:0 1px 0 rgba(255,240,220,.05) inset,0 14px 28px -10px rgba(0,0,0,.85),0 2px 4px rgba(0,0,0,.45);--ease:cubic-bezier(.2,.8,.2,1);font-family:Archivo,system-ui,sans-serif;color:var(--ink);} .ds-big{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;width:820px;} .ds-big>div{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:10px 16px;font-size:64px;line-height:1;font-stretch:68%;font-weight:800;letter-spacing:-.01em;font-variant-numeric:tabular-nums;} .ds-big small{display:block;font-size:13px;font-stretch:100%;font-weight:500;color:var(--ink-3);letter-spacing:0;margin-bottom:2px;} .ds-big .ds-next{color:var(--turmeric);border-color:var(--turmeric);background:var(--turmeric-soft);} .ds-big .ds-ready{color:var(--leaf);border-color:var(--leaf-line);background:var(--leaf-soft);}"
+    },
+    {
+      "name": "Kitchen Dial",
+      "kind": "custom",
+      "refersTo": "",
+      "description": "Signature: 50-slot circular queue with FRONT and REAR hands that sweep forward at 200ms and wrap past slot 0.",
+      "html": "<div class=\"ds-dial\"><svg viewBox=\"-36 -36 672 672\" role=\"img\" aria-label=\"Circular kitchen queue of 50 slots. 16 in use. Front at slot 44, rear at slot 9.\"><circle cx=\"300\" cy=\"300\" r=\"226\" fill=\"none\" stroke=\"#2c241c\"/><circle cx=\"300\" cy=\"300\" r=\"150\" fill=\"#1a1410\" stroke=\"#2c241c\"/><line x1=\"300.0\" y1=\"114.0\" x2=\"300.0\" y2=\"84.0\" stroke=\"#c98a2a\" stroke-width=\"9\" stroke-linecap=\"round\"/><text x=\"300.0\" y=\"57.0\" text-anchor=\"middle\" font-size=\"20\" font-weight=\"600\" fill=\"#a3937e\">0</text><line x1=\"323.3\" y1=\"115.5\" x2=\"327.1\" y2=\"85.7\" stroke=\"#c98a2a\" stroke-width=\"9\" stroke-linecap=\"round\"/><line x1=\"346.3\" y1=\"119.8\" x2=\"353.7\" y2=\"90.8\" stroke=\"#c98a2a\" stroke-width=\"9\" stroke-linecap=\"round\"/><line x1=\"368.5\" y1=\"127.1\" x2=\"379.5\" y2=\"99.2\" stroke=\"#c98a2a\" stroke-width=\"9\" stroke-linecap=\"round\"/><line x1=\"389.6\" y1=\"137.0\" x2=\"404.1\" y2=\"110.7\" stroke=\"#c98a2a\" stroke-width=\"9\" stroke-linecap=\"round\"/><line x1=\"409.3\" y1=\"149.5\" x2=\"427.0\" y2=\"125.3\" stroke=\"#c98a2a\" stroke-width=\"9\" stroke-linecap=\"round\"/><text x=\"446.9\" y=\"104.7\" text-anchor=\"middle\" font-size=\"20\" font-weight=\"600\" fill=\"#a3937e\">5</text><line x1=\"427.3\" y1=\"164.4\" x2=\"447.9\" y2=\"142.5\" stroke=\"#c98a2a\" stroke-width=\"9\" stroke-linecap=\"round\"/><line x1=\"443.3\" y1=\"181.4\" x2=\"466.4\" y2=\"162.3\" stroke=\"#c98a2a\" stroke-width=\"9\" stroke-linecap=\"round\"/><line x1=\"457.0\" y1=\"200.3\" x2=\"482.4\" y2=\"184.3\" stroke=\"#c98a2a\" stroke-width=\"9\" stroke-linecap=\"round\"/><line x1=\"468.3\" y1=\"220.8\" x2=\"495.4\" y2=\"208.0\" stroke=\"#c98a2a\" stroke-width=\"9\" stroke-linecap=\"round\"/><line x1=\"476.9\" y1=\"242.5\" x2=\"505.4\" y2=\"233.3\" stroke=\"#3e3329\" stroke-width=\"3\" stroke-linecap=\"round\"/><text x=\"537.8\" y=\"229.7\" text-anchor=\"middle\" font-size=\"20\" font-weight=\"600\" fill=\"#a3937e\">10</text><line x1=\"482.7\" y1=\"265.1\" x2=\"512.2\" y2=\"259.5\" stroke=\"#3e3329\" stroke-width=\"3\" stroke-linecap=\"round\"/><line x1=\"485.6\" y1=\"288.3\" x2=\"515.6\" y2=\"286.4\" stroke=\"#3e3329\" stroke-width=\"3\" stroke-linecap=\"round\"/><line x1=\"485.6\" y1=\"311.7\" x2=\"515.6\" y2=\"313.6\" stroke=\"#3e3329\" stroke-width=\"3\" stroke-linecap=\"round\"/><line x1=\"482.7\" y1=\"334.9\" x2=\"512.2\" y2=\"340.5\" stroke=\"#3e3329\" stroke-width=\"3\" stroke-linecap=\"round\"/><line x1=\"476.9\" y1=\"357.5\" x2=\"505.4\" y2=\"366.7\" stroke=\"#3e3329\" stroke-width=\"3\" stroke-linecap=\"round\"/><text x=\"537.8\" y=\"384.3\" text-anchor=\"middle\" font-size=\"20\" font-weight=\"600\" fill=\"#a3937e\">15</text><line x1=\"468.3\" y1=\"379.2\" x2=\"495.4\" y2=\"392.0\" stroke=\"#3e3329\" stroke-width=\"3\" stroke-linecap=\"round\"/><line x1=\"457.0\" y1=\"399.7\" x2=\"482.4\" y2=\"415.7\" stroke=\"#3e3329\" stroke-width=\"3\" stroke-linecap=\"round\"/><line x1=\"443.3\" y1=\"418.6\" x2=\"466.4\" y2=\"437.7\" stroke=\"#3e3329\" stroke-width=\"3\" stroke-linecap=\"round\"/><line x1=\"427.3\" y1=\"435.6\" x2=\"447.9\" y2=\"457.5\" stroke=\"#3e3329\" stroke-width=\"3\" stroke-linecap=\"round\"/><line x1=\"409.3\" y1=\"450.5\" x2=\"427.0\" y2=\"474.7\" stroke=\"#3e3329\" stroke-width=\"3\" stroke-linecap=\"round\"/><text x=\"446.9\" y=\"509.3\" text-anchor=\"middle\" font-size=\"20\" font-weight=\"600\" fill=\"#a3937e\">20</text><line x1=\"389.6\" y1=\"463.0\" x2=\"404.1\" y2=\"489.3\" stroke=\"#3e3329\" stroke-width=\"3\" stroke-linecap=\"round\"/><line x1=\"368.5\" y1=\"472.9\" x2=\"379.5\" y2=\"500.8\" stroke=\"#3e3329\" stroke-width=\"3\" stroke-linecap=\"round\"/><line x1=\"346.3\" y1=\"480.2\" x2=\"353.7\" y2=\"509.2\" stroke=\"#3e3329\" stroke-width=\"3\" stroke-linecap=\"round\"/><line x1=\"323.3\" y1=\"484.5\" x2=\"327.1\" y2=\"514.3\" stroke=\"#3e3329\" stroke-width=\"3\" stroke-linecap=\"round\"/><line x1=\"300.0\" y1=\"486.0\" x2=\"300.0\" y2=\"516.0\" stroke=\"#3e3329\" stroke-width=\"3\" stroke-linecap=\"round\"/><text x=\"300.0\" y=\"557.0\" text-anchor=\"middle\" font-size=\"20\" font-weight=\"600\" fill=\"#a3937e\">25</text><line x1=\"276.7\" y1=\"484.5\" x2=\"272.9\" y2=\"514.3\" stroke=\"#3e3329\" stroke-width=\"3\" stroke-linecap=\"round\"/><line x1=\"253.7\" y1=\"480.2\" x2=\"246.3\" y2=\"509.2\" stroke=\"#3e3329\" stroke-width=\"3\" stroke-linecap=\"round\"/><line x1=\"231.5\" y1=\"472.9\" x2=\"220.5\" y2=\"500.8\" stroke=\"#3e3329\" stroke-width=\"3\" stroke-linecap=\"round\"/><line x1=\"210.4\" y1=\"463.0\" x2=\"195.9\" y2=\"489.3\" stroke=\"#3e3329\" stroke-width=\"3\" stroke-linecap=\"round\"/><line x1=\"190.7\" y1=\"450.5\" x2=\"173.0\" y2=\"474.7\" stroke=\"#3e3329\" stroke-width=\"3\" stroke-linecap=\"round\"/><text x=\"153.1\" y=\"509.3\" text-anchor=\"middle\" font-size=\"20\" font-weight=\"600\" fill=\"#a3937e\">30</text><line x1=\"172.7\" y1=\"435.6\" x2=\"152.1\" y2=\"457.5\" stroke=\"#3e3329\" stroke-width=\"3\" stroke-linecap=\"round\"/><line x1=\"156.7\" y1=\"418.6\" x2=\"133.6\" y2=\"437.7\" stroke=\"#3e3329\" stroke-width=\"3\" stroke-linecap=\"round\"/><line x1=\"143.0\" y1=\"399.7\" x2=\"117.6\" y2=\"415.7\" stroke=\"#3e3329\" stroke-width=\"3\" stroke-linecap=\"round\"/><line x1=\"131.7\" y1=\"379.2\" x2=\"104.6\" y2=\"392.0\" stroke=\"#3e3329\" stroke-width=\"3\" stroke-linecap=\"round\"/><line x1=\"123.1\" y1=\"357.5\" x2=\"94.6\" y2=\"366.7\" stroke=\"#3e3329\" stroke-width=\"3\" stroke-linecap=\"round\"/><text x=\"62.2\" y=\"384.3\" text-anchor=\"middle\" font-size=\"20\" font-weight=\"600\" fill=\"#a3937e\">35</text><line x1=\"117.3\" y1=\"334.9\" x2=\"87.8\" y2=\"340.5\" stroke=\"#3e3329\" stroke-width=\"3\" stroke-linecap=\"round\"/><line x1=\"114.4\" y1=\"311.7\" x2=\"84.4\" y2=\"313.6\" stroke=\"#3e3329\" stroke-width=\"3\" stroke-linecap=\"round\"/><line x1=\"114.4\" y1=\"288.3\" x2=\"84.4\" y2=\"286.4\" stroke=\"#3e3329\" stroke-width=\"3\" stroke-linecap=\"round\"/><line x1=\"117.3\" y1=\"265.1\" x2=\"87.8\" y2=\"259.5\" stroke=\"#3e3329\" stroke-width=\"3\" stroke-linecap=\"round\"/><line x1=\"123.1\" y1=\"242.5\" x2=\"94.6\" y2=\"233.3\" stroke=\"#3e3329\" stroke-width=\"3\" stroke-linecap=\"round\"/><text x=\"62.2\" y=\"229.7\" text-anchor=\"middle\" font-size=\"20\" font-weight=\"600\" fill=\"#a3937e\">40</text><line x1=\"131.7\" y1=\"220.8\" x2=\"104.6\" y2=\"208.0\" stroke=\"#3e3329\" stroke-width=\"3\" stroke-linecap=\"round\"/><line x1=\"143.0\" y1=\"200.3\" x2=\"117.6\" y2=\"184.3\" stroke=\"#3e3329\" stroke-width=\"3\" stroke-linecap=\"round\"/><line x1=\"156.7\" y1=\"181.4\" x2=\"133.6\" y2=\"162.3\" stroke=\"#3e3329\" stroke-width=\"3\" stroke-linecap=\"round\"/><line x1=\"172.7\" y1=\"164.4\" x2=\"152.1\" y2=\"142.5\" stroke=\"#f0a531\" stroke-width=\"9\" stroke-linecap=\"round\"/><line x1=\"190.7\" y1=\"149.5\" x2=\"173.0\" y2=\"125.3\" stroke=\"#c98a2a\" stroke-width=\"9\" stroke-linecap=\"round\"/><text x=\"153.1\" y=\"104.7\" text-anchor=\"middle\" font-size=\"20\" font-weight=\"600\" fill=\"#a3937e\">45</text><line x1=\"210.4\" y1=\"137.0\" x2=\"195.9\" y2=\"110.7\" stroke=\"#c98a2a\" stroke-width=\"9\" stroke-linecap=\"round\"/><line x1=\"231.5\" y1=\"127.1\" x2=\"220.5\" y2=\"99.2\" stroke=\"#c98a2a\" stroke-width=\"9\" stroke-linecap=\"round\"/><line x1=\"253.7\" y1=\"119.8\" x2=\"246.3\" y2=\"90.8\" stroke=\"#c98a2a\" stroke-width=\"9\" stroke-linecap=\"round\"/><line x1=\"276.7\" y1=\"115.5\" x2=\"272.9\" y2=\"85.7\" stroke=\"#c98a2a\" stroke-width=\"9\" stroke-linecap=\"round\"/><g class=\"ds-hand\" style=\"transform:rotate(316.8deg)\"><line x1=\"300\" y1=\"144\" x2=\"300\" y2=\"124\" stroke=\"#f0a531\" stroke-width=\"4\" stroke-linecap=\"round\"/><path d=\"M 293 72 L 307 72 L 300 86 Z\" fill=\"#f0a531\"/><g transform=\"rotate(-316.8 300 0)\"><rect x=\"268\" y=\"-12\" width=\"64\" height=\"24\" rx=\"6\" fill=\"#f0a531\"/><text x=\"300\" y=\"5\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#2a1a04\">FRONT</text></g></g><g class=\"ds-hand\" style=\"transform:rotate(64.8deg)\"><line x1=\"300\" y1=\"144\" x2=\"300\" y2=\"124\" stroke=\"#f4eadb\" stroke-width=\"4\" stroke-linecap=\"round\"/><path d=\"M 293 72 L 307 72 L 300 86 Z\" fill=\"#f4eadb\"/><g transform=\"rotate(-64.8 300 0)\"><rect x=\"268\" y=\"-12\" width=\"64\" height=\"24\" rx=\"6\" fill=\"#f4eadb\"/><text x=\"300\" y=\"5\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#15100c\">REAR</text></g></g></svg><div class=\"ds-dial-c\"><div class=\"ds-dial-l\">Next up</div><div class=\"ds-dial-t\">#198</div><div class=\"ds-dial-w\">Ravi Kumar · 2 masala dosa, filter coffee · waiting 6 min</div><button class=\"ds-btn ds-btn-go\" type=\"button\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12l5 5l10 -10\"/></svg>Mark ready</button></div></div>",
+      "css": ":host{--ground:#15100c;--surface:#1e1813;--surface-2:#272019;--surface-3:#31281f;--line:#3a2f25;--line-strong:#54463a;--line-hover:#6a5a4b;--ink:#f4eadb;--ink-2:#cdbfaa;--ink-3:#a3937e;--turmeric:#f0a531;--turmeric-hover:#f6b44c;--turmeric-soft:#3a2a12;--turmeric-ink:#2a1a04;--leaf:#8cc764;--leaf-soft:#1f2c15;--leaf-soft-hover:#283a1b;--leaf-line:#3d5a29;--chilli:#ec5b42;--chilli-text:#ff9a86;--shadow:0 1px 0 rgba(255,240,220,.05) inset,0 14px 28px -10px rgba(0,0,0,.85),0 2px 4px rgba(0,0,0,.45);--ease:cubic-bezier(.2,.8,.2,1);font-family:Archivo,system-ui,sans-serif;color:var(--ink);} .ds-btn{appearance:none;font:inherit;font-family:Archivo,system-ui,sans-serif;font-size:14px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:38px;padding:0 14px;border-radius:8px;border:1px solid var(--line-strong);background:var(--surface-2);color:var(--ink);cursor:pointer;transition:background .15s,border-color .15s,color .15s,transform .1s;white-space:nowrap;} .ds-btn:hover{background:var(--surface-3);border-color:var(--line-hover);} .ds-btn:active{transform:translateY(1px);} .ds-btn:focus-visible{outline:2px solid var(--turmeric);outline-offset:2px;} .ds-btn[disabled]{cursor:not-allowed;background:var(--surface-2);border-color:var(--line);color:var(--ink-3);transform:none;} .ds-btn svg{width:17px;height:17px;} .ds-btn-go{background:var(--leaf-soft);border-color:var(--leaf-line);color:var(--leaf);} .ds-btn-go:hover{background:var(--leaf-soft-hover);border-color:var(--leaf-line);} .ds-dial{position:relative;width:420px;aspect-ratio:1;} .ds-dial svg{width:100%;height:100%;display:block;overflow:visible;font-family:Archivo,sans-serif;font-variant-numeric:tabular-nums;} .ds-hand{transition:transform .2s var(--ease);transform-origin:300px 300px;} .ds-dial-c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;} .ds-dial-l{font-size:13px;color:var(--ink-3);} .ds-dial-t{font-size:80px;line-height:.92;color:var(--turmeric);font-stretch:68%;font-weight:800;letter-spacing:-.01em;margin:2px 0 6px;font-variant-numeric:tabular-nums;} .ds-dial-w{font-size:14px;color:var(--ink-2);max-width:170px;} .ds-dial-c .ds-btn{margin-top:14px;} @media (prefers-reduced-motion:reduce){.ds-hand{transition:none;}}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Kitchen Wall Clock",
+    "overview": "The circular queue is drawn as the canteen's wall clock: fifty numbered slots around a dial, FRONT and REAR as two hands that sweep one slot per operation and visibly wrap past slot 0. Everything else on the screen is the counter around that clock. The material is a seasoned cast-iron tawa: a warm brown-black ground, cream ink, and three spice colours that each carry exactly one meaning. Turmeric is \"in the kitchen / next up / the one action\", curry-leaf green is \"ready to collect\", chilli red is \"full or wrong\".\n\nDensity is a working console, not a showcase. Three columns at the counter (order form, kitchen dial, pickup shelf plus C readout), compact 38px controls, 13px labels, hairline dividers in warm steel. The student board inverts that density: two columns of huge condensed token numbers built to be read from across the canteen. Numbers are the heroes of both views, set in Archivo's condensed heavy cut with tabular figures; the UI around them stays at normal width so the two never compete.\n\nDepth is soft and offset: panels sit on the ground with a long, dark, downward shadow and a faint top-edge highlight, like iron plates on a counter. Nothing glows. Motion is mechanical and short: the hands sweep at 200ms on an ease-out and always move forward around the dial.",
+    "keyCharacteristics": [
+      "One dial signature: 50 slots, FRONT (turmeric) and REAR (cream) hands, forward-only sweep with wrap.",
+      "Warm brown-black ground with three surface steps; cream ink in three steps.",
+      "Spice colours are semantic, never decorative: turmeric = preparing / next / primary action, leaf = ready, chilli = full / error.",
+      "Condensed heavy tabular numerals for every token number; normal-width Archivo for UI.",
+      "Monospace appears only in the C operation readout.",
+      "Soft offset shadows on panels and banners; no glow, no blur halos."
+    ],
+    "rules": [
+      {
+        "name": "The One Meaning Rule",
+        "body": "Each spice colour owns one state: turmeric is preparing, next and the primary action; leaf is ready; chilli is full or wrong. A spice colour never appears as decoration or brand flourish.",
+        "section": "colors"
+      },
+      {
+        "name": "The Never Colour Alone Rule",
+        "body": "Every coloured state is also stated in words and position: \"50 of 50 slots · full\", \"Next\", the first shelf row, the FRONT tag. Remove the colour and the screen must still say the same thing.",
+        "section": "colors"
+      },
+      {
+        "name": "The Tabular Token Rule",
+        "body": "Every number that can change (tokens, counts, slots, rupees, clock) uses tabular figures so values never jitter as they update. Token numbers are always condensed heavy; captions inside a token tile reset to normal width and weight 500.",
+        "section": "typography"
+      },
+      {
+        "name": "The Mono Is the C Program Rule",
+        "body": "JetBrains Mono appears only where the screen quotes the C program's operation (`enqueue(&kitchen, #213)`, index arithmetic, O(1)). UI text is never set in mono.",
+        "section": "typography"
+      },
+      {
+        "name": "The Iron Plate Rule",
+        "body": "Shadows fall down and away, dark and offset, never outward and coloured. Depth inside a plate comes from surface steps and hairlines, not more shadows.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do draw the kitchen queue as the 50-slot dial with FRONT and REAR hands; the strip and board are views of the same order, front first.",
+      "Do keep turmeric for preparing, next and the single primary action, leaf for ready, and chilli for full and errors.",
+      "Do set every token number in condensed heavy Archivo (width 68%, weight 800) with tabular figures.",
+      "Do state capacity in words beside the colour: \"50 of 50 slots · full\", \"Kitchen full: stop issuing tokens.\"",
+      "Do write error messages that name the value and the next step, with a chilli icon and chilli-text sentence under the field or action.",
+      "Do sweep the hands forward at 200ms on cubic-bezier(.2, .8, .2, 1) and drop the transition under prefers-reduced-motion.",
+      "Do lift panels with the Plate shadow and layer within them using surface steps and 1px warm steel hairlines."
+    ],
+    "donts": [
+      "Don't replace the dial with a ticket list under hero stat cards.",
+      "Don't use glow halos or coloured blurred shadows; the only coloured shadow is the 3px focus spread on inputs.",
+      "Don't use JetBrains Mono anywhere outside the C operation readout.",
+      "Don't fade disabled buttons with opacity; switch them to surface-2 or surface-3 with ink-3 text.",
+      "Don't show more than one turmeric primary button in a view.",
+      "Don't signal preparing, ready or full by colour alone."
+    ]
+  }
+}
