@@ -11,7 +11,12 @@ import StudentBoard from './components/StudentBoard.jsx';
 const POLL_MS = 2000; // keeps a second screen (e.g. the student board) in sync
 
 export default function App() {
-  const [view, setView] = useState('counter');
+  // Open http://localhost:3001/#board on a second screen to show only the student board.
+  const [view, setViewState] = useState(window.location.hash === '#board' ? 'board' : 'counter');
+  const setView = (v) => {
+    setViewState(v);
+    window.history.replaceState(null, '', v === 'board' ? '#board' : '#');
+  };
   const [menu, setMenu] = useState(null);
   const [state, setState] = useState(null);
   const [ops, setOps] = useState({ current: null, history: [] });

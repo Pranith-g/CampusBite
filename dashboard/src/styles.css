@@ -53,7 +53,7 @@ body { font-family: var(--sans); color: var(--ink); font-size: 15px; line-height
 .readouts .full b { color: var(--chilli); }
 .search { position: relative; }
 .search svg { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--ink-3); }
-.search input { width: 230px; padding-left: 36px; }
+.search input[type=text] { width: 230px; padding-left: 36px; }
 .clock { font-size: 13px; color: var(--ink-3); text-align: right; white-space: nowrap; }
 .clock b { display: block; color: var(--ink); font-size: 17px; font-weight: 700; }
 .banner { display: flex; align-items: center; gap: 10px; padding: 10px 24px; font-size: 14px; border-bottom: 1px solid var(--line); background: var(--surface-2); color: var(--ink-2); }
