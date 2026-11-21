@@ -74,6 +74,25 @@ function buildLine(command, args) {
   return [command, ...clean].join('|');
 }
 
+// ---------- operation log ----------
+// The last few queue operations C reported, so every screen (and a
+// reloaded page) shows the same "Last operation" panel.
+const opLog = { current: null, history: [] };
+
+function withOps(line) {
+  try {
+    const reply = JSON.parse(line);
+    if (reply.op) {
+      if (opLog.current) opLog.history = [opLog.current, ...opLog.history].slice(0, 4);
+      opLog.current = { ...reply.op, ok: reply.ok };
+    }
+    reply.ops = opLog;
+    return JSON.stringify(reply);
+  } catch {
+    return line;   // not JSON: pass it through untouched
+  }
+}
+
 // ---------- HTTP ----------
 
 const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml',
@@ -100,7 +119,7 @@ function serveStatic(req, res) {
 
 const server = http.createServer(async (req, res) => {
   try {
-    if (req.method === 'GET' && req.url === '/api/state') return sendJson(res, 200, await send('STATE'));
+    if (req.method === 'GET' && req.url === '/api/state') return sendJson(res, 200, withOps(await send('STATE')));
     if (req.method === 'GET' && req.url === '/api/menu') return sendJson(res, 200, await send('MENU'));
     if (req.method === 'POST' && req.url === '/api/command') {
       let body = '';
@@ -112,7 +131,7 @@ const server = http.createServer(async (req, res) => {
       try { data = JSON.parse(body); } catch { return sendJson(res, 400, JSON.stringify({ ok: false, message: 'Body must be JSON.' })); }
       const line = buildLine(data.command, data.args);
       if (!line) return sendJson(res, 400, JSON.stringify({ ok: false, message: 'Unknown command or wrong number of arguments.' }));
-      return sendJson(res, 200, await send(line));
+      return sendJson(res, 200, withOps(await send(line)));
     }
     if (req.url.startsWith('/api/')) return sendJson(res, 404, JSON.stringify({ ok: false, message: 'No such API route.' }));
     return serveStatic(req, res);

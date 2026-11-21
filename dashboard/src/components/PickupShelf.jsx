@@ -1,7 +1,7 @@
 import { itemText, ordinal } from '../format.js';
 
 // The pickup shelf is a FIFO queue too, so only its front order can be handed over.
-export default function PickupShelf({ shelf, menu, run }) {
+export default function PickupShelf({ shelf, menu, run, pending }) {
   const full = shelf.count === shelf.capacity;
   return (
     <section className="panel" aria-label="Pickup shelf">
@@ -18,7 +18,7 @@ export default function PickupShelf({ shelf, menu, run }) {
               <div className="meta">{itemText(o.items, menu)}</div>
             </div>
             {k === 0
-              ? <button className="btn go" type="button" onClick={() => run('HANDOVER')}>Hand over</button>
+              ? <button className="btn go" type="button" onClick={() => run('HANDOVER')} disabled={pending}>Hand over</button>
               : <span className="pos num">{ordinal(k + 1)} in line</span>}
           </li>
         ))}

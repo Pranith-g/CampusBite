@@ -22,14 +22,21 @@ export default function App() {
   const [ops, setOps] = useState({ current: null, history: [] });
   const [banner, setBanner] = useState(null); // { kind: 'ok' | 'bad', text }
   const [offline, setOffline] = useState(false);
+  const [pending, setPending] = useState(false); // a command is on its way to C
   const busy = useRef(false);
+  const version = useRef(0);                      // bumped by every command
+  const lastSent = useRef({ command: '', at: 0 });
 
   // Fetch the latest state from C. Used on start and by the poll timer.
   const refresh = useCallback(async () => {
     if (busy.current) return;
+    const asked = version.current;
     try {
       const reply = await getState();
+      // A command finished while this poll was in flight: its reply is newer, keep it.
+      if (version.current !== asked) return;
       setState(reply.state);
+      if (reply.ops) setOps(reply.ops);
       setOffline(false);
     } catch {
       setOffline(true);
@@ -44,17 +51,23 @@ export default function App() {
   }, [refresh]);
 
   // Send one command to C and redraw from its reply.
+  // While a command is on its way, action buttons are disabled, so a
+  // double-click can't move a second order by accident.
   const run = useCallback(async (command, args = []) => {
+    if (busy.current) return { ok: false, message: 'Still working on the last action.' };
+    // The same action twice within 400 ms is a double-click, not a second order.
+    const now = Date.now();
+    if (command !== 'STATE' && command === lastSent.current.command && now - lastSent.current.at < 400) {
+      return { ok: false, message: 'Ignored a double-click.' };
+    }
+    lastSent.current = { command, at: now };
     busy.current = true;
+    version.current += 1;
+    setPending(true);
     try {
       const reply = await sendCommand(command, args);
       if (reply.state) setState(reply.state);
-      if (reply.op) {
-        setOps((prev) => ({
-          current: { ...reply.op, ok: reply.ok },
-          history: prev.current ? [prev.current, ...prev.history].slice(0, 4) : prev.history,
-        }));
-      }
+      if (reply.ops) setOps(reply.ops);
       setOffline(false);
       return reply;
     } catch {
@@ -62,6 +75,7 @@ export default function App() {
       return { ok: false, message: "Can't reach the C program." };
     } finally {
       busy.current = false;
+      setPending(false);
     }
   }, []);
 
@@ -111,10 +125,10 @@ export default function App() {
               <OrderForm menu={menuItems} limits={menu} state={state} run={run} />
             </div>
             <div className="col">
-              <KitchenQueue kitchen={state.kitchen} shelf={state.shelf} menu={menuItems} run={run} />
+              <KitchenQueue kitchen={state.kitchen} shelf={state.shelf} menu={menuItems} run={run} pending={pending} />
             </div>
             <div className="col">
-              <PickupShelf shelf={state.shelf} menu={menuItems} run={run} />
+              <PickupShelf shelf={state.shelf} menu={menuItems} run={run} pending={pending} />
               <LastOperation ops={ops} />
             </div>
           </div>

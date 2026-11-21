@@ -81,6 +81,7 @@ input.invalid:focus { box-shadow: 0 0 0 3px rgba(236, 91, 66, .2); }
 .btn.go[disabled] { background: var(--surface-2); border-color: var(--line); color: var(--ink-3); }
 .btn.ghost { background: none; border-color: transparent; color: var(--ink-2); padding: 0 10px; }
 .btn.ghost:hover { background: var(--surface-2); color: var(--ink); }
+.btn.ghost[disabled] { background: none; border-color: transparent; }
 .btn.danger { color: var(--chilli); }
 .btn.danger:hover { color: #ff8a74; }
 .btn.confirm { background: #2c1712; border-color: #5a2a20; color: var(--chilli-text); }
