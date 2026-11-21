@@ -1,0 +1,122 @@
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { IconAlertTriangle, IconCircleCheck, IconPlugConnectedX } from '@tabler/icons-react';
+import { getMenu, getState, sendCommand } from './api.js';
+import TopBar from './components/TopBar.jsx';
+import OrderForm from './components/OrderForm.jsx';
+import KitchenQueue from './components/KitchenQueue.jsx';
+import PickupShelf from './components/PickupShelf.jsx';
+import LastOperation from './components/LastOperation.jsx';
+import StudentBoard from './components/StudentBoard.jsx';
+
+const POLL_MS = 2000; // keeps a second screen (e.g. the student board) in sync
+
+export default function App() {
+  const [view, setView] = useState('counter');
+  const [menu, setMenu] = useState(null);
+  const [state, setState] = useState(null);
+  const [ops, setOps] = useState({ current: null, history: [] });
+  const [banner, setBanner] = useState(null); // { kind: 'ok' | 'bad', text }
+  const [offline, setOffline] = useState(false);
+  const busy = useRef(false);
+
+  // Fetch the latest state from C. Used on start and by the poll timer.
+  const refresh = useCallback(async () => {
+    if (busy.current) return;
+    try {
+      const reply = await getState();
+      setState(reply.state);
+      setOffline(false);
+    } catch {
+      setOffline(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    getMenu().then((m) => setMenu(m)).catch(() => setOffline(true));
+    refresh();
+    const timer = setInterval(refresh, POLL_MS);
+    return () => clearInterval(timer);
+  }, [refresh]);
+
+  // Send one command to C and redraw from its reply.
+  const run = useCallback(async (command, args = []) => {
+    busy.current = true;
+    try {
+      const reply = await sendCommand(command, args);
+      if (reply.state) setState(reply.state);
+      if (reply.op) {
+        setOps((prev) => ({
+          current: { ...reply.op, ok: reply.ok },
+          history: prev.current ? [prev.current, ...prev.history].slice(0, 4) : prev.history,
+        }));
+      }
+      setOffline(false);
+      return reply;
+    } catch {
+      setOffline(true);
+      return { ok: false, message: "Can't reach the C program." };
+    } finally {
+      busy.current = false;
+    }
+  }, []);
+
+  const search = async (query) => {
+    const reply = await run('SEARCH', [query]);
+    setBanner({ kind: reply.ok ? 'ok' : 'bad', text: reply.message });
+  };
+
+  if (!state || !menu) {
+    return (
+      <div className="center-screen">
+        {offline ? (
+          <div>
+            <IconPlugConnectedX size={32} stroke={1.75} aria-hidden="true" />
+            <h2>Can't reach the C program</h2>
+            <p>Start everything with <code>start.bat</code>, then reload this page.</p>
+          </div>
+        ) : (
+          <p>Connecting to the C program…</p>
+        )}
+      </div>
+    );
+  }
+
+  const menuItems = menu.menu;
+
+  return (
+    <>
+      <TopBar state={state} view={view} onView={setView} onSearch={search} />
+      {offline && (
+        <div className="banner bad" role="alert">
+          <IconPlugConnectedX size={18} aria-hidden="true" />
+          Lost connection to the C program. Showing the last known state.
+        </div>
+      )}
+      {banner && (
+        <div className={`banner ${banner.kind}`} role="status">
+          {banner.kind === 'ok' ? <IconCircleCheck size={18} aria-hidden="true" /> : <IconAlertTriangle size={18} aria-hidden="true" />}
+          {banner.text}
+          <button className="btn ghost" onClick={() => setBanner(null)}>Dismiss</button>
+        </div>
+      )}
+      <main>
+        {view === 'counter' ? (
+          <div className="counter">
+            <div className="col">
+              <OrderForm menu={menuItems} limits={menu} state={state} run={run} />
+            </div>
+            <div className="col">
+              <KitchenQueue kitchen={state.kitchen} shelf={state.shelf} menu={menuItems} run={run} />
+            </div>
+            <div className="col">
+              <PickupShelf shelf={state.shelf} menu={menuItems} run={run} />
+              <LastOperation ops={ops} />
+            </div>
+          </div>
+        ) : (
+          <StudentBoard state={state} />
+        )}
+      </main>
+    </>
+  );
+}
