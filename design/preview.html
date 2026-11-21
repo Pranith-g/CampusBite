@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CampusBite — counter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+:root {
+  --ground: #15100c;
+  --surface: #1e1813;
+  --surface-2: #272019;
+  --surface-3: #31281f;
+  --line: #3a2f25;
+  --line-strong: #54463a;
+  --ink: #f4eadb;
+  --ink-2: #cdbfaa;
+  --ink-3: #a3937e;
+  --turmeric: #f0a531;
+  --turmeric-soft: #3a2a12;
+  --turmeric-ink: #2a1a04;
+  --leaf: #8cc764;
+  --leaf-soft: #1f2c15;
+  --chilli: #ec5b42;
+  --chilli-soft: #3a1a13;
+  --chilli-text: #ff9a86;
+  --shadow: 0 1px 0 rgba(255, 240, 220, .05) inset, 0 14px 28px -10px rgba(0, 0, 0, .85), 0 2px 4px rgba(0, 0, 0, .45);
+  --ease: cubic-bezier(.2, .8, .2, 1);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { background: var(--ground); }
+body { font-family: Archivo, system-ui, sans-serif; color: var(--ink); background: var(--ground); font-size: 15px; line-height: 1.45; -webkit-font-smoothing: antialiased; min-height: 100vh; }
+::selection { background: var(--turmeric); color: var(--turmeric-ink); }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 10px; border: 2px solid var(--ground); }
+::-webkit-scrollbar-track { background: var(--ground); }
+:focus-visible { outline: 2px solid var(--turmeric); outline-offset: 2px; }
+.num { font-variant-numeric: tabular-nums; }
+.cond { font-stretch: 68%; font-weight: 800; letter-spacing: -0.01em; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+.bar { display: flex; align-items: center; gap: 24px; padding: 0 24px; height: 64px; border-bottom: 1px solid var(--line); background: var(--surface); position: sticky; top: 0; z-index: 5; }
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 19px; font-stretch: 85%; white-space: nowrap; }
+.tabs { display: flex; gap: 2px; background: var(--ground); padding: 3px; border-radius: 9px; border: 1px solid var(--line); }
+.tab { appearance: none; border: 0; background: none; color: var(--ink-2); font: inherit; font-size: 14px; font-weight: 500; padding: 7px 14px; border-radius: 7px; cursor: pointer; transition: background .15s, color .15s; white-space: nowrap; }
+.tab:hover { color: var(--ink); }
+.tab[aria-selected="true"] { background: var(--surface-3); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.4); }
+.readouts { display: flex; gap: 22px; margin-left: auto; font-size: 13px; color: var(--ink-3); white-space: nowrap; }
+.readouts b { display: block; font-size: 17px; color: var(--ink); font-weight: 700; transition: color .2s; }
+.readouts .busy b { color: var(--turmeric); }
+.readouts .full b { color: var(--chilli); }
+.search { position: relative; }
+.search i { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--ink-3); font-size: 17px; }
+.search input { width: 230px; padding-left: 36px; }
+.clock { font-size: 13px; color: var(--ink-3); text-align: right; white-space: nowrap; }
+.clock b { display: block; color: var(--ink); font-size: 17px; font-weight: 700; }
+
+input[type=text] { font: inherit; font-size: 14px; color: var(--ink); background: var(--ground); border: 1px solid var(--line-strong); border-radius: 8px; height: 38px; padding: 0 12px; width: 100%; transition: border-color .15s, box-shadow .15s; }
+input[type=text]::placeholder { color: var(--ink-3); }
+input[type=text]:hover { border-color: #6a5a4b; }
+input[type=text]:focus { outline: none; border-color: var(--turmeric); box-shadow: 0 0 0 3px rgba(240, 165, 49, .18); }
+input.invalid { border-color: var(--chilli); }
+input.invalid:focus { box-shadow: 0 0 0 3px rgba(236, 91, 66, .2); border-color: var(--chilli); }
+.btn { appearance: none; font: inherit; font-size: 14px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 38px; padding: 0 14px; border-radius: 8px; border: 1px solid var(--line-strong); background: var(--surface-2); color: var(--ink); cursor: pointer; transition: background .15s, border-color .15s, color .15s, transform .1s; white-space: nowrap; }
+.btn:hover { background: var(--surface-3); border-color: #6a5a4b; }
+.btn:active { transform: translateY(1px); }
+.btn i { font-size: 17px; }
+.btn[disabled] { cursor: not-allowed; opacity: 1; background: var(--surface-2); border-color: var(--line); color: var(--ink-3); transform: none; }
+.btn.primary { background: var(--turmeric); color: var(--turmeric-ink); border-color: var(--turmeric); height: 46px; font-size: 15px; font-weight: 700; }
+.btn.primary:hover { background: #f6b44c; }
+.btn.primary[disabled] { background: var(--surface-3); border-color: var(--line-strong); color: var(--ink-3); }
+.btn.go { background: var(--leaf-soft); border-color: #3d5a29; color: var(--leaf); }
+.btn.go:hover { background: #283a1b; }
+.btn.ghost { background: none; border-color: transparent; color: var(--ink-2); }
+.btn.ghost:hover { background: var(--surface-2); color: var(--ink); }
+.btn.danger { color: var(--chilli); }
+.btn.danger:hover { color: #ff8a74; }
+
+.view { display: none; }
+.view.on { display: block; }
+.counter { display: grid; grid-template-columns: 360px minmax(0, 1fr) 360px; gap: 20px; padding: 20px 24px 28px; max-width: 1640px; margin: 0 auto; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); }
+.panel-h { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 16px 18px 0; }
+.panel-h h2 { font-size: 17px; font-weight: 700; }
+.panel-h span { font-size: 13px; color: var(--ink-3); transition: color .2s; }
+.panel-h span.full { color: var(--chilli-text); font-weight: 600; }
+.pad { padding: 16px 18px 18px; }
+.col { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+
+.field { display: grid; gap: 6px; margin-bottom: 12px; }
+.field label { font-size: 13px; color: var(--ink-2); font-weight: 500; }
+.msg { display: flex; gap: 8px; font-size: 13px; line-height: 1.4; color: var(--chilli-text); }
+.msg i { font-size: 16px; margin-top: 1px; color: var(--chilli); flex: none; }
+.msg[hidden] { display: none; }
+.seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: var(--ground); padding: 3px; border-radius: 9px; border: 1px solid var(--line); margin: 4px 0 8px; }
+.seg button { appearance: none; border: 0; background: none; color: var(--ink-2); font: inherit; font-size: 13px; font-weight: 500; padding: 6px; border-radius: 6px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--surface-3); color: var(--ink); }
+.menu { list-style: none; }
+.menu li { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--line); }
+.menu li:last-child { border-bottom: 0; }
+.menu .nm { font-size: 14px; font-weight: 500; }
+.menu .meta { font-size: 12.5px; color: var(--ink-3); }
+.menu li.picked .nm { color: var(--turmeric); }
+.step { display: flex; align-items: center; border: 1px solid var(--line-strong); border-radius: 8px; overflow: hidden; }
+.step button { appearance: none; border: 0; background: var(--surface-2); color: var(--ink); width: 30px; height: 30px; cursor: pointer; display: grid; place-items: center; }
+.step button i { font-size: 15px; }
+.step button:hover { background: var(--surface-3); }
+.step output { width: 30px; text-align: center; font-weight: 700; font-size: 14px; }
+.bill { border-top: 1px dashed var(--line-strong); margin-top: 6px; padding-top: 12px; display: grid; gap: 4px; font-size: 13.5px; color: var(--ink-2); }
+.bill div { display: flex; justify-content: space-between; gap: 12px; }
+.bill .total { color: var(--ink); font-size: 18px; font-weight: 700; margin-top: 4px; }
+.bill .empty { color: var(--ink-3); }
+.issue { margin-top: 14px; width: 100%; }
+.after-issue { margin-top: 10px; }
+
+.dial-wrap { position: relative; width: min(100%, 540px); margin: 0 auto; aspect-ratio: 1; }
+.dial-wrap svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.hand { transition: transform .2s var(--ease); transform-origin: 300px 300px; }
+.tick { transition: stroke .2s, stroke-width .2s; }
+.dial-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; pointer-events: none; }
+.dial-center > * { pointer-events: auto; }
+.dial-center .lbl { font-size: 13px; color: var(--ink-3); }
+.dial-center .tok { font-size: clamp(64px, 8.5vw, 104px); line-height: .92; color: var(--turmeric); margin: 2px 0 6px; }
+.dial-center .tok.none { color: var(--ink-3); }
+.dial-center .who { font-size: 14px; color: var(--ink-2); max-width: 210px; }
+.dial-center .btn { margin-top: 14px; }
+.dial-center .msg { max-width: 200px; margin-top: 8px; justify-content: center; }
+.strip-h { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 4px 18px 10px; font-size: 13px; color: var(--ink-3); }
+.strip-h b { color: var(--ink-2); font-weight: 600; }
+.strip { display: flex; gap: 8px; padding: 0 18px 16px; overflow-x: auto; }
+.chip { flex: none; min-width: 96px; background: var(--surface-2); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; }
+.chip .ix { font-size: 12px; color: var(--ink-3); }
+.chip .t { font-size: 26px; line-height: 1.05; }
+.chip .n { font-size: 12.5px; color: var(--ink-2); white-space: nowrap; }
+.chip.front { border-color: var(--turmeric); background: var(--turmeric-soft); }
+.chip.front .t { color: var(--turmeric); }
+.chip.more { display: grid; place-items: center; color: var(--ink-3); font-size: 13px; }
+.tools { display: flex; gap: 8px; padding: 12px 18px 14px; border-top: 1px solid var(--line); flex-wrap: wrap; }
+.tools .spacer { flex: 1; }
+.tools .btn.ghost { padding: 0 10px; }
+
+.shelf { list-style: none; padding-bottom: 8px; margin-top: 12px; }
+.shelf li { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 12px 18px; border-top: 1px solid var(--line); }
+.shelf li:first-child { border-top: 0; }
+.shelf .t { font-size: 34px; line-height: 1; color: var(--leaf); min-width: 64px; }
+.shelf .n { font-size: 14px; font-weight: 600; }
+.shelf .meta { font-size: 12.5px; color: var(--ink-3); }
+.shelf .pos { font-size: 12.5px; color: var(--ink-3); }
+.shelf li.first { background: var(--leaf-soft); }
+.shelf .empty-row { grid-template-columns: 1fr; color: var(--ink-3); font-size: 14px; padding: 18px; }
+
+.ops { font-family: 'JetBrains Mono', monospace; font-size: 12.5px; line-height: 1.75; }
+.ops .cur { background: var(--ground); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; color: var(--ink-2); white-space: pre-wrap; }
+.ops .cur b { color: var(--turmeric); font-weight: 600; }
+.ops .cur b.bad { color: var(--chilli-text); }
+.ops .cur .o { float: right; color: var(--leaf); }
+.ops ol { list-style: none; margin-top: 10px; color: var(--ink-3); }
+.ops ol li { display: flex; justify-content: space-between; gap: 10px; padding: 3px 2px; }
+.ops ol li .bad { color: var(--chilli-text); }
+
+.board { padding: 28px 32px 40px; max-width: 1640px; margin: 0 auto; }
+.calling { display: flex; align-items: center; justify-content: space-between; gap: 24px; background: var(--leaf-soft); border: 1px solid #3d5a29; border-radius: 18px; padding: 22px 32px; margin-bottom: 24px; box-shadow: var(--shadow); }
+.calling h2 { font-size: clamp(26px, 3vw, 36px); font-weight: 700; line-height: 1.15; }
+.calling h2 span { display: block; font-size: .6em; color: var(--ink-2); font-weight: 500; margin-top: 6px; }
+.calling .t { font-size: clamp(96px, 14vw, 200px); line-height: .85; color: var(--leaf); }
+.calling.idle { background: var(--surface); border-color: var(--line); }
+.calling.idle .t { color: var(--ink-3); }
+.cols2 { display: grid; grid-template-columns: 1.4fr 1fr; gap: 24px; }
+.cols2 h3 { font-size: 22px; font-weight: 700; padding: 18px 24px 4px; display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.cols2 h3 span { font-size: 15px; color: var(--ink-3); font-weight: 500; }
+.cols2 h3 span.full { color: var(--chilli-text); font-weight: 600; }
+.bignums { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; padding: 16px 24px 24px; }
+.bignums > div { background: var(--surface-2); border: 1px solid var(--line); border-radius: 12px; padding: 10px 16px; font-size: 64px; line-height: 1; }
+.bignums > div small { display: block; font-size: 13px; font-stretch: 100%; font-weight: 500; color: var(--ink-3); letter-spacing: 0; margin-bottom: 2px; }
+.bignums.prep > div:first-child { color: var(--turmeric); border-color: var(--turmeric); background: var(--turmeric-soft); }
+.bignums.ready > div { color: var(--leaf); border-color: #3d5a29; background: var(--leaf-soft); }
+.bignums > div.more { display: grid; place-items: center; font-size: 22px; font-stretch: 100%; font-weight: 600; color: var(--ink-3); }
+.bignums .none { grid-column: 1 / -1; font-size: 18px; font-stretch: 100%; font-weight: 500; color: var(--ink-3); background: none; border-style: dashed; padding: 22px 16px; }
+.board-foot { margin-top: 20px; color: var(--ink-3); font-size: 15px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+
+.note { max-width: 1640px; margin: 0 auto; padding: 0 24px 32px; font-size: 12.5px; color: var(--ink-3); }
+
+@media (max-width: 1320px) {
+  .counter { grid-template-columns: 340px minmax(0, 1fr); }
+  .counter > .col:last-child { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; }
+  .readouts .hide-md { display: none; }
+}
+@media (max-width: 1100px) { .search { display: none; } }
+@media (max-width: 860px) {
+  .bar { height: auto; flex-wrap: wrap; padding: 12px 16px; gap: 12px; }
+  .readouts { order: 3; width: 100%; margin: 0; justify-content: space-between; }
+  .clock { margin-left: auto; }
+  .counter { grid-template-columns: 1fr; padding: 16px; }
+  .counter > .col:first-child { order: 2; }
+  .counter > .col:last-child { grid-template-columns: 1fr; order: 3; }
+  .board { padding: 16px; }
+  .calling { flex-direction: column; align-items: flex-start; padding: 18px 20px; }
+  .cols2 { grid-template-columns: 1fr; }
+  .bignums { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; padding: 12px 16px 16px; }
+  .bignums > div { font-size: 40px; padding: 8px 12px; }
+  .cols2 h3 { padding: 16px 16px 4px; }
+  .dial-center .lbl { font-size: 12px; }
+  .dial-center .tok { font-size: 50px; margin: 0 0 4px; }
+  .dial-center .who { font-size: 12px; max-width: 132px; }
+  .dial-center .btn { margin-top: 8px; height: 32px; font-size: 13px; padding: 0 10px; }
+  .dial-center .msg { font-size: 11.5px; max-width: 140px; }
+  .dial-num.minor { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .hand, .tick { transition: none; } }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="brand">
+    <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="12" fill="none" stroke="#f0a531" stroke-width="2.5"/><path d="M14 14 L14 5" stroke="#f0a531" stroke-width="2.5" stroke-linecap="round"/><path d="M14 14 L21 17" stroke="#f4eadb" stroke-width="2.5" stroke-linecap="round"/><circle cx="14" cy="14" r="2.2" fill="#f4eadb"/></svg>
+    CampusBite
+  </div>
+  <div class="tabs" role="tablist" aria-label="Views">
+    <button class="tab" role="tab" aria-selected="true" data-view="counter">Counter</button>
+    <button class="tab" role="tab" aria-selected="false" data-view="board">Student board</button>
+  </div>
+  <div class="readouts">
+    <div id="ro-k-wrap">Kitchen<b class="num" id="ro-kitchen"></b></div>
+    <div id="ro-s-wrap">Shelf<b class="num" id="ro-shelf"></b></div>
+    <div class="hide-md">Served<b class="num" id="ro-served"></b></div>
+    <div class="hide-md">Revenue<b class="num" id="ro-revenue"></b></div>
+  </div>
+  <label class="search"><span class="sr">Search token or USN</span><i class="ti ti-search" aria-hidden="true"></i><input type="text" placeholder="Search token or USN"></label>
+  <div class="clock">Lunch service<b class="num">12:41</b></div>
+</header>
+
+<main>
+<section class="view on" id="view-counter" aria-label="Counter">
+  <div class="counter">
+
+    <div class="col">
+      <form class="panel" id="order-form" novalidate>
+        <div class="panel-h"><h2>New order</h2><span class="num" id="next-label"></span></div>
+        <div class="pad">
+          <div class="field"><label for="f-name">Student name</label><input type="text" id="f-name" value="Ananya Rao" autocomplete="off"></div>
+          <div class="field">
+            <label for="f-usn">USN</label>
+            <input type="text" id="f-usn" value="1DS24CS017" class="num" autocomplete="off" aria-describedby="usn-msg">
+            <div class="msg" id="usn-msg" hidden><i class="ti ti-alert-circle" aria-hidden="true"></i><span></span></div>
+          </div>
+          <div class="seg" role="group" aria-label="Menu section">
+            <button type="button" data-sec="Meals" aria-pressed="true">Meals</button>
+            <button type="button" data-sec="Snacks" aria-pressed="false">Snacks</button>
+            <button type="button" data-sec="Drinks" aria-pressed="false">Drinks</button>
+          </div>
+          <ul class="menu" id="menu"></ul>
+          <div class="bill num" id="bill"></div>
+          <button class="btn primary issue" type="submit" id="issue"><i class="ti ti-ticket" aria-hidden="true"></i><span></span></button>
+          <div class="msg after-issue" id="issue-msg" hidden><i class="ti ti-alert-triangle" aria-hidden="true"></i><span></span></div>
+        </div>
+      </form>
+    </div>
+
+    <div class="col">
+      <section class="panel" aria-label="Kitchen queue">
+        <div class="panel-h"><h2>Kitchen queue</h2><span class="num" id="k-count"></span></div>
+        <div class="dial-wrap">
+          <svg viewBox="-36 -36 672 672" id="dial" role="img" aria-label="Circular kitchen queue of 50 slots"></svg>
+          <div class="dial-center">
+            <div class="lbl">Next up</div>
+            <div class="tok cond num" id="next-tok"></div>
+            <div class="who" id="next-who"></div>
+            <button class="btn go" id="ready" type="button"><i class="ti ti-check" aria-hidden="true"></i>Mark ready</button>
+            <div class="msg" id="ready-msg" hidden><i class="ti ti-alert-triangle" aria-hidden="true"></i><span></span></div>
+          </div>
+        </div>
+        <div class="strip-h"><span>Front to rear</span><span class="num" id="pointers"></span></div>
+        <div class="strip" id="strip"></div>
+        <div class="tools">
+          <button class="btn" type="button"><i class="ti ti-search" aria-hidden="true"></i>Find token</button>
+          <button class="btn danger" type="button"><i class="ti ti-x" aria-hidden="true"></i>Cancel token</button>
+          <span class="spacer"></span>
+          <button class="btn ghost" type="button" id="rush"><i class="ti ti-flame" aria-hidden="true"></i>Rush hour</button>
+          <button class="btn ghost" type="button" id="eod"><i class="ti ti-receipt" aria-hidden="true"></i>End of day</button>
+          <button class="btn ghost" type="button" id="reset" aria-label="Reset demo" title="Reset demo"><i class="ti ti-rotate" aria-hidden="true"></i></button>
+        </div>
+      </section>
+    </div>
+
+    <div class="col">
+      <section class="panel" aria-label="Pickup shelf">
+        <div class="panel-h"><h2>Pickup shelf</h2><span class="num" id="s-count"></span></div>
+        <ul class="shelf" id="shelf"></ul>
+      </section>
+      <section class="panel" aria-label="Last operation">
+        <div class="panel-h"><h2>Last operation</h2><span>from the C program</span></div>
+        <div class="pad ops">
+          <div class="cur" id="op-cur"></div>
+          <ol id="op-log"></ol>
+        </div>
+      </section>
+    </div>
+
+  </div>
+</section>
+
+<section class="view" id="view-board" aria-label="Student board">
+  <div class="board">
+    <div class="calling" id="calling"><h2 id="calling-h"></h2><div class="t cond num" id="calling-t"></div></div>
+    <div class="cols2">
+      <div class="panel"><h3>Preparing <span class="num" id="b-prep-count"></span></h3><div class="bignums prep cond num" id="b-prep"></div></div>
+      <div class="panel"><h3>Ready to collect <span class="num" id="b-ready-count"></span></h3><div class="bignums ready cond num" id="b-ready"></div></div>
+    </div>
+    <div class="board-foot"><span>Keep your token slip ready. Tokens are served in order.</span><span class="num" id="b-foot"></span></div>
+  </div>
+</section>
+</main>
+
+<p class="note">Design preview. All names, USNs, prices, and totals are synthetic demo data. In the real build every number on this screen comes from the C program, and this page holds no queue of its own.</p>
+
+<script>
+const N = 50, SHELF = 20, COOKS = 3, C = 300, NS = 'http://www.w3.org/2000/svg';
+const MENU = {
+  Meals: [['Masala dosa', 45, 6], ['Idli vada', 35, 3], ['Veg thali', 70, 4], ['Chole bhature', 60, 7], ['Veg biryani', 80, 5]],
+  Snacks: [['Samosa (2)', 20, 2], ['Vada pav', 25, 2], ['Gobi manchurian', 50, 6], ['Paneer roll', 55, 5], ['Bhel puri', 30, 3]],
+  Drinks: [['Filter coffee', 15, 1], ['Masala chai', 12, 1], ['Fresh lime soda', 30, 2], ['Mango lassi', 40, 2], ['Badam milk', 35, 1]]
+};
+const PRICE = {}; Object.values(MENU).flat().forEach(([n, p, m]) => PRICE[n] = { p, m });
+const FIRST = ['Ravi', 'Ananya', 'Mohit', 'Sneha', 'Arjun', 'Fatima', 'Vikram', 'Pooja', 'Nikhil', 'Sana', 'Tejas', 'Isha', 'Karthik', 'Lavanya', 'Harsh', 'Deepa', 'Rohan', 'Nisha', 'Aditya', 'Keerthi', 'Varun', 'Meghana', 'Suhas', 'Bhavya'];
+const LAST = ['Kumar', 'Rao', 'Jain', 'Patil', 'Nair', 'Shaikh', 'Reddy', 'Hegde', 'Desai', 'Khan', 'Bhat', 'Menon', 'Gowda', 'Iyer', 'Shetty', 'Naik'];
+const BRANCH = ['CS', 'IS', 'EC', 'ME', 'CV', 'EE'];
+const ITEMS = Object.keys(PRICE);
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const fakeUsn = () => `1DS2${3 + Math.floor(Math.random() * 3)}${pick(BRANCH)}${String(100 + Math.floor(Math.random() * 180)).padStart(3, '0')}`;
+function makeOrder(tok, name, usn, items, ago) {
+  const total = items.reduce((s, [n, q]) => s + PRICE[n].p * q, 0);
+  const prep = Math.max(...items.map(([n]) => PRICE[n].m));
+  return { tok, name, usn, items, total, prep, ago };
+}
+const itemText = items => items.map(([n, q]) => q > 1 ? `${q} ${n.toLowerCase()}` : n.toLowerCase()).join(', ');
+
+let S;
+function seed() {
+  const kitchen = Array(N).fill(null);
+  const seedNames = ['Ravi Kumar', 'Ananya Rao', 'Mohit Jain', 'Sneha Patil', 'Arjun Nair', 'Fatima Shaikh', 'Vikram Reddy', 'Pooja Hegde', 'Nikhil Desai', 'Sana Khan', 'Tejas Bhat', 'Isha Menon', 'Karthik Gowda', 'Lavanya Iyer', 'Harsh Naik', 'Deepa Shetty'];
+  const seedUsn = ['1DS24ME112', '1DS24CS017', '1DS23EC141', '1DS25IS108', '1DS24CV133', '1DS23CS166', '1DS25EE120', '1DS24IS157', '1DS23ME104', '1DS25CS129', '1DS24EC118', '1DS23IS172', '1DS25CV111', '1DS24EE146', '1DS23CS138', '1DS25ME163'];
+  const front = 44;
+  for (let k = 0; k < 16; k++) {
+    const items = k === 0 ? [['Masala dosa', 2], ['Filter coffee', 1]] : [[pick(ITEMS), 1 + (k % 2)]];
+    kitchen[(front + k) % N] = makeOrder(198 + k, seedNames[k], seedUsn[k], items, Math.max(0, 6 - Math.floor(k / 3)));
+  }
+  const shelfOrders = [
+    makeOrder(194, 'Kiran Shetty', '1DS24CS151', [['Veg thali', 1]], 4),
+    makeOrder(195, 'Divya Murthy', '1DS25EC127', [['Idli vada', 1], ['Masala chai', 1]], 3),
+    makeOrder(196, 'Rahul Gowda', '1DS23ME159', [['Chole bhature', 1]], 1),
+    makeOrder(197, 'Meera Iyer', '1DS24IS114', [['Samosa (2)', 2]], 0)
+  ];
+  const shelf = Array(SHELF).fill(null);
+  shelfOrders.forEach((o, k) => shelf[(7 + k) % SHELF] = o);
+  S = { kitchen, front, count: 16, shelf, sFront: 7, sCount: 4, nextToken: 214, served: 193, revenue: 14820,
+        qty: { 'Masala dosa': 2, 'Veg biryani': 1 }, sec: 'Meals', log: [], cur: null, deg: { f: 0, r: 0 } };
+  S.cur = { kind: 'ok', html: '<b>enqueue</b>(&amp;kitchen, #213)\nrear  = (8 + 1) % 50 = 9\ncount = 15 + 1 = 16', o: 'O(1)' };
+  S.log = [['dequeue kitchen → shelf #197', 'O(1)'], ['search  token #201', 'O(n)'], ['enqueue #212 → slot 8', 'O(1)']];
+}
+const rear = () => (S.front + S.count - 1 + N) % N;
+const kAt = k => S.kitchen[(S.front + k) % N];
+const sAt = k => S.shelf[(S.sFront + k) % SHELF];
+
+const svg = document.getElementById('dial');
+const el = (t, a) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); return e; };
+const pol = (r, i) => { const a = (i / N) * 2 * Math.PI - Math.PI / 2; return [C + r * Math.cos(a), C + r * Math.sin(a)]; };
+svg.appendChild(el('circle', { cx: C, cy: C, r: 226, fill: 'none', stroke: '#2c241c', 'stroke-width': 1 }));
+svg.appendChild(el('circle', { cx: C, cy: C, r: 150, fill: '#1a1410', stroke: '#2c241c', 'stroke-width': 1 }));
+const ticks = [];
+for (let i = 0; i < N; i++) {
+  const [x1, y1] = pol(186, i), [x2, y2] = pol(216, i);
+  const m = el('line', { x1, y1, x2, y2, 'stroke-linecap': 'round', class: 'tick' });
+  svg.appendChild(m); ticks.push(m);
+  if (i % 5 === 0) {
+    const [tx, ty] = pol(250, i);
+    const t = el('text', { x: tx, y: ty + 7, 'text-anchor': 'middle', 'font-size': 20, 'font-weight': 600, 'font-family': 'Archivo, sans-serif', fill: '#a3937e', class: 'dial-num' + (i % 10 ? ' minor' : ''), style: 'font-variant-numeric: tabular-nums' });
+    t.textContent = i; svg.appendChild(t);
+  }
+}
+function hand(color, inkColor, label) {
+  const g = el('g', { class: 'hand' });
+  g.appendChild(el('line', { x1: C, y1: C - 156, x2: C, y2: C - 176, stroke: color, 'stroke-width': 4, 'stroke-linecap': 'round' }));
+  g.appendChild(el('path', { d: `M ${C - 7} ${C - 228} L ${C + 7} ${C - 228} L ${C} ${C - 214} Z`, fill: color }));
+  const tag = el('g', {});
+  tag.appendChild(el('rect', { x: C - 32, y: C - 312, width: 64, height: 24, rx: 6, fill: color }));
+  const t = el('text', { x: C, y: C - 295, 'text-anchor': 'middle', 'font-size': 13, 'font-weight': 700, 'font-family': 'Archivo, sans-serif', fill: inkColor });
+  t.textContent = label; tag.appendChild(t); g.appendChild(tag);
+  svg.appendChild(g); return { g, tag };
+}
+const hf = hand('#f0a531', '#2a1a04', 'FRONT'), hr = hand('#f4eadb', '#15100c', 'REAR');
+function aim(h, key, i) {
+  const target = (i / N) * 360;
+  let d = target - (((S.deg[key] % 360) + 360) % 360);
+  if (d < -0.01) d += 360;
+  S.deg[key] += d;
+  h.g.style.transform = `rotate(${S.deg[key]}deg)`;
+  h.tag.setAttribute('transform', `rotate(${-S.deg[key]} ${C} ${C - 300})`);
+}
+
+const $ = id => document.getElementById(id);
+function showMsg(id, text) { const m = $(id); m.hidden = !text; if (text) m.querySelector('span').textContent = text; }
+function op(kind, html, o, logLine) {
+  if (S.cur) S.log.unshift([S.cur.short || S.cur.html.split('\n')[0].replace(/<[^>]+>/g, '').replace('&amp;', '&'), S.cur.o, S.cur.kind]);
+  S.log = S.log.slice(0, 4);
+  S.cur = { kind, html, o, short: logLine };
+}
+const USN_RE = /^[1-4][A-Z]{2}\d{2}[A-Z]{2}\d{3}$/;
+function findActive(usn) {
+  for (let k = 0; k < S.count; k++) if (kAt(k).usn === usn) return { where: 'kitchen', o: kAt(k) };
+  for (let k = 0; k < S.sCount; k++) if (sAt(k).usn === usn) return { where: 'pickup shelf', o: sAt(k) };
+  return null;
+}
+function formState() {
+  const name = $('f-name').value.trim(), usn = $('f-usn').value.trim().toUpperCase();
+  const items = Object.entries(S.qty).filter(([, q]) => q > 0);
+  let usnErr = '';
+  if (!usn) usnErr = 'Enter the student\'s USN.';
+  else if (!USN_RE.test(usn)) usnErr = `${usn} isn't a valid USN. Use 10 characters like 1DS24CS017.`;
+  else { const a = findActive(usn); if (a) usnErr = `${usn} already has token #${a.o.tok} on the ${a.where}. Hand it over or cancel it first.`; }
+  let block = '';
+  if (S.count === N) block = 'Kitchen full: stop issuing tokens. Mark the front order ready to free a slot.';
+  else if (!name) block = 'Enter the student\'s name.';
+  else if (!items.length) block = 'Add at least one item.';
+  return { name, usn, items, usnErr, block, ok: !usnErr && !block };
+}
+
+function render() {
+  const r = rear(), full = S.count === N;
+  ticks.forEach((m, i) => {
+    const has = !!S.kitchen[i];
+    m.setAttribute('stroke', full ? (i === S.front ? '#ff8a74' : '#c8432e') : i === S.front && has ? '#f0a531' : has ? '#c98a2a' : '#3e3329');
+    m.setAttribute('stroke-width', has ? 9 : 3);
+  });
+  if (S.count) { aim(hf, 'f', S.front); aim(hr, 'r', r); }
+  hf.g.style.opacity = hr.g.style.opacity = S.count ? 1 : 0.35;
+  svg.setAttribute('aria-label', `Circular kitchen queue of ${N} slots. ${S.count} in use. Front at slot ${S.front}, rear at slot ${r}.`);
+
+  const f = S.count ? kAt(0) : null;
+  $('next-tok').textContent = f ? '#' + f.tok : 'Empty';
+  $('next-tok').classList.toggle('none', !f);
+  $('next-who').textContent = f ? `${f.name} · ${itemText(f.items)} · ${f.ago ? 'waiting ' + f.ago + ' min' : 'just placed'}` : 'No orders in the kitchen. Issue a token to start.';
+  const shelfFull = S.sCount === SHELF;
+  $('ready').disabled = !f || shelfFull;
+  showMsg('ready-msg', f && shelfFull ? 'Pickup shelf full. Hand over the front order first.' : '');
+
+  const kc = $('k-count'); kc.textContent = full ? `${N} of ${N} slots · full` : `${S.count} of ${N} slots`; kc.classList.toggle('full', full);
+  $('pointers').innerHTML = `front <b>${S.front}</b> · rear <b>${S.count ? r : '–'}</b> · count <b>${S.count}</b>`;
+  const kw = $('ro-k-wrap'); kw.className = full ? 'full' : S.count >= N * 0.6 ? 'busy' : '';
+  $('ro-kitchen').textContent = `${S.count} / ${N}`;
+  $('ro-s-wrap').className = shelfFull ? 'full' : S.sCount >= SHELF * 0.6 ? 'busy' : '';
+  $('ro-shelf').textContent = `${S.sCount} / ${SHELF}`;
+  $('ro-served').textContent = S.served;
+  $('ro-revenue').textContent = '₹' + S.revenue.toLocaleString('en-IN');
+
+  const strip = $('strip'); strip.innerHTML = '';
+  for (let k = 0; k < Math.min(S.count, 6); k++) {
+    const i = (S.front + k) % N, s = S.kitchen[i];
+    strip.insertAdjacentHTML('beforeend', `<div class="chip ${k === 0 ? 'front' : ''}"><div class="ix num">slot ${i}</div><div class="t cond num">${s.tok}</div><div class="n">${s.name}</div></div>`);
+  }
+  if (S.count > 6) strip.insertAdjacentHTML('beforeend', `<div class="chip more num">+${S.count - 6} more</div>`);
+  if (!S.count) strip.innerHTML = '<div class="chip more" style="min-width:100%;padding:16px">The queue is empty: front and rear meet, count is 0.</div>';
+
+  const sc = $('s-count'); sc.textContent = shelfFull ? `${SHELF} of ${SHELF} · full` : `${S.sCount} of ${SHELF}`; sc.classList.toggle('full', shelfFull);
+  const shelf = $('shelf'); shelf.innerHTML = '';
+  for (let k = 0; k < S.sCount; k++) {
+    const o = sAt(k);
+    shelf.insertAdjacentHTML('beforeend', `<li class="${k === 0 ? 'first' : ''}"><div class="t cond num">${o.tok}</div><div><div class="n">${o.name}</div><div class="meta">${itemText(o.items)} · ${o.ago ? 'ready ' + o.ago + ' min' : 'just now'}</div></div>${k === 0 ? '<button class="btn go" type="button" id="handover">Hand over</button>' : `<span class="pos num">${k + 1}${['', 'st', 'nd', 'rd'][k + 1] || 'th'} in line</span>`}</li>`);
+  }
+  if (!S.sCount) shelf.innerHTML = '<li class="empty-row">Nothing on the shelf. Orders appear here when the kitchen marks them ready.</li>';
+  if ($('handover')) $('handover').onclick = handOver;
+
+  const cur = $('op-cur'); cur.innerHTML = `<span class="o">${S.cur.o}</span>${S.cur.html}`;
+  $('op-log').innerHTML = S.log.map(([t, o, kind]) => `<li><span class="${kind === 'bad' ? 'bad' : ''}">${t}</span><span>${o}</span></li>`).join('');
+
+  const sec = $('menu'); sec.innerHTML = '';
+  MENU[S.sec].forEach(([n, p, m]) => {
+    const q = S.qty[n] || 0;
+    sec.insertAdjacentHTML('beforeend', `<li class="${q ? 'picked' : ''}"><div><div class="nm">${n}</div><div class="meta num">₹${p} · ${m} min</div></div><div class="step"><button type="button" data-n="${n}" data-d="-1" aria-label="Remove one ${n}"><i class="ti ti-minus" aria-hidden="true"></i></button><output class="num" aria-label="${n} quantity">${q}</output><button type="button" data-n="${n}" data-d="1" aria-label="Add one ${n}"><i class="ti ti-plus" aria-hidden="true"></i></button></div></li>`);
+  });
+  const fs = formState();
+  const items = fs.items;
+  const total = items.reduce((s, [n, q]) => s + PRICE[n].p * q, 0);
+  let ahead = 0; for (let k = 0; k < S.count; k++) ahead += kAt(k).prep;
+  const wait = items.length ? Math.ceil(ahead / COOKS) + Math.max(...items.map(([n]) => PRICE[n].m)) : 0;
+  $('bill').innerHTML = items.length
+    ? items.map(([n, q]) => `<div><span>${n} × ${q}</span><span>₹${PRICE[n].p * q}</span></div>`).join('') + `<div class="total"><span>Total</span><span>₹${total}</span></div><div><span>Estimated wait</span><span>about ${wait} min</span></div>`
+    : '<div class="empty">No items yet. Use + to add from the menu.</div>';
+  $('next-label').textContent = `next token #${S.nextToken}`;
+  $('issue').querySelector('span').textContent = full ? 'Kitchen full' : `Issue token #${S.nextToken}`;
+  $('issue').disabled = !fs.ok;
+  const usnIn = $('f-usn'); usnIn.classList.toggle('invalid', !!fs.usnErr); usnIn.setAttribute('aria-invalid', !!fs.usnErr);
+  showMsg('usn-msg', fs.usnErr);
+  showMsg('issue-msg', fs.block && (full || fs.name) ? fs.block : '');
+
+  const sf = S.sCount ? sAt(0) : null;
+  $('calling').classList.toggle('idle', !sf);
+  $('calling-h').innerHTML = sf ? `${sf.name}, please collect<span>Token ${sf.tok} is ready at the counter</span>` : 'No orders ready yet<span>Watch for your token number here</span>';
+  $('calling-t').textContent = sf ? sf.tok : '—';
+  const PREP_MAX = 12, bp = $('b-prep'); bp.innerHTML = '';
+  const showN = S.count > PREP_MAX ? PREP_MAX - 1 : S.count;
+  for (let k = 0; k < showN; k++) bp.insertAdjacentHTML('beforeend', `<div>${k === 0 ? '<small>Next</small>' : ''}${kAt(k).tok}</div>`);
+  if (S.count > PREP_MAX) bp.insertAdjacentHTML('beforeend', `<div class="more">+${S.count - showN} more</div>`);
+  if (!S.count) bp.innerHTML = '<div class="none">No orders in the kitchen right now.</div>';
+  const bpc = $('b-prep-count'); bpc.textContent = full ? `${S.count} orders · kitchen full` : `${S.count} ${S.count === 1 ? 'order' : 'orders'}`; bpc.classList.toggle('full', full);
+  const br = $('b-ready'); br.innerHTML = '';
+  for (let k = 0; k < S.sCount; k++) br.insertAdjacentHTML('beforeend', `<div>${sAt(k).tok}</div>`);
+  if (!S.sCount) br.innerHTML = '<div class="none">Nothing ready yet.</div>';
+  $('b-ready-count').textContent = `${S.sCount} on the shelf`;
+  $('b-foot').textContent = `Kitchen ${S.count} of ${N} · Lunch service · 12:41`;
+}
+
+function issue() {
+  const fs = formState();
+  if (S.count === N) { op('bad', '<b class="bad">reject</b> enqueue: queue full\ncount == 50, kitchen at capacity', 'O(1)', 'reject  queue full'); render(); return false; }
+  if (!fs.ok) return false;
+  const before = rear(), slot = (S.front + S.count) % N, wasEmpty = !S.count;
+  S.kitchen[slot] = makeOrder(S.nextToken, fs.name, fs.usn, fs.items, 0); S.count++;
+  op('ok', `<b>enqueue</b>(&amp;kitchen, #${S.nextToken})\nrear  = ${wasEmpty ? 'front' : `(${before} + 1) % 50`} = ${slot}\ncount = ${S.count - 1} + 1 = ${S.count}`, 'O(1)', `enqueue #${S.nextToken} → slot ${slot}`);
+  S.nextToken++; S.qty = {};
+  return true;
+}
+$('order-form').addEventListener('submit', e => { e.preventDefault(); issue(); render(); });
+$('ready').addEventListener('click', () => {
+  if (!S.count || S.sCount === SHELF) return;
+  const before = S.front, o = S.kitchen[S.front];
+  S.kitchen[S.front] = null; S.front = (S.front + 1) % N; S.count--;
+  o.ago = 0; S.shelf[(S.sFront + S.sCount) % SHELF] = o; S.sCount++;
+  op('ok', `<b>dequeue</b>(&amp;kitchen) → #${o.tok}\nfront = (${before} + 1) % 50 = ${S.front}\n<b>enqueue</b>(&amp;shelf, #${o.tok})`, 'O(1)', `dequeue kitchen → shelf #${o.tok}`);
+  render();
+});
+function handOver() {
+  if (!S.sCount) return;
+  const o = S.shelf[S.sFront]; S.shelf[S.sFront] = null; S.sFront = (S.sFront + 1) % SHELF; S.sCount--;
+  S.served++; S.revenue += o.total;
+  op('ok', `<b>dequeue</b>(&amp;shelf) → #${o.tok} handed over\nsFront = (${(S.sFront + SHELF - 1) % SHELF} + 1) % 20 = ${S.sFront}\nserved = ${S.served}`, 'O(1)', `dequeue shelf → #${o.tok} served`);
+  render();
+}
+let rushTimer = null;
+$('rush').addEventListener('click', () => {
+  if (rushTimer) return;
+  rushTimer = setInterval(() => {
+    if (S.count === N) {
+      clearInterval(rushTimer); rushTimer = null;
+      op('bad', '<b class="bad">reject</b> enqueue: queue full\ncount == 50, kitchen at capacity', 'O(1)', 'reject  queue full'); render(); return;
+    }
+    const slot = (S.front + S.count) % N;
+    S.kitchen[slot] = makeOrder(S.nextToken, `${pick(FIRST)} ${pick(LAST)}`, fakeUsn(), [[pick(ITEMS), 1 + Math.floor(Math.random() * 2)]], 0);
+    S.count++;
+    op('ok', `<b>enqueue</b>(&amp;kitchen, #${S.nextToken})\nrear  = ${slot} · count = ${S.count}`, 'O(1)', `enqueue #${S.nextToken} → slot ${slot}`);
+    S.nextToken++; render();
+  }, 70);
+});
+$('eod').addEventListener('click', () => {
+  op('ok', `<b>summary</b>() end of day\nserved  = ${S.served} · revenue = ₹${S.revenue.toLocaleString('en-IN')}\nkitchen = ${S.count} open · shelf = ${S.sCount}`, 'O(1)', `summary served ${S.served}`);
+  render();
+});
+$('reset').addEventListener('click', () => { if (rushTimer) { clearInterval(rushTimer); rushTimer = null; } const d = S.deg; seed(); S.deg = d; render(); });
+$('menu').addEventListener('click', e => {
+  const b = e.target.closest('button[data-n]'); if (!b) return;
+  const n = b.dataset.n; S.qty[n] = Math.max(0, Math.min(10, (S.qty[n] || 0) + Number(b.dataset.d))); render();
+});
+['f-name', 'f-usn'].forEach(id => $(id).addEventListener('input', render));
+document.querySelectorAll('.seg button').forEach(b => b.addEventListener('click', () => {
+  S.sec = b.dataset.sec; document.querySelectorAll('.seg button').forEach(x => x.setAttribute('aria-pressed', x === b)); render();
+}));
+document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('.tab').forEach(x => x.setAttribute('aria-selected', x === b));
+  document.querySelectorAll('.view').forEach(v => v.classList.toggle('on', v.id === 'view-' + b.dataset.view));
+}));
+seed(); render();
+</script>
+</body>
+</html>
