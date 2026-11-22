@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { IconAlertCircle, IconAlertTriangle, IconCircleCheck, IconMinus, IconPlus, IconTicket } from '@tabler/icons-react';
+import { IconMinus, IconPlus } from '@tabler/icons-react';
 import { NAME_PATTERN, USN_PATTERN, rupees } from '../format.js';
 
 const SECTIONS = ['Meals', 'Snacks', 'Drinks'];
@@ -75,7 +75,7 @@ export default function OrderForm({ menu, limits, state, run }) {
           <input id="f-usn" type="text" autoComplete="off" placeholder="1DS24CS017" className={`num ${usnError ? 'invalid' : ''}`}
                  value={usn} aria-invalid={!!usnError} aria-describedby="usn-msg"
                  onChange={(e) => { setUsn(e.target.value); setResult(null); }} />
-          {usnError && <div className="msg" id="usn-msg"><IconAlertCircle size={16} aria-hidden="true" /><span>{usnError}</span></div>}
+          {usnError && <div className="msg" id="usn-msg"><span>{usnError}</span></div>}
         </div>
 
         <div className="seg" role="group" aria-label="Menu section">
@@ -114,13 +114,11 @@ export default function OrderForm({ menu, limits, state, run }) {
         </div>
 
         <button className="btn primary issue" type="submit" disabled={!canIssue}>
-          <IconTicket size={18} aria-hidden="true" />
           {full ? 'Kitchen full' : sending ? 'Issuing…' : `Issue token #${state.nextToken}`}
         </button>
-        {block && <div className="msg after-issue"><IconAlertTriangle size={16} aria-hidden="true" /><span>{block}</span></div>}
+        {block && <div className="msg after-issue"><span>{block}</span></div>}
         {result && (
           <div className={`msg after-issue ${result.ok ? 'good' : ''}`} role="status">
-            {result.ok ? <IconCircleCheck size={16} aria-hidden="true" /> : <IconAlertTriangle size={16} aria-hidden="true" />}
             <span>{result.message}</span>
           </div>
         )}

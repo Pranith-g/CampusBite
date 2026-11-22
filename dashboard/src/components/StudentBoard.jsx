@@ -14,15 +14,15 @@ export default function StudentBoard({ state }) {
           {calling ? `${calling.name}, please collect` : 'No orders ready yet'}
           <span>{calling ? `Token ${calling.token} is ready at the counter` : 'Watch for your token number here'}</span>
         </h2>
-        <div className="t cond num">{calling ? calling.token : '—'}</div>
+        {calling && <div className="t cond num">{calling.token}</div>}
       </div>
 
       <div className="cols2">
         <div className="panel">
-          <h3>Preparing <span className={`num ${full ? 'full' : ''}`}>{kitchen.count} {kitchen.count === 1 ? 'order' : 'orders'}{full ? ' · kitchen full' : ''}</span></h3>
+          <h3>Preparing <span className={`num ${full ? 'full' : ''}`}>{kitchen.count} {kitchen.count === 1 ? 'order' : 'orders'}{kitchen.count ? ` · ${kitchen.orders[0].token} is next` : ''}{full ? ' · kitchen full' : ''}</span></h3>
           <div className="bignums prep cond num">
             {kitchen.orders.slice(0, shown).map((o, k) => (
-              <div key={o.token}>{k === 0 && <small>Next</small>}{o.token}</div>
+              <div key={o.token}>{o.token}</div>
             ))}
             {kitchen.count > PREP_TILES && <div className="more">+{kitchen.count - shown} more</div>}
             {!kitchen.count && <div className="none">No orders in the kitchen right now.</div>}

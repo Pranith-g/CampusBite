@@ -445,16 +445,16 @@ One command per line on stdin, one JSON line back on stdout ([`src/pipe.c`](src/
 
 | Command | Arguments | Does | Queue work |
 |---|---|---|---|
-| `STATE` | — | Return the current state | — |
-| `MENU` | — | Return the menu and limits | — |
+| `STATE` | none | Return the current state | none |
+| `MENU` | none | Return the menu and limits | none |
 | `PLACE` | `name\|usn\|id:qty,id:qty` | Issue a token | enqueue |
-| `READY` | — | Kitchen front → shelf | dequeue + enqueue |
-| `HANDOVER` | — | Shelf front → served | dequeue |
+| `READY` | none | Kitchen front → shelf | dequeue + enqueue |
+| `HANDOVER` | none | Shelf front → served | dequeue |
 | `CANCEL` | `token` | Cancel a kitchen order | remove + shift |
 | `SEARCH` | `token or USN` | Find an active order | linear search |
-| `RUSH` | — | Fill the kitchen with demo orders | enqueue × n |
-| `SUMMARY` | — | End-of-day totals | — |
-| `NEWDAY` | — | Clear both queues | init |
+| `RUSH` | none | Fill the kitchen with demo orders | enqueue × n |
+| `SUMMARY` | none | End-of-day totals | none |
+| `NEWDAY` | none | Clear both queues | init |
 
 Example: `READY` returns (state trimmed):
 

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { IconAlertTriangle, IconCheck, IconCircleCheck, IconFlame, IconReceipt, IconRotate, IconX } from '@tabler/icons-react';
+import { IconRotate } from '@tabler/icons-react';
 import KitchenDial from './KitchenDial.jsx';
 import { itemText, waitText } from '../format.js';
 
@@ -43,16 +43,15 @@ export default function KitchenQueue({ kitchen, shelf, menu, run, pending }) {
       <div className="dial-wrap">
         <KitchenDial queue={kitchen} />
         <div className="dial-center">
-          <div className="lbl">Next up</div>
           <div className={`tok cond num ${next ? '' : 'none'}`}>{next ? `#${next.token}` : 'Empty'}</div>
           <div className="who">
-            {next ? `${next.name} · ${itemText(next.items, menu)} · ${waitText(next.waitingMin)}` : 'No orders in the kitchen. Issue a token to start.'}
+            {next ? `Next up: ${next.name} · ${itemText(next.items, menu)} · ${waitText(next.waitingMin)}` : 'No orders in the kitchen. Issue a token to start.'}
           </div>
           <button className="btn go" type="button" onClick={markReady} disabled={!next || shelfFull || pending}>
-            <IconCheck size={17} aria-hidden="true" />Mark ready
+            Mark ready
           </button>
-          {next && shelfFull && <div className="msg"><IconAlertTriangle size={16} aria-hidden="true" /><span>Pickup shelf full. Hand over the front order first.</span></div>}
-          {readyMsg && !shelfFull && <div className="msg"><IconAlertTriangle size={16} aria-hidden="true" /><span>{readyMsg}</span></div>}
+          {next && shelfFull && <div className="msg"><span>Pickup shelf full. Hand over the front order first.</span></div>}
+          {readyMsg && !shelfFull && <div className="msg"><span>{readyMsg}</span></div>}
         </div>
       </div>
 
@@ -81,7 +80,6 @@ export default function KitchenQueue({ kitchen, shelf, menu, run, pending }) {
           <button className="btn ghost" type="button" onClick={() => { setTool(null); setToolMsg(null); }}>Close</button>
           {toolMsg && (
             <div className={`msg ${toolMsg.ok ? 'good' : ''}`} role="status">
-              {toolMsg.ok ? <IconCircleCheck size={16} aria-hidden="true" /> : <IconAlertTriangle size={16} aria-hidden="true" />}
               <span>{toolMsg.message}</span>
             </div>
           )}
@@ -90,11 +88,11 @@ export default function KitchenQueue({ kitchen, shelf, menu, run, pending }) {
 
       <div className="tools">
         <button className="btn danger" type="button" onClick={() => setTool(tool === 'cancel' ? null : 'cancel')}>
-          <IconX size={17} aria-hidden="true" />Cancel token
+          Cancel token
         </button>
         <span className="spacer" />
-        <button className="btn ghost" type="button" onClick={() => run('RUSH')} disabled={pending}><IconFlame size={17} aria-hidden="true" />Rush hour</button>
-        <button className="btn ghost" type="button" onClick={() => run('SUMMARY')} disabled={pending}><IconReceipt size={17} aria-hidden="true" />End of day</button>
+        <button className="btn ghost" type="button" onClick={() => run('RUSH')} disabled={pending}>Rush hour</button>
+        <button className="btn ghost" type="button" onClick={() => run('SUMMARY')} disabled={pending}>End of day</button>
         <button className={`btn ghost ${confirmDay ? 'confirm' : ''}`} type="button" onClick={newDay} onBlur={() => setConfirmDay(false)}
                 aria-label={confirmDay ? 'Click again to clear everything' : 'Start a new day'} title="Start a new day">
           <IconRotate size={17} aria-hidden="true" />{confirmDay && 'Clear everything?'}

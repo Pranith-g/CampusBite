@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { IconAlertTriangle, IconCircleCheck, IconPlugConnectedX } from '@tabler/icons-react';
+import { IconPlugConnectedX } from '@tabler/icons-react';
 import { getMenu, getState, sendCommand } from './api.js';
 import TopBar from './components/TopBar.jsx';
 import OrderForm from './components/OrderForm.jsx';
@@ -107,13 +107,11 @@ export default function App() {
       <TopBar state={state} view={view} onView={setView} onSearch={search} />
       {offline && (
         <div className="banner bad" role="alert">
-          <IconPlugConnectedX size={18} aria-hidden="true" />
           Lost connection to the C program. Showing the last known state.
         </div>
       )}
       {banner && (
         <div className={`banner ${banner.kind}`} role="status">
-          {banner.kind === 'ok' ? <IconCircleCheck size={18} aria-hidden="true" /> : <IconAlertTriangle size={18} aria-hidden="true" />}
           {banner.text}
           <button className="btn ghost" onClick={() => setBanner(null)}>Dismiss</button>
         </div>
