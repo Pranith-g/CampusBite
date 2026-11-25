@@ -13,13 +13,23 @@
 .dishes li:last-child { border-bottom: 0; }
 .dishes .name { font-size: 17px; font-weight: 700; overflow-wrap: anywhere; }
 .dishes .price { font-weight: 700; margin-top: 4px; }
-.dishes .meta { font-size: 14px; color: var(--ink-3); margin-top: 6px; }
+.dishes .meta { font-size: 14px; color: var(--ink-3); margin-top: 4px; }
+.dishes .about + .meta { margin-top: 6px; }
 .dishes .info { min-width: 0; }
 .dishes .about { font-size: 14px; line-height: 1.4; color: var(--ink-2); margin-top: 6px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 /* the green square-and-dot mark Indian menus use for vegetarian food */
 .veg { display: inline-grid; place-items: center; width: 16px; height: 16px; border: 1.5px solid var(--leaf); border-radius: 3px; flex: none; }
 .veg::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--leaf); }
-.dishes .veg { margin-bottom: 6px; }
+.dishes .marks { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.hp { font-size: 12px; font-weight: 700; color: var(--turmeric); border: 1px solid var(--turmeric); border-radius: 4px; padding: 0 6px; line-height: 18px; }
+/* the pure-veg note and the High protein filter share one row */
+.filters { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px 12px; margin-top: 12px; }
+.filters .pure { margin-top: 0; }
+.chip { appearance: none; font: inherit; font-size: 14px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink-2); cursor: pointer; touch-action: manipulation; }
+.chip[aria-pressed="true"] { border-color: var(--turmeric); background: var(--turmeric-soft); color: var(--turmeric); }
+@media (hover: hover) { .chip:hover { border-color: var(--line-hover); color: var(--ink); } .chip[aria-pressed="true"]:hover { border-color: var(--turmeric-hover); color: var(--turmeric-hover); } }
+.filter-note { margin-top: 16px; color: var(--ink-2); font-size: 14px; }
+.link { appearance: none; border: 0; background: none; padding: 0; font: inherit; color: var(--turmeric); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
 .pure { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-size: 14px; font-weight: 600; color: var(--leaf); }
 .dishes li.picked .name { color: var(--turmeric); }
 .shot { position: relative; flex: none; width: 140px; padding-bottom: 24px; }
