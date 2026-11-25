@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { IconLayoutGrid, IconLogout, IconReceipt, IconShoppingBag, IconToolsKitchen2 } from '@tabler/icons-react';
+import { IconLayoutGrid, IconLogout, IconReceipt, IconReceiptRefund, IconShoppingBag, IconToolsKitchen2, IconWallet } from '@tabler/icons-react';
 import { api } from '../api.js';
 import { go, useCart, usePolled, useRoute, useWide } from '../hooks.js';
 import { rupees } from '../format.js';
@@ -10,15 +10,16 @@ import Menu from './Menu.jsx';
 import OrderStatus from './OrderStatus.jsx';
 import Orders from './Orders.jsx';
 
-// Buzz the phone and change the tab title when one of your orders turns ready.
-function useReadyAlert(ready) {
+// Buzz the phone and change the tab title when one of your orders turns
+// ready, or a dish runs out and a refund needs your choice.
+function useAlerts(ready, owed) {
   const told = useRef(new Set());
-  const ids = ready.map((o) => o.id).join(',');
+  const ids = [...ready.map((o) => `r${o.id}`), ...owed.map((r) => `f${r.id}`)].join(',');
   useEffect(() => {
     const fresh = ids.split(',').filter((id) => id && !told.current.has(id));
     fresh.forEach((id) => told.current.add(id));
     if (fresh.length) navigator.vibrate?.([200, 100, 200]);
-    document.title = ids ? 'Food ready · CampusBite' : 'CampusBite';
+    document.title = ids.includes('f') ? 'Refund waiting · CampusBite' : ids ? 'Food ready · CampusBite' : 'CampusBite';
     return () => { document.title = 'CampusBite'; };
   }, [ids]);
 }
@@ -38,7 +39,10 @@ export default function Shop({ student, onSignedOut }) {
   const mine = usePolled(api.orders, 3000, onError);
   const orders = mine.data?.orders;
   const ready = (orders ?? []).filter((o) => o.status === 'ready');
-  useReadyAlert(ready);
+  // Refunds for dishes that ran out, still waiting for the student to choose.
+  const owed = (orders ?? []).flatMap((o) => o.refunds.filter((r) => !r.method).map((r) => ({ ...r, orderId: o.id })));
+  const wallet = mine.data?.wallet ?? 0;
+  useAlerts(ready, owed);
 
   // The menu is checked often, so prices and stock stay fresh.
   const { data: menu, error: menuError, refresh: reloadMenu } = usePolled(api.menu, 5000, onError);
@@ -78,7 +82,7 @@ export default function Shop({ student, onSignedOut }) {
 
   const cartPanel = menu && (
     <Cart lines={lines} total={total} cart={cart} maxQty={menu.maxQty} onError={onError}
-          onStale={reloadMenu} onPaid={mine.refresh} />
+          onStale={reloadMenu} onPaid={mine.refresh} wallet={wallet} />
   );
 
   return (
@@ -94,6 +98,11 @@ export default function Shop({ student, onSignedOut }) {
           ))}
         </nav>
         <div className="who">
+          {wallet > 0 && (
+            <a className="wallet-chip num" href="#/orders" aria-label={`Canteen wallet ${rupees(wallet)}`}>
+              <IconWallet size={18} aria-hidden="true" /> {rupees(wallet)}
+            </a>
+          )}
           <span>{student.name}</span>
           <button className="btn ghost" onClick={signOut}><IconLogout size={18} aria-hidden="true" /> Sign out</button>
         </div>
@@ -106,6 +115,12 @@ export default function Shop({ student, onSignedOut }) {
             <span><strong>Your food is ready</strong>Collect token {o.number} at the counter.</span>
           </a>
         ))}
+        {owed.filter((r) => !(screen === 'order' && String(r.orderId) === orderId)).map((r) => (
+          <a key={r.id} className="refund-bar" href={`#/orders/${r.orderId}`}>
+            <IconReceiptRefund size={28} aria-hidden="true" />
+            <span><strong>{r.items} ran out</strong>Choose where your {rupees(r.amount)} refund goes.</span>
+          </a>
+        ))}
       </div>
 
       {error && (
@@ -116,8 +131,8 @@ export default function Shop({ student, onSignedOut }) {
       )}
 
       <main className={wide && screen === 'menu' ? 'page split' : 'page'}>
-        {screen === 'orders' && <Orders orders={orders} error={mine.error} />}
-        {screen === 'order' && <OrderStatus key={orderId} id={orderId} onError={onError} />}
+        {screen === 'orders' && <Orders orders={orders} error={mine.error} wallet={wallet} />}
+        {screen === 'order' && <OrderStatus key={orderId} id={orderId} onError={onError} onChosen={mine.refresh} />}
         {screen === 'tokens' && <Board orders={orders ?? []} onError={onError} />}
         {screen === 'credits' && <Credits items={menu?.items ?? []} />}
         {screen === 'cart' && cartPanel}

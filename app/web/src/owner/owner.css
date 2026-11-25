@@ -101,3 +101,10 @@
 /* The cart hides small photos on very narrow phones; the Stock rows keep theirs. */
 .stock .photo.small { display: block; }
 .stock .photo.small.none { display: grid; }
+
+/* ---------- a dish ran out after paying ---------- */
+.btn.small { min-height: 36px; padding: 0 10px; font-size: 13px; }
+.rows .meta s { color: var(--chilli-text); }
+.ran-out { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 12px; background: var(--surface-2); border: 1px solid var(--line-strong); border-radius: 10px; }
+.ran-out p { flex-basis: 100%; font-size: 13px; color: var(--ink-2); }
+.notice { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 16px; background: var(--leaf-soft); color: var(--ink); border-bottom: 1px solid var(--leaf-line); font-size: 14px; }

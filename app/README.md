@@ -26,6 +26,10 @@ Then open http://localhost:4000. Sign in with a demo account from
 - A live token board
 - A "your food is ready" alert while the app is open
 - Order history
+- A dish that runs out after paying is refunded. The student chooses the
+  canteen wallet (instant, spent only at this canteen) or the original UPI or
+  card (a pretend refund that arrives in 2 to 3 days). The wallet can pay for
+  the next order.
 - "Only 3 left" and "Out of stock" on the menu, and a cart that says what to fix
 
 **Canteen owner** (http://localhost:4000/#/owner, account in `server/seed.js`)
@@ -34,17 +38,20 @@ Then open http://localhost:4000. Sign in with a demo account from
 - The kitchen queue drawn as a 50-slot dial with FRONT and REAR
 - Mark the front order ready, hand orders over from the pickup shelf (20 places)
 - "Add sample orders" to fill the kitchen for a demo (they use up stock)
+- "Ran out?" on a waiting order: pick the dish that cannot be made. The
+  student is refunded for it and the dish is marked out of stock. If nothing in
+  the order can be made, the order is cancelled and leaves the kitchen queue;
+  the orders behind it move up one slot, like the C queue.
 - Stock screen: starting quantity and quantity left for each dish, and an
   out-of-stock switch. Every dish starts at 60. Paying takes stock, so two
   students cannot buy the same last plate.
 
 For a demo, open the student side and the owner side in two tabs.
 
-Marking a dish out of stock stops new orders only. Orders already paid stay in
-the kitchen.
+Marking a dish out of stock on the Stock screen stops new orders only. For
+orders already paid, use "Ran out?" on the order.
 
-Not built yet: cancelling orders, refunds and wallet, calories, filters and
-combos. The alert does not reach a phone when the app is closed.
+Not built yet: calories, the high-protein filter and combos. The alert does not reach a phone when the app is closed.
 
 ## Dish photos
 

@@ -4,12 +4,13 @@
 import { AppError } from './errors.js';
 import { transaction } from './db.js';
 import { kitchenFull, nextSlot } from './kitchen.js';
+import { refundsFor, walletBalance } from './refunds.js';
 import { takeStock } from './stock.js';
 
 export const COOKS = 3;             // orders the kitchen can work on at once
 export const MAX_QTY = 10;          // most of one item in one order
 export const FIRST_NUMBER = 101;   // first token number
-export const PAY_METHODS = ['upi', 'card'];   // both are pretend payments
+export const PAY_METHODS = ['upi', 'card', 'wallet'];   // all pretend payments
 
 export function listMenu(db) {
   return db.prepare(`
@@ -25,7 +26,7 @@ export function kitchenLoad(db) {
   return db.prepare(`
     SELECT COALESCE(SUM(i.prep_min * i.qty), 0) AS minutes
     FROM order_items i JOIN orders o ON o.id = i.order_id
-    WHERE o.status = 'preparing'`).get().minutes;
+    WHERE o.status = 'preparing' AND i.ran_out = 0`).get().minutes;
 }
 
 // Estimated time = the work already ahead, shared between the cooks,
@@ -78,6 +79,10 @@ export function placeOrder(db, student, body, label = null) {
     if (expectedTotal !== undefined && expectedTotal !== amount) {
       throw new AppError(409, 'Prices changed. Check the new total and pay again.');
     }
+    if (payMethod === 'wallet') {
+      const balance = walletBalance(db, student.id);
+      if (balance < amount) throw new AppError(409, `Your canteen wallet has only ₹${balance}. Pay by UPI or card.`);
+    }
     const slot = nextSlot(db);
     takeStock(db, lines);
     const eta = estimateMinutes(db, lines);
@@ -94,12 +99,13 @@ export function placeOrder(db, student, body, label = null) {
 const ORDER_COLUMNS = 'id, number, status, total, pay_method AS payMethod, eta_min AS etaMin, placed_at AS placedAt, ready_at AS readyAt';
 
 function withItems(db, order) {
-  const items = db.prepare('SELECT item_id AS id, name, price, qty FROM order_items WHERE order_id = ? ORDER BY rowid').all(order.id);
+  const items = db.prepare('SELECT item_id AS id, name, price, qty, ran_out AS ranOut FROM order_items WHERE order_id = ? ORDER BY rowid')
+    .all(order.id).map((i) => ({ ...i, ranOut: Boolean(i.ranOut) }));
   // How many orders are in front of this one in the kitchen queue.
   const ahead = order.status === 'preparing'
     ? db.prepare("SELECT COUNT(*) AS n FROM orders WHERE status = 'preparing' AND id < ?").get(order.id).n
     : 0;
-  return { ...order, ahead, ageMs: Date.now() - order.placedAt, items };
+  return { ...order, ahead, ageMs: Date.now() - order.placedAt, items, refunds: refundsFor(db, order.id) };
 }
 
 // A student can only ever read their own orders.

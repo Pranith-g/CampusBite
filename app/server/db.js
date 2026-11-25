@@ -47,7 +47,7 @@ const SCHEMA = `
     number        INTEGER NOT NULL UNIQUE,   -- the token number
     student_id    INTEGER NOT NULL REFERENCES students(id),
     request_id    TEXT NOT NULL,
-    status        TEXT NOT NULL DEFAULT 'preparing',  -- preparing, ready, collected
+    status        TEXT NOT NULL DEFAULT 'preparing',  -- preparing, ready, collected, cancelled
     total         INTEGER NOT NULL,
     pay_method    TEXT NOT NULL,
     eta_min       INTEGER NOT NULL,
@@ -64,7 +64,18 @@ const SCHEMA = `
     name      TEXT NOT NULL,
     price     INTEGER NOT NULL,
     prep_min  INTEGER NOT NULL,
-    qty       INTEGER NOT NULL
+    qty       INTEGER NOT NULL,
+    ran_out   INTEGER NOT NULL DEFAULT 0   -- 1 when the dish ran out after paying
+  );
+  CREATE TABLE IF NOT EXISTS refunds (
+    id          INTEGER PRIMARY KEY,
+    order_id    INTEGER NOT NULL REFERENCES orders(id),
+    student_id  INTEGER NOT NULL REFERENCES students(id),
+    amount      INTEGER NOT NULL,
+    items       TEXT NOT NULL,     -- what ran out, like "2 × Masala dosa"
+    created_at  INTEGER NOT NULL,
+    method      TEXT,              -- wallet or original; empty until the student chooses
+    chosen_at   INTEGER
   );
 `;
 
@@ -77,6 +88,7 @@ const ADDED_COLUMNS = {
     left_qty: `INTEGER NOT NULL DEFAULT ${START_QTY}`,
     sold_out: 'INTEGER NOT NULL DEFAULT 0',
   },
+  order_items: { ran_out: 'INTEGER NOT NULL DEFAULT 0' },
   orders: { slot: 'INTEGER NOT NULL DEFAULT 0', ready_at: 'INTEGER', collected_at: 'INTEGER', label: 'TEXT' },
 };
 

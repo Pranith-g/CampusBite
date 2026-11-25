@@ -12,8 +12,11 @@ const shortage = (line) => {
   return line.qty > line.left ? `Only ${line.left} left` : '';
 };
 
-export default function Cart({ lines, total, cart, maxQty, onError, onStale, onPaid }) {
+export default function Cart({ lines, total, cart, maxQty, onError, onStale, onPaid, wallet = 0 }) {
   const [method, setMethod] = useState('upi');
+  const walletShort = wallet < total;
+  // The wallet stops being a choice once the cart costs more than it holds.
+  useEffect(() => { if (method === 'wallet' && walletShort) setMethod('upi'); }, [method, walletShort]);
   const [paying, setPaying] = useState(false);
   const [error, setError] = useState('');
 
@@ -93,13 +96,17 @@ export default function Cart({ lines, total, cart, maxQty, onError, onStale, onP
 
       <fieldset className="methods" disabled={paying}>
         <legend>Pay with</legend>
-        {Object.entries(PAY_METHODS).map(([id, label]) => (
-          <label key={id}>
-            <input type="radio" name="method" value={id} checked={method === id} onChange={() => setMethod(id)} />
-            <span>{label}</span>
+        {Object.entries(PAY_METHODS).filter(([id]) => id !== 'wallet' || wallet > 0).map(([id, label]) => (
+          <label key={id} className={id === 'wallet' ? 'wallet' : undefined}>
+            <input type="radio" name="method" value={id} checked={method === id} onChange={() => setMethod(id)}
+                   disabled={id === 'wallet' && walletShort} />
+            <span>{id === 'wallet' ? <>Wallet <b className="num">{rupees(wallet)}</b></> : label}</span>
           </label>
         ))}
       </fieldset>
+      {wallet > 0 && walletShort && (
+        <p className="fine">Your canteen wallet has {rupees(wallet)}, not enough for this order.</p>
+      )}
 
       {error && (
         <p className="msg" role="alert"><IconAlertCircle size={18} aria-hidden="true" /> <span>{error}</span></p>

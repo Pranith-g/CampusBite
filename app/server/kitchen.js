@@ -2,9 +2,12 @@
 // idea as the C project:
 //   a new order takes the slot after REAR:   (rear + 1) % 50
 //   the order at FRONT is the next one to be marked ready
-// An order that is "preparing" occupies its slot. Because orders leave only
-// from the front, the slot after REAR is always free unless all 50 are used.
+// An order that is "preparing" occupies its slot. Orders stay side by side
+// from FRONT to REAR, so the slot after REAR is free unless all 50 are used.
 // Ready orders wait on the pickup shelf (20 places) until handed over.
+// A cancelled order leaves from the middle. Like queue_remove_token in the C
+// project, every order behind it moves one slot toward the front, so the
+// orders stay side by side and REAR steps back by one.
 import { transaction } from './db.js';
 import { AppError } from './errors.js';
 import { outOfStockCount } from './stock.js';
@@ -16,7 +19,8 @@ const countWith = (db, status) => db.prepare('SELECT COUNT(*) AS n FROM orders W
 
 export const kitchenFull = (db) => countWith(db, 'preparing') >= KITCHEN_SLOTS;
 
-const newest = (db) => db.prepare('SELECT slot, number FROM orders ORDER BY id DESC LIMIT 1').get();
+// The newest order that took a slot. Its slot is REAR.
+const newest = (db) => db.prepare("SELECT slot, number FROM orders WHERE status != 'cancelled' ORDER BY id DESC LIMIT 1").get();
 
 // The slot for a new order.
 export function nextSlot(db) {
@@ -39,6 +43,13 @@ export function markReady(db, token) {
   });
 }
 
+// Take an order out of the middle of the kitchen queue (it was cancelled).
+// Call inside a transaction.
+export function removeFromKitchen(db, orderId) {
+  db.prepare("UPDATE orders SET status = 'cancelled' WHERE id = ? AND status = 'preparing'").run(orderId);
+  db.prepare(`UPDATE orders SET slot = (slot + ${KITCHEN_SLOTS - 1}) % ${KITCHEN_SLOTS} WHERE status = 'preparing' AND id > ?`).run(orderId);
+}
+
 export function handOver(db, token) {
   if (!Number.isInteger(token)) throw new AppError(400, 'Which token?');
   const { changes } = db.prepare("UPDATE orders SET status = 'collected', collected_at = ? WHERE number = ? AND status = 'ready'")
@@ -47,14 +58,14 @@ export function handOver(db, token) {
 }
 
 function ordersWith(db, status, sort) {
-  const items = db.prepare('SELECT name, qty FROM order_items WHERE order_id = ? ORDER BY rowid');
+  const items = db.prepare('SELECT item_id AS id, name, qty, ran_out AS ranOut FROM order_items WHERE order_id = ? ORDER BY rowid');
   return db.prepare(`
     SELECT o.id, o.number AS token, o.slot, o.placed_at AS placedAt, o.ready_at AS readyAt,
            COALESCE(o.label, s.name) AS name
     FROM orders o JOIN students s ON s.id = o.student_id
     WHERE o.status = ? ORDER BY ${sort}`)
     .all(status)
-    .map((o) => ({ ...o, items: items.all(o.id) }));
+    .map((o) => ({ ...o, items: items.all(o.id).map((i) => ({ ...i, ranOut: Boolean(i.ranOut) })) }));
 }
 
 // Everything the owner screen shows.
@@ -69,7 +80,9 @@ export function ownerState(db) {
     kitchen: { capacity: KITCHEN_SLOTS, count: kitchen.length, front, rear, orders: kitchen },
     shelf: { capacity: SHELF_SLOTS, count: shelf.length, orders: shelf },
     collectedToday: db.prepare('SELECT COUNT(*) AS n FROM orders WHERE collected_at >= ?').get(today).n,
-    paidToday: db.prepare('SELECT COALESCE(SUM(total), 0) AS n FROM orders WHERE placed_at >= ?').get(today).n,
+    // Takings today, less what was refunded.
+    paidToday: db.prepare('SELECT COALESCE(SUM(total), 0) AS n FROM orders WHERE placed_at >= ?').get(today).n
+      - db.prepare('SELECT COALESCE(SUM(amount), 0) AS n FROM refunds WHERE created_at >= ?').get(today).n,
     outOfStock: outOfStockCount(db),
     now: Date.now(),
   };

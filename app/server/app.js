@@ -6,6 +6,7 @@ import { createAuth } from './auth.js';
 import { AppError } from './errors.js';
 import { board, handOver, markReady, ownerState } from './kitchen.js';
 import { COOKS, MAX_QTY, getOrder, kitchenLoad, listMenu, listOrders, placeOrder, quote } from './orders.js';
+import { chooseRefund, markRanOut, walletBalance } from './refunds.js';
 import { addSampleOrders } from './samples.js';
 import { listStock, updateStock } from './stock.js';
 
@@ -108,6 +109,10 @@ export function createServer(db, options) {
       handOver(db, (await readBody(req)).token);
       return send(res, 200, ownerState(db));
     }
+    if (route === 'POST /api/owner/ran-out') {
+      const done = markRanOut(db, await readBody(req));
+      return send(res, 200, { ...ownerState(db), done });
+    }
     if (route === 'GET /api/owner/stock') return send(res, 200, { items: listStock(db) });
     if (route === 'POST /api/owner/stock') {
       updateStock(db, await readBody(req));
@@ -152,7 +157,14 @@ export function createServer(db, options) {
       const body = await readBody(req);
       return send(res, 201, { order: placeOrder(db, student, body) });
     }
-    if (route === 'GET /api/orders') return send(res, 200, { orders: listOrders(db, student) });
+    if (route === 'GET /api/orders') {
+      return send(res, 200, { orders: listOrders(db, student), wallet: walletBalance(db, student.id) });
+    }
+    const refund = req.method === 'POST' && path.match(/^\/api\/refunds\/(\d{1,12})$/);
+    if (refund) {
+      chooseRefund(db, student, Number(refund[1]), (await readBody(req)).method);
+      return send(res, 200, { orders: listOrders(db, student), wallet: walletBalance(db, student.id) });
+    }
     const one = req.method === 'GET' && path.match(/^\/api\/orders\/(\d{1,12})$/);
     if (one) return send(res, 200, { order: getOrder(db, student, Number(one[1])) });
 

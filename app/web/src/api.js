@@ -35,6 +35,7 @@ export const api = {
   orders: () => request('GET', '/orders'),
   order: (id) => request('GET', `/orders/${id}`),
   board: () => request('GET', '/board'),
+  chooseRefund: (id, method) => request('POST', `/refunds/${id}`, { method }),
 
   // Canteen owner
   ownerMe: () => request('GET', '/owner/me'),
@@ -43,6 +44,7 @@ export const api = {
   ownerState: () => request('GET', '/owner/state'),
   markReady: (token) => request('POST', '/owner/ready', { token }),
   handOver: (token) => request('POST', '/owner/hand-over', { token }),
+  ranOut: (token, itemId) => request('POST', '/owner/ran-out', { token, itemId }),
   sampleOrders: () => request('POST', '/owner/sample-orders', {}),
   ownerStock: () => request('GET', '/owner/stock'),
   saveStock: (change) => request('POST', '/owner/stock', change),

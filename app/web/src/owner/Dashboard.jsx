@@ -3,6 +3,11 @@ import { IconLogout, IconToolsKitchen2 } from '@tabler/icons-react';
 import { api } from '../api.js';
 import { usePolled, useRoute } from '../hooks.js';
 import { itemText, ordinal, rupees, waitedText } from '../format.js';
+
+// The items in an order, with the ones that ran out struck through.
+const Items = ({ items }) => items.map((i, k) => (
+  <span key={i.id}>{k > 0 && ', '}{i.ranOut ? <s>{i.qty} × {i.name}</s> : `${i.qty} × ${i.name}`}</span>
+));
 import KitchenDial from './KitchenDial.jsx';
 import Stock from './Stock.jsx';
 
@@ -16,6 +21,8 @@ export default function Dashboard({ onSignedOut }) {
   const { data, error, refresh } = usePolled(api.ownerState, 2000, onError);
   const [pending, setPending] = useState(false);
   const [message, setMessage] = useState('');
+  const [notice, setNotice] = useState('');
+  const [askToken, setAskToken] = useState(null);   // the order whose "Ran out?" list is open
   const stockTab = useRoute() === 'owner/stock';
   const last = useRef({ key: '', at: 0 });
 
@@ -26,6 +33,7 @@ export default function Dashboard({ onSignedOut }) {
     last.current = { key, at: Date.now() };
     setPending(true);
     setMessage('');
+    setNotice('');
     try {
       await work();
     } catch (err) {
@@ -35,6 +43,15 @@ export default function Dashboard({ onSignedOut }) {
     await refresh();
     setPending(false);
   };
+
+  // A dish in a waiting order cannot be made: refund it to the student.
+  const ranOut = (order, item) => act(`out-${order.token}-${item.id}`, async () => {
+    const { done } = await api.ranOut(order.token, item.id);
+    setAskToken(null);
+    setNotice(done.cancelled
+      ? `Token ${done.token} cancelled: nothing in it can be made. ${order.name} gets a ${rupees(done.amount)} refund for ${done.dish}.`
+      : `${done.dish} ran out for token ${done.token}. ${order.name} gets a ${rupees(done.amount)} refund. ${done.dish} is now out of stock.`);
+  });
 
   const signOut = async () => {
     try {
@@ -74,6 +91,12 @@ export default function Dashboard({ onSignedOut }) {
       </header>
 
       {(error || message) && <div className="banner" role="alert"><span>{message || error.message}</span></div>}
+      {notice && !message && (
+        <div className="notice" role="status">
+          <span>{notice}</span>
+          <button className="btn ghost" onClick={() => setNotice('')}>OK</button>
+        </div>
+      )}
 
       {stockTab ? <Stock onError={onError} onSaved={refresh} /> : (
       <main className="counter">
@@ -85,9 +108,24 @@ export default function Dashboard({ onSignedOut }) {
                 <div className="t cond num">{o.token}</div>
                 <div>
                   <div className="n">{o.name}</div>
-                  <div className="meta">{itemText(o.items)}</div>
+                  <div className="meta"><Items items={o.items} /></div>
                   <div className="meta num">{k === 0 ? 'Next' : `${ordinal(k + 1)} in line`} · {waitedText(now - o.placedAt)}</div>
                 </div>
+                <button className="btn small" aria-expanded={askToken === o.token} disabled={pending}
+                        aria-label={`Something ran out in token ${o.token}`}
+                        onClick={() => setAskToken(askToken === o.token ? null : o.token)}>
+                  Ran out?
+                </button>
+                {askToken === o.token && (
+                  <div className="ran-out">
+                    <p>Which dish can&rsquo;t be made? {o.name} is refunded for it.</p>
+                    {o.items.filter((i) => !i.ranOut).map((i) => (
+                      <button key={i.id} className="btn" disabled={pending} onClick={() => ranOut(o, i)}>
+                        {i.qty} × {i.name} ran out
+                      </button>
+                    ))}
+                  </div>
+                )}
               </li>
             ))}
             {!kitchen.count && <li className="none">No orders waiting. New orders from students appear here by themselves.</li>}
