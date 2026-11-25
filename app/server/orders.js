@@ -14,7 +14,7 @@ export const PAY_METHODS = ['upi', 'card', 'wallet'];   // all pretend payments
 
 export function listMenu(db) {
   return db.prepare(`
-    SELECT id, name, section, price, prep_min AS prepMin, photo, about, left_qty AS "left",
+    SELECT id, name, section, price, prep_min AS prepMin, photo, about, kcal, protein_g AS protein, left_qty AS "left",
            (sold_out = 1 OR left_qty = 0) AS soldOut
     FROM menu_items ORDER BY id`)
     .all()

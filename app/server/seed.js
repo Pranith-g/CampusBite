@@ -36,6 +36,26 @@ export const MENU = [
     'Warm milk with almonds and saffron'],
 ];
 
+// Rough calories (kcal) and protein (grams) for one serving, from typical
+// recipes. A real canteen should check these against its own recipes.
+export const NUTRITION = {
+  'Masala dosa': [380, 8],
+  'Idli vada': [330, 11],
+  'Veg thali': [650, 18],
+  'Chole bhature': [720, 19],
+  'Veg biryani': [520, 12],
+  'Samosa (2)': [520, 8],
+  'Vada pav': [290, 7],
+  'Gobi manchurian': [340, 7],
+  'Paneer roll': [450, 20],
+  'Bhel puri': [260, 6],
+  'Filter coffee': [110, 4],
+  'Masala chai': [100, 3],
+  'Fresh lime soda': [70, 0],
+  'Mango lassi': [260, 8],
+  'Badam milk': [220, 9],
+};
+
 // Every dish starts with this many. The owner changes it on the Stock screen.
 export const START_QTY = 60;
 

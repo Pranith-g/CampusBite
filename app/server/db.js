@@ -5,7 +5,7 @@ import { DatabaseSync } from 'node:sqlite';
 import { mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { hashPin } from './auth.js';
-import { MENU, OWNER, SAMPLE_USN, START_QTY, STUDENTS } from './seed.js';
+import { MENU, NUTRITION, OWNER, SAMPLE_USN, START_QTY, STUDENTS } from './seed.js';
 
 const SCHEMA = `
   CREATE TABLE IF NOT EXISTS students (
@@ -38,6 +38,8 @@ const SCHEMA = `
     prep_min  INTEGER NOT NULL,
     photo     TEXT,
     about     TEXT,                                  -- one line under the name on the menu
+    kcal      INTEGER,                               -- rough calories for one serving
+    protein_g INTEGER,                               -- rough protein in grams for one serving
     start_qty INTEGER NOT NULL DEFAULT ${START_QTY},  -- stock the owner started with
     left_qty  INTEGER NOT NULL DEFAULT ${START_QTY},  -- stock that can still be ordered
     sold_out  INTEGER NOT NULL DEFAULT 0              -- the owner's out-of-stock switch
@@ -84,6 +86,8 @@ const ADDED_COLUMNS = {
   menu_items: {
     photo: 'TEXT',
     about: 'TEXT',
+    kcal: 'INTEGER',
+    protein_g: 'INTEGER',
     start_qty: `INTEGER NOT NULL DEFAULT ${START_QTY}`,
     left_qty: `INTEGER NOT NULL DEFAULT ${START_QTY}`,
     sold_out: 'INTEGER NOT NULL DEFAULT 0',
@@ -130,6 +134,8 @@ function seed(db) {
   for (const [name, , , , photo] of MENU) setPhoto.run(photo, name);
   const setAbout = db.prepare('UPDATE menu_items SET about = ? WHERE name = ? AND about IS NULL');
   for (const [name, , , , , about] of MENU) setAbout.run(about, name);
+  const setNutrition = db.prepare('UPDATE menu_items SET kcal = ?, protein_g = ? WHERE name = ? AND kcal IS NULL');
+  for (const [name, [kcal, protein]] of Object.entries(NUTRITION)) setNutrition.run(kcal, protein, name);
 
   if (empty('students')) {
     const add = db.prepare('INSERT INTO students (usn, name, pin_hash) VALUES (?, ?, ?)');
