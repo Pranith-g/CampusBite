@@ -24,3 +24,6 @@ data/*.txt
 *.log
 Thumbs.db
 .DS_Store
+
+# The ordering app in app/: its database is local demo data
+app/data/
