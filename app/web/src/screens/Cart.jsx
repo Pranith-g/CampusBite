@@ -1,0 +1,116 @@
+import { useCallback, useEffect, useState } from 'react';
+import { IconAlertCircle } from '@tabler/icons-react';
+import DishPhoto from '../components/DishPhoto.jsx';
+import Stepper from '../components/Stepper.jsx';
+import { api } from '../api.js';
+import { go, usePolled } from '../hooks.js';
+import { PAY_METHODS, rupees } from '../format.js';
+
+// Why a line cannot be paid for right now, or '' if it can.
+const shortage = (line) => {
+  if (line.soldOut) return 'Out of stock';
+  return line.qty > line.left ? `Only ${line.left} left` : '';
+};
+
+export default function Cart({ lines, total, cart, maxQty, onError, onStale, onPaid }) {
+  const [method, setMethod] = useState('upi');
+  const [paying, setPaying] = useState(false);
+  const [error, setError] = useState('');
+
+  // Ask the server for the estimated time, and keep it fresh.
+  const wanted = JSON.stringify(lines.map(({ id, qty }) => ({ id, qty })));
+  const loadQuote = useCallback(
+    () => (wanted === '[]' ? Promise.resolve(null) : api.quote(JSON.parse(wanted))),
+    [wanted],
+  );
+  const { data: quote } = usePolled(loadQuote, 10000, onError);
+  // An old "payment failed" message no longer applies once the cart, or what
+  // is in stock for it, changes.
+  const stockNow = lines.map(shortage).join();
+  useEffect(() => setError(''), [wanted, stockNow]);
+
+  const pay = async () => {
+    setPaying(true);
+    setError('');
+    try {
+      const { order } = await api.placeOrder({
+        items: JSON.parse(wanted), payMethod: method, requestId: cart.requestId, expectedTotal: total,
+      });
+      cart.clear();
+      onPaid();
+      go(`orders/${order.id}`);
+    } catch (err) {
+      onError(err);
+      if (err.status === 400 || err.status === 409) onStale();
+      setError(err.message);
+    } finally {
+      setPaying(false);
+    }
+  };
+
+  const full = quote?.kitchenFull;
+  const short = lines.some(shortage);
+
+  if (!lines.length) {
+    return (
+      <section className="cart" aria-labelledby="cart-title">
+        <h2 id="cart-title">Your cart</h2>
+        <p className="empty">Your cart is empty. Tap Add on anything in the menu.</p>
+      </section>
+    );
+  }
+
+  return (
+    <section className="cart" aria-labelledby="cart-title">
+      <h2 id="cart-title">Your cart</h2>
+      <ul className="items">
+        {lines.map((l) => {
+          const max = Math.min(maxQty, l.left);
+          return (
+            <li key={l.id}>
+              <DishPhoto photo={l.photo} size="small" />
+              <div>
+                <div className="name">{l.name}</div>
+                <div className="meta num">{l.qty} × {rupees(l.price)} = <b>{rupees(l.price * l.qty)}</b></div>
+                {shortage(l) && <div className="short num" role="alert">{shortage(l)}</div>}
+              </div>
+              {l.soldOut ? (
+                <button className="btn" aria-label={`Remove ${l.name}`} disabled={paying}
+                        onClick={() => cart.change(l.id, -l.qty, 0)}>Remove</button>
+              ) : (
+                <Stepper name={l.name} qty={l.qty} max={max} disabled={paying}
+                         onChange={(d) => cart.change(l.id, d, max)} />
+              )}
+            </li>
+          );
+        })}
+      </ul>
+
+      <dl className="sum num">
+        <div className="total"><dt>Total</dt><dd>{rupees(total)}</dd></div>
+        <div><dt>Estimated time</dt><dd>{quote ? `about ${quote.etaMin} min` : 'checking…'}</dd></div>
+      </dl>
+
+      <fieldset className="methods" disabled={paying}>
+        <legend>Pay with</legend>
+        {Object.entries(PAY_METHODS).map(([id, label]) => (
+          <label key={id}>
+            <input type="radio" name="method" value={id} checked={method === id} onChange={() => setMethod(id)} />
+            <span>{label}</span>
+          </label>
+        ))}
+      </fieldset>
+
+      {error && (
+        <p className="msg" role="alert"><IconAlertCircle size={18} aria-hidden="true" /> <span>{error}</span></p>
+      )}
+      {full && (
+        <p className="msg" role="alert"><IconAlertCircle size={18} aria-hidden="true" /> <span>Every kitchen slot is taken. Try again in a few minutes.</span></p>
+      )}
+      <button className="btn primary pay" disabled={paying || full || short} onClick={pay}>
+        {short ? 'Fix your cart to pay' : full ? 'Kitchen is full' : paying ? 'Paying…' : `Pay ${rupees(total)}`}
+      </button>
+      <p className="fine">This is a demo payment. No real money is taken.</p>
+    </section>
+  );
+}
