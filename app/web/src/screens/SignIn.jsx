@@ -30,27 +30,34 @@ export default function SignIn({ onDone }) {
   const message = badUsn ? `${id} isn't a valid USN. Use 10 characters like 1DS24CS017.` : error;
 
   return (
-    <main className="signin">
-      <div className="brand"><IconToolsKitchen2 size={22} aria-hidden="true" /> CampusBite</div>
-      <div className="signin-food" aria-hidden="true">
-        {['masala-dosa', 'chole-bhature', 'samosa'].map((p) => <img key={p} src={`/food/${p}.jpg`} alt="" />)}
+    <main className="welcome">
+      <div className="hero" aria-hidden="true">
+        <img src="/food/hero.jpg" alt="" />
+        <div className="hero-ticket">
+          <span>Token</span>
+          <b className="cond num">101</b>
+          <span className="ready">Ready to collect</span>
+        </div>
       </div>
-      <h1>Order from the canteen</h1>
-      <p className="lead">Pay on your phone, then collect your food at the counter.</p>
-      <form onSubmit={submit} noValidate>
-        <label htmlFor="usn">USN</label>
-        <input id="usn" type="text" autoComplete="username" autoCapitalize="characters" spellCheck="false"
-               maxLength={10} placeholder="1DS24CS017" className={badUsn ? 'invalid' : ''} aria-invalid={badUsn}
-               value={usn} onChange={(e) => { setUsn(e.target.value.toUpperCase()); setError(''); }} />
-        <label htmlFor="pin">PIN</label>
-        <input id="pin" type="password" inputMode="numeric" autoComplete="current-password" maxLength={8}
-               value={pin} onChange={(e) => { setPin(e.target.value); setError(''); }} />
-        {message && (
-          <p className="msg" role="alert"><IconAlertCircle size={18} aria-hidden="true" /> <span>{message}</span></p>
-        )}
-        <button className="btn primary" type="submit" disabled={!ready}>{sending ? 'Signing in…' : 'Sign in'}</button>
-      </form>
-      <p className="switch"><a href="#/owner">Canteen owner? Sign in here</a></p>
+      <div className="welcome-body">
+        <div className="brand"><IconToolsKitchen2 size={22} aria-hidden="true" /> CampusBite</div>
+        <h1>Skip the queue at the canteen</h1>
+        <p className="lead">Order and pay on your phone. Collect your food when your token is called.</p>
+        <form onSubmit={submit} noValidate>
+          <label htmlFor="usn">USN</label>
+          <input id="usn" type="text" autoComplete="username" autoCapitalize="characters" spellCheck="false"
+                 maxLength={10} placeholder="1DS24CS017" className={badUsn ? 'invalid' : ''} aria-invalid={badUsn}
+                 value={usn} onChange={(e) => { setUsn(e.target.value.toUpperCase()); setError(''); }} />
+          <label htmlFor="pin">PIN</label>
+          <input id="pin" type="password" inputMode="numeric" autoComplete="current-password" maxLength={8}
+                 value={pin} onChange={(e) => { setPin(e.target.value); setError(''); }} />
+          {message && (
+            <p className="msg" role="alert"><IconAlertCircle size={18} aria-hidden="true" /> <span>{message}</span></p>
+          )}
+          <button className="btn primary" type="submit" disabled={!ready}>{sending ? 'Signing in…' : 'Sign in'}</button>
+        </form>
+        <p className="switch"><a href="#/owner">Canteen owner? Sign in here</a></p>
+      </div>
     </main>
   );
 }

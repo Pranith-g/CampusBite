@@ -72,6 +72,32 @@ input.invalid, input.invalid:focus { border-color: var(--chilli); }
 .signin form { display: grid; margin-top: 24px; }
 .signin label { font-size: 14px; font-weight: 500; color: var(--ink-2); margin: 12px 0 8px; }
 .signin .btn { margin-top: 24px; }
+/* student sign-in: dish photo on top (left on a laptop), form below */
+.welcome { min-height: 100vh; min-height: 100dvh; }
+.welcome .hero { position: relative; height: 300px; overflow: hidden; }
+.welcome .hero img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.welcome .hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(21, 16, 12, 0) 45%, var(--ground)); }
+.hero-ticket { position: absolute; right: 16px; bottom: 28px; z-index: 1; display: grid; justify-items: start; gap: 2px; padding: 12px 16px; background: var(--surface); border: 1px solid var(--line-strong); border-radius: 12px; box-shadow: var(--shadow); font-size: 13px; color: var(--ink-2); }
+.hero-ticket b { font-size: 44px; line-height: .95; color: var(--ink); }
+.hero-ticket .ready { color: var(--leaf); font-weight: 600; }
+.welcome-body { max-width: 420px; margin: 0 auto; padding: 4px 20px calc(32px + env(safe-area-inset-bottom)); }
+.welcome .brand { margin-bottom: 16px; }
+.welcome .brand svg { color: var(--turmeric); }
+.welcome h1 { font-size: 30px; font-stretch: 90%; line-height: 1.1; }
+.welcome form { display: grid; margin-top: 24px; }
+.welcome label { font-size: 14px; font-weight: 500; color: var(--ink-2); margin: 12px 0 8px; }
+.welcome .btn { margin-top: 24px; }
+@media (min-width: 900px) {
+  .welcome { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(420px, 1fr); }
+  .welcome .hero { height: auto; min-height: 100vh; }
+  .welcome .hero::after { background: linear-gradient(to right, rgba(21, 16, 12, 0) 60%, var(--ground)); }
+  .hero-ticket { left: 40px; right: auto; bottom: 40px; padding: 16px 20px; }
+  .hero-ticket b { font-size: 64px; }
+  .welcome-body { align-self: center; width: 100%; padding: 48px 40px; }
+  .welcome h1 { font-size: 40px; }
+}
+/* keep browser autofill from painting the inputs blue */
+input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus { -webkit-box-shadow: 0 0 0 40px var(--ground) inset; -webkit-text-fill-color: var(--ink); caret-color: var(--turmeric); transition: background-color 9999s; }
 .center { min-height: 80vh; display: grid; place-items: center; text-align: center; color: var(--ink-2); padding: 24px; }
 .center .btn { margin-top: 16px; }
 
@@ -101,7 +127,7 @@ input.invalid, input.invalid:focus { border-color: var(--chilli); }
 .sum div { display: flex; justify-content: space-between; gap: 16px; }
 .sum dd { white-space: nowrap; }
 .sum .total { color: var(--ink); font-size: 19px; font-weight: 700; }
-.methods { border: 0; margin-top: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.methods { border: 0; margin-top: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(104px, 1fr)); gap: 8px; }
 .methods legend { font-size: 14px; font-weight: 500; color: var(--ink-2); margin-bottom: 8px; }
 .methods label { display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 12px; border: 1px solid var(--line-strong); border-radius: 8px; cursor: pointer; font-weight: 500; }
 .methods label:has(input:checked) { border-color: var(--turmeric); background: var(--turmeric-soft); }
