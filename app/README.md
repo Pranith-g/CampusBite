@@ -21,6 +21,7 @@ Then open http://localhost:4000. Sign in with a demo account from
 **Students** (http://localhost:4000)
 
 - Sign in, browse the menu with dish photos, add to cart
+- Calories and protein for each dish, and a "High protein" filter (15 g or more)
 - Pretend payment (no real money) and a token number
 - Estimated time, and how many orders are ahead
 - A live token board
@@ -51,7 +52,10 @@ For a demo, open the student side and the owner side in two tabs.
 Marking a dish out of stock on the Stock screen stops new orders only. For
 orders already paid, use "Ran out?" on the order.
 
-Not built yet: calories, the high-protein filter and combos. The alert does not reach a phone when the app is closed.
+Calories and protein are rough values for one serving from typical recipes.
+Change them in `server/seed.js` to match your own canteen.
+
+Not built yet: combos. The alert does not reach a phone when the app is closed.
 
 ## Dish photos
 

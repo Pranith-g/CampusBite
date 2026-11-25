@@ -38,8 +38,9 @@
 16. [Testing](#testing)
 17. [Design decisions and trade-offs](#design-decisions-and-trade-offs)
 18. [Limitations and future work](#limitations-and-future-work)
-19. [Team](#team)
-20. [AI usage](#ai-usage)
+19. [The ordering app (app/)](#the-ordering-app-app)
+20. [Team](#team)
+21. [AI usage](#ai-usage)
 
 ---
 
@@ -636,6 +637,14 @@ Everything compiles with `-Wall -Wextra -pedantic` with **zero warnings**.
 - **The duplicate check is O(n).** A hash set of active USNs would make it O(1) if capacity grew a lot.
 - **One process at a time** should write the save file.
 - **Possible extensions:** SMS or notification when a token is ready, a separate counter per food section, daily sales charts, a printed token slip.
+
+---
+
+## The ordering app (app/)
+
+After the capstone version above was finished (tagged `capstone-v1`), we built a second, separate project in the `app/` folder: a canteen ordering website. Students order and pay (pretend payment) on their phones and get a token; the canteen owner sees incoming orders on a 50-slot circular-queue dial and manages stock. If a dish runs out after paying, the student is refunded to a canteen wallet or the original UPI / card. It also has dish photos, calories and a high-protein filter.
+
+It is written in JavaScript (Node.js server with SQLite, React screens) and does not change the C program. How to run it and the full feature list are in **[app/README.md](app/README.md)**.
 
 ---
 
