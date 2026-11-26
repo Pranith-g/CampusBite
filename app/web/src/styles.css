@@ -137,13 +137,13 @@ input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:foc
   .tabs a { flex: none; flex-direction: row; white-space: nowrap; gap: 8px; min-height: 36px; padding: 0 16px; border-radius: 7px; font-size: 14px; }
   .tabs svg { width: 18px; height: 18px; }
   .page { padding: 32px 24px 48px; }
-  .page.split { max-width: 1040px; display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 32px; align-items: start; }
-  .split aside { position: sticky; top: calc(var(--bar) + 24px); max-height: calc(100vh - var(--bar) - 48px); overflow-y: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); padding: 16px 20px 20px; }
+  .page.split { max-width: 1220px; display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 32px; align-items: start; }
+  /* the cart is its own panel: always on screen beside the menu, scrolling on its own when it holds many dishes, with the title and Pay button kept in view */
+  .split aside { position: sticky; top: calc(var(--bar) + 24px); max-height: calc(100dvh - var(--bar) - 48px); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: var(--line-strong) transparent; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); padding: 0 20px; }
+  .split aside .cart > h2 { position: sticky; top: 0; z-index: 2; margin: 0 -20px; padding: 16px 20px 12px; background: var(--surface); border-bottom: 1px solid var(--line); }
+  .split aside .pay { position: sticky; bottom: 0; z-index: 2; box-shadow: 0 -12px 0 var(--surface), 0 12px 0 var(--surface); }
+  .split aside .cart > :last-child { margin-bottom: 0; padding-bottom: 16px; }
   .split aside .empty { border: 0; padding: 12px 0 0; margin: 0; }
-  /* A long cart scrolls its own list, so the total and Pay stay in view. */
-  .split aside, .split .cart { display: flex; flex-direction: column; min-height: 0; }
-  .split .cart > * { flex-shrink: 0; }
-  .split .cart > .items { flex: 0 1 auto; min-height: 76px; overflow-y: auto; padding-right: 4px; }
 }
 @media (max-width: 480px) {
   .who > span { display: none; }
