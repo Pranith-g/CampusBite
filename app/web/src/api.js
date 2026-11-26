@@ -28,6 +28,7 @@ async function request(method, path, body) {
 export const api = {
   me: () => request('GET', '/me'),
   signIn: (usn, pin) => request('POST', '/sign-in', { usn, pin }),
+  signUp: (account) => request('POST', '/sign-up', account),
   signOut: () => request('POST', '/sign-out', {}),
   menu: () => request('GET', '/menu'),
   quote: (items) => request('POST', '/quote', { items }),
@@ -35,11 +36,15 @@ export const api = {
   orders: () => request('GET', '/orders'),
   order: (id) => request('GET', `/orders/${id}`),
   board: () => request('GET', '/board'),
+  favourites: () => request('GET', '/favourites'),
+  setFavourite: (itemId, favourite) => request('POST', '/favourites', { itemId, favourite }),
   chooseRefund: (id, method) => request('POST', `/refunds/${id}`, { method }),
 
   // Canteen owner
   ownerMe: () => request('GET', '/owner/me'),
   ownerSignIn: (username, password) => request('POST', '/owner/sign-in', { username, password }),
+  ownerSignUp: (account) => request('POST', '/owner/sign-up', account),
+  ownerSummary: () => request('GET', '/owner/summary'),
   ownerSignOut: () => request('POST', '/owner/sign-out', {}),
   ownerState: () => request('GET', '/owner/state'),
   markReady: (token) => request('POST', '/owner/ready', { token }),
