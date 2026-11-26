@@ -11,15 +11,27 @@ import { takeStock } from './stock.js';
 export const COOKS = 3;             // orders the kitchen can work on at once
 export const MAX_QTY = 10;          // most of one item in one order
 export const FIRST_NUMBER = 101;   // first token number
+export const NOTE_MAX = 80;       // longest note for the kitchen
+export const BESTSELLER_DAYS = 7; // a bestseller is among the most ordered over this many days
 export const PAY_METHODS = ['upi', 'card', 'wallet'];   // all pretend payments
 
+// The three dishes ordered most in the last week, if each sold at least 3 plates.
+function bestsellers(db) {
+  const since = Date.now() - BESTSELLER_DAYS * 24 * 60 * 60 * 1000;
+  return new Set(db.prepare(`
+    SELECT i.item_id AS id, SUM(i.qty) AS plates FROM order_items i JOIN orders o ON o.id = i.order_id
+    WHERE o.placed_at >= ? AND i.ran_out = 0
+    GROUP BY i.item_id HAVING plates >= 3 ORDER BY plates DESC, i.item_id LIMIT 3`).all(since).map((r) => r.id));
+}
+
 export function listMenu(db) {
+  const top = bestsellers(db);
   return db.prepare(`
     SELECT id, name, section, price, prep_min AS prepMin, photo, about, kcal, protein_g AS protein, left_qty AS "left",
            (sold_out = 1 OR left_qty = 0) AS soldOut
     FROM menu_items ORDER BY id`)
     .all()
-    .map((item) => ({ ...item, soldOut: Boolean(item.soldOut) }));
+    .map((item) => ({ ...item, soldOut: Boolean(item.soldOut), bestseller: top.has(item.id) }));
 }
 
 // Minutes of cooking already waiting in the kitchen.
@@ -75,6 +87,9 @@ export function quote(db, items) {
 export function placeOrder(db, student, body, label = null) {
   const { items, payMethod, requestId, expectedTotal } = body ?? {};
   if (!PAY_METHODS.includes(payMethod)) throw new AppError(400, 'Choose how you want to pay.');
+  if (body.note !== undefined && body.note !== null && typeof body.note !== 'string') throw new AppError(400, 'That note could not be read.');
+  const note = String(body.note ?? '').replace(/[\u0000-\u001f\u007f]/g, ' ').replace(/\s+/g, ' ').trim();
+  if (note.length > NOTE_MAX) throw new AppError(400, `Keep the note for the kitchen under ${NOTE_MAX} characters.`);
   if (typeof requestId !== 'string' || !/^[A-Za-z0-9-]{8,64}$/.test(requestId)) {
     throw new AppError(400, 'That order could not be read.');
   }
@@ -96,15 +111,15 @@ export function placeOrder(db, student, body, label = null) {
     const eta = estimateMinutes(db, lines);
     const number = db.prepare('SELECT COALESCE(MAX(number), ?) + 1 AS n FROM orders').get(FIRST_NUMBER - 1).n;
     const { lastInsertRowid } = db.prepare(`
-      INSERT INTO orders (number, student_id, request_id, total, pay_method, eta_min, placed_at, slot, label, discount)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`).run(number, student.id, requestId, amount, payMethod, eta, Date.now(), slot, label, discount);
+      INSERT INTO orders (number, student_id, request_id, total, pay_method, eta_min, placed_at, slot, label, discount, note)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`).run(number, student.id, requestId, amount, payMethod, eta, Date.now(), slot, label, discount, note || null);
     const add = db.prepare('INSERT INTO order_items (order_id, item_id, name, price, prep_min, qty) VALUES (?, ?, ?, ?, ?, ?)');
     for (const l of lines) add.run(lastInsertRowid, l.id, l.name, l.price, l.prepMin, l.qty);
     return getOrder(db, student, Number(lastInsertRowid));
   });
 }
 
-const ORDER_COLUMNS = 'id, number, status, total, discount, pay_method AS payMethod, eta_min AS etaMin, placed_at AS placedAt, ready_at AS readyAt';
+const ORDER_COLUMNS = 'id, number, status, total, discount, pay_method AS payMethod, eta_min AS etaMin, placed_at AS placedAt, ready_at AS readyAt, collected_at AS collectedAt, note';
 
 function withItems(db, order) {
   const items = db.prepare('SELECT item_id AS id, name, price, qty, ran_out AS ranOut FROM order_items WHERE order_id = ? ORDER BY rowid')

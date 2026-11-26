@@ -178,3 +178,31 @@ test('the owner sees today\'s summary', async (t) => {
   assert.deepEqual(data.ranOut, [{ name: 'Idli vada', qty: 1 }]);
   assert.equal(data.hours.reduce((n, h) => n + h.orders, 0), 3);
 });
+
+test("the three most ordered dishes this week are marked bestsellers", async (t) => {
+  const app = await start(); t.after(app.close);
+  const menu = async () => (await app.browser()("GET", "/api/menu")).data.items;
+  assert.ok((await menu()).every((m) => !m.bestseller));
+  const call = app.browser();
+  await call("POST", "/api/sign-in", { usn: STUDENTS[0].usn, pin: STUDENTS[0].pin });
+  await app.buy(call, [{ id: 6, qty: 5 }, { id: 3, qty: 4 }, { id: 2, qty: 3 }, { id: 9, qty: 2 }]);
+  await app.buy(call, [{ id: 1, qty: 3 }]);
+  const best = (await menu()).filter((m) => m.bestseller).map((m) => m.name);
+  // Samosa 5, thali 4, then dosa and idli vada tie on 3: dosa is first on the menu, so it wins. Paneer roll (2) is too few.
+  assert.deepEqual(best.sort(), ["Masala dosa", "Samosa (2)", "Veg thali"]);
+});
+
+test("a note for the kitchen is cleaned, kept with the order and shown to the owner", async (t) => {
+  const app = await start(); t.after(app.close);
+  const call = app.browser();
+  await call("POST", "/api/sign-in", { usn: STUDENTS[0].usn, pin: STUDENTS[0].pin });
+  const order = (await call("POST", "/api/orders", { items: [{ id: 1, qty: 1 }], payMethod: "upi", requestId: crypto.randomUUID(), note: "  less   spicy,\nno onion " })).data.order;
+  assert.equal(order.note, "less spicy, no onion");
+  const owner = (await app.owner("GET", "/api/owner/state")).data;
+  assert.equal(owner.kitchen.orders[0].note, "less spicy, no onion");
+
+  const long = await call("POST", "/api/orders", { items: [{ id: 2, qty: 1 }], payMethod: "upi", requestId: crypto.randomUUID(), note: "x".repeat(81) });
+  assert.equal(long.status, 400);
+  const plain = (await call("POST", "/api/orders", { items: [{ id: 2, qty: 1 }], payMethod: "upi", requestId: crypto.randomUUID() })).data.order;
+  assert.equal(plain.note, null);
+});

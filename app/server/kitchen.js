@@ -60,7 +60,7 @@ export function handOver(db, token) {
 function ordersWith(db, status, sort) {
   const items = db.prepare('SELECT item_id AS id, name, qty, ran_out AS ranOut FROM order_items WHERE order_id = ? ORDER BY rowid');
   return db.prepare(`
-    SELECT o.id, o.number AS token, o.slot, o.placed_at AS placedAt, o.ready_at AS readyAt,
+    SELECT o.id, o.number AS token, o.slot, o.placed_at AS placedAt, o.ready_at AS readyAt, o.note,
            COALESCE(o.label, s.name) AS name
     FROM orders o JOIN students s ON s.id = o.student_id
     WHERE o.status = ? ORDER BY ${sort}`)

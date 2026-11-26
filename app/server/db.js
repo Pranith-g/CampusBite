@@ -59,6 +59,7 @@ const SCHEMA = `
     collected_at  INTEGER,
     label         TEXT,                        -- name shown for sample orders
     discount      INTEGER NOT NULL DEFAULT 0,  -- combo saving taken off the total
+    note          TEXT,                        -- note for the kitchen, like "less spicy"
     UNIQUE (student_id, request_id)
   );
   CREATE TABLE IF NOT EXISTS order_items (
@@ -99,7 +100,7 @@ const ADDED_COLUMNS = {
     sold_out: 'INTEGER NOT NULL DEFAULT 0',
   },
   order_items: { ran_out: 'INTEGER NOT NULL DEFAULT 0' },
-  orders: { slot: 'INTEGER NOT NULL DEFAULT 0', ready_at: 'INTEGER', collected_at: 'INTEGER', label: 'TEXT', discount: 'INTEGER NOT NULL DEFAULT 0' },
+  orders: { slot: 'INTEGER NOT NULL DEFAULT 0', ready_at: 'INTEGER', collected_at: 'INTEGER', label: 'TEXT', discount: 'INTEGER NOT NULL DEFAULT 0', note: 'TEXT' },
 };
 
 export function openDatabase(file) {
