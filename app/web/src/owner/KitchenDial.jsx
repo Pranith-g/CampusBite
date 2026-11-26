@@ -25,7 +25,8 @@ function Hand({ deg, color, ink, label, dim, tagR = 300 }) {
   );
 }
 
-export default function KitchenDial({ queue }) {
+// labels: also write each token number beside its slot (for a small queue).
+export default function KitchenDial({ queue, labels = false }) {
   const { capacity: n, front, rear, count, orders } = queue;
   const used = new Set(orders.map((o) => o.slot));
   const full = count === n;
@@ -56,11 +57,12 @@ export default function KitchenDial({ queue }) {
     ticks.push(<line key={i} className="tick" x1={x1} y1={y1} x2={x2} y2={y2} stroke={stroke} strokeWidth={has ? 9 : 3} strokeLinecap="round" />);
   }
   const numerals = [];
-  for (let i = 0; i < n; i += 5) {
+  const step = n <= 12 ? 1 : 5;   // a small queue numbers every slot
+  for (let i = 0; i < n; i += step) {
     const [x, y] = polar(250, i, n);
     numerals.push(
       <text key={i} x={x} y={y + 7} textAnchor="middle" fontSize="20" fontWeight="600" fill="#a3937e"
-            className={`dial-num num ${i % 10 ? 'minor' : ''}`} fontFamily="'Archivo Variable', sans-serif">{i}</text>
+            className={`dial-num num ${step === 5 && i % 10 ? 'minor' : ''}`} fontFamily="'Archivo Variable', sans-serif">{i}</text>
     );
   }
 
@@ -71,6 +73,13 @@ export default function KitchenDial({ queue }) {
       <circle cx={C} cy={C} r="150" fill="#1a1410" stroke="#2c241c" />
       {ticks}
       {numerals}
+      {labels && orders.map((o) => {
+        const [x, y] = polar(116, o.slot, n);   // inside the ring, clear of the hands
+        return (
+          <text key={o.token} x={x} y={y + 7} textAnchor="middle" fontSize="20" fontWeight="800" className="num"
+                fill={o.slot === front ? '#f0a531' : '#f4eadb'} fontFamily="'Archivo Variable', sans-serif">{o.token}</text>
+        );
+      })}
       <Hand deg={fDeg} color="#f0a531" ink="#2a1a04" label="FRONT" dim={!count} />
       <Hand deg={rDeg} color="#f4eadb" ink="#15100c" label="REAR" dim={!count} tagR={rearTagR} />
     </svg>

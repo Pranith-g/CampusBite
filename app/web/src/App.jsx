@@ -5,6 +5,7 @@ import Gate from './components/Gate.jsx';
 import SignIn from './screens/SignIn.jsx';
 import Shop from './screens/Shop.jsx';
 import OwnerApp from './owner/OwnerApp.jsx';
+import HowItWorks from './screens/HowItWorks.jsx';
 
 function StudentApp() {
   const [student, setStudent] = useState(undefined); // undefined = still checking
@@ -23,12 +24,15 @@ function StudentApp() {
   }, []);
 
   if (student === undefined) return <Gate error={error} onRetry={check} />;
-  if (!student) return <SignIn onDone={setStudent} />;
+  if (!student) return <SignIn kind="student" onDone={setStudent} />;
   // key: a different student gets a fresh screen and their own cart.
   return <Shop key={student.id} student={student} onSignedOut={signedOut} />;
 }
 
-// Addresses starting #/owner are the canteen owner's side.
+// Addresses starting #/owner are the canteen owner's side. #/how explains the
+// app and is open to everyone, signed in or not.
 export default function App() {
-  return useRoute().split('/')[0] === 'owner' ? <OwnerApp /> : <StudentApp />;
+  const page = useRoute().split('/')[0];
+  if (page === 'how') return <HowItWorks />;
+  return page === 'owner' ? <OwnerApp /> : <StudentApp />;
 }
