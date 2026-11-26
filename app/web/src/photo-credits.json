@@ -19,9 +19,10 @@
   },
   {
     "slug": "chole-bhature",
-    "author": "Zoshua Colah",
-    "source": "https://unsplash.com/photos/chana-masala-with-fried-bhatura-bread-Idh9dnG2v8w",
-    "licence": "Unsplash License"
+    "author": "Muhammad Khawar Nazir",
+    "source": "https://www.pexels.com/photo/traditional-indian-plate-with-puri-and-chole-36388454/",
+    "licence": "Pexels License",
+    "title": "Traditional Indian plate with puri and chole"
   },
   {
     "slug": "veg-biryani",
@@ -49,15 +50,17 @@
   },
   {
     "slug": "paneer-roll",
-    "author": "Anil Sharma",
-    "source": "https://unsplash.com/photos/two-delicious-wraps-filled-with-creamy-sauce-4QS1YwaWejI",
-    "licence": "Unsplash License"
+    "author": "dhiraj jain",
+    "source": "https://www.pexels.com/photo/close-up-shot-a-wrap-12737663/",
+    "licence": "Pexels License",
+    "title": "Close up shot of a wrap"
   },
   {
     "slug": "bhel-puri",
-    "author": "Zoshua Colah",
-    "source": "https://unsplash.com/photos/bhel-puri-snack-on-newspaper-njTRk9XkYPc",
-    "licence": "Unsplash License"
+    "author": "Calwin Veigas",
+    "source": "https://www.pexels.com/photo/delicious-indian-bhel-puri-snack-in-bowl-35213277/",
+    "licence": "Pexels License",
+    "title": "Delicious Indian bhel puri snack in bowl"
   },
   {
     "slug": "filter-coffee",
@@ -73,9 +76,10 @@
   },
   {
     "slug": "lime-soda",
-    "author": "JULIET FRÍAS",
-    "source": "https://unsplash.com/photos/clear-drinking-glass-with-lemon-juice-WDgN0XclV_w",
-    "licence": "Unsplash License"
+    "author": "prasannabaarathi",
+    "source": "https://www.pexels.com/photo/photograph-of-a-glass-with-soda-water-4045205/",
+    "licence": "Pexels License",
+    "title": "Photograph of a glass with soda water"
   },
   {
     "slug": "mango-lassi",
@@ -85,8 +89,9 @@
   },
   {
     "slug": "badam-milk",
-    "author": "Jason Leung",
-    "source": "https://unsplash.com/photos/a-bowl-of-food-sitting-on-top-of-a-wooden-table-dpzNv3N9qbM",
-    "licence": "Unsplash License"
+    "author": "Naheedzain Siddiqui",
+    "source": "https://www.pexels.com/photo/traditional-hyderabadi-milk-sharbat-in-clay-pot-38260645/",
+    "licence": "Pexels License",
+    "title": "Traditional Hyderabadi milk sharbat in clay pot"
   }
 ]

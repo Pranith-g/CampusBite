@@ -6,7 +6,7 @@ export default function Credits({ items }) {
   return (
     <section aria-labelledby="credits-title">
       <h1 id="credits-title">Photo credits</h1>
-      <p className="lead">The dish photos come from Unsplash. They are free to use under the Unsplash License and are shown resized and cropped. They are not photos of this canteen&rsquo;s food.</p>
+      <p className="lead">The dish photos come from Unsplash and Pexels. They are free to use under the Unsplash License or the Pexels License and are shown resized and cropped. They are not photos of this canteen&rsquo;s food.</p>
       <ul className="credits">
         {credits.map((c) => (
           <li key={c.slug}>
