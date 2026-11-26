@@ -20,8 +20,16 @@ Then open http://localhost:4000. Sign in with a demo account from
 
 **Students** (http://localhost:4000)
 
-- Sign in, browse the menu with dish photos, add to cart
-- Calories and protein for each dish, and a "High protein" filter (15 g or more)
+- Sign up with name, USN and a 4 to 6 digit PIN, or sign in. The sign-in page
+  shows the live kitchen queue as a round dial (token numbers only)
+- Browse the menu with dish photos, add to cart
+- Calories for each dish; protein is shown on high-protein dishes (15 g or
+  more), with a "High protein" filter
+- Star favourite dishes and filter by them; "Order again" on past orders
+- Meal combos: when the cart has all the dishes of a combo, the saving comes
+  off the total
+- A "How it works" page (http://localhost:4000/#/how) with a small circular
+  queue to try: add orders, mark them ready, cancel one from the middle
 - Pretend payment (no real money) and a token number
 - Estimated time, and how many orders are ahead
 - A live token board
@@ -33,7 +41,12 @@ Then open http://localhost:4000. Sign in with a demo account from
   the next order.
 - "Only 3 left" and "Out of stock" on the menu, and a cart that says what to fix
 
-**Canteen owner** (http://localhost:4000/#/owner, account in `server/seed.js`)
+**Canteen owner** (http://localhost:4000/#/owner, demo account in `server/seed.js`)
+
+- Sign up needs the canteen code (`CANTEEN_CODE` in `server/seed.js`, or set
+  the `CANTEEN_CODE` setting on the server). Change it before going online
+- Today tab: orders, takings, refunds, average order, top dishes, orders by
+  hour, how students paid
 
 - Incoming orders as they arrive
 - The kitchen queue drawn as a 50-slot dial with FRONT and REAR
@@ -53,9 +66,7 @@ Marking a dish out of stock on the Stock screen stops new orders only. For
 orders already paid, use "Ran out?" on the order.
 
 Calories and protein are rough values for one serving from typical recipes.
-Change them in `server/seed.js` to match your own canteen.
-
-Not built yet: combos. The alert does not reach a phone when the app is closed.
+Change them in `server/seed.js` to match your own canteen. The alert does not reach a phone when the app is closed.
 
 ## Dish photos
 

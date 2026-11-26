@@ -642,7 +642,7 @@ Everything compiles with `-Wall -Wextra -pedantic` with **zero warnings**.
 
 ## The ordering app (app/)
 
-After the capstone version above was finished (tagged `capstone-v1`), we built a second, separate project in the `app/` folder: a canteen ordering website. Students order and pay (pretend payment) on their phones and get a token; the canteen owner sees incoming orders on a 50-slot circular-queue dial and manages stock. If a dish runs out after paying, the student is refunded to a canteen wallet or the original UPI / card. It also has dish photos, calories and a high-protein filter.
+After the capstone version above was finished (tagged `capstone-v1`), we built a second, separate project in the `app/` folder: a canteen ordering website. Students order and pay (pretend payment) on their phones and get a token; the canteen owner sees incoming orders on a 50-slot circular-queue dial and manages stock. Students and canteen owners can sign up (owners need a canteen code). If a dish runs out after paying, the student is refunded to a canteen wallet or the original UPI / card. It also has dish photos, calories, a high-protein filter, favourites, meal combos, a sales summary for the owner, and a *How it works* page where you can try the circular queue yourself.
 
 It is written in JavaScript (Node.js server with SQLite, React screens) and does not change the C program. How to run it and the full feature list are in **[app/README.md](app/README.md)**.
 
