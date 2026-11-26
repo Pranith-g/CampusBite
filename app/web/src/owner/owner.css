@@ -127,3 +127,6 @@
 .bar-value { color: var(--ink); font-weight: 600; white-space: nowrap; }
 .today .none, .today .note { padding: 8px 20px 0; font-size: 14px; color: var(--ink-2); }
 @media (min-width: 900px) { .today { grid-template-columns: 1fr 1fr; } .today .panel:first-child, .today .panel:last-child { grid-column: 1 / -1; } }
+
+/* the owner bar is full on narrower laptops: How it works becomes an icon */
+@media (max-width: 1180px) { .owner-bar .how-link span { display: none; } }

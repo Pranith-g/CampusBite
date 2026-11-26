@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { IconAlertCircle, IconToolsKitchen2 } from '@tabler/icons-react';
+import { IconAlertCircle, IconChefHat, IconChevronRight, IconHelpCircle, IconSchool, IconToolsKitchen2 } from '@tabler/icons-react';
 import { api } from '../api.js';
 import { USN_PATTERN } from '../format.js';
 import LiveKitchen from '../components/LiveKitchen.jsx';
@@ -9,12 +9,12 @@ const KINDS = {
   student: {
     title: 'Order from the canteen',
     lead: 'Order and pay on your phone. Collect your food when your token is called.',
-    other: <a href="#/owner">Canteen owner? Sign in here</a>,
+    other: { href: '#/owner', Icon: IconChefHat, title: 'Canteen owner', text: 'Sign in or make an owner account' },
   },
   owner: {
     title: 'Canteen owner',
     lead: 'See incoming orders, move tokens through the kitchen and manage stock.',
-    other: <a href="#/menu">Student? Sign in here</a>,
+    other: { href: '#/menu', Icon: IconSchool, title: 'Student', text: 'Order food with your USN' },
   },
 };
 
@@ -129,7 +129,15 @@ export default function SignIn({ kind = 'student', onDone }) {
             {sending ? (up ? 'Creating your account…' : 'Signing in…') : (up ? 'Create account' : 'Sign in')}
           </button>
         </form>
-        <p className="switch">{text.other} · <a href="#/how">How it works</a></p>
+        <nav className="auth-links" aria-label="More">
+          {[text.other, { href: '#/how', Icon: IconHelpCircle, title: 'How it works', text: 'See how the token queue runs' }].map(({ href, Icon, title, text: line }) => (
+            <a key={href} className="link-card" href={href}>
+              <Icon size={22} aria-hidden="true" />
+              <span><b>{title}</b><small>{line}</small></span>
+              <IconChevronRight size={18} aria-hidden="true" />
+            </a>
+          ))}
+        </nav>
       </div>
 
       <LiveKitchen />

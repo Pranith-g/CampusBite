@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from 'react';
-import { IconLogout, IconToolsKitchen2 } from '@tabler/icons-react';
+import { IconHelpCircle, IconLogout, IconToolsKitchen2 } from '@tabler/icons-react';
 import { api } from '../api.js';
 import { usePolled, useRoute } from '../hooks.js';
 import { itemText, ordinal, rupees, waitedText } from '../format.js';
@@ -91,6 +91,7 @@ export default function Dashboard({ onSignedOut }) {
           <div>Collected today<b className="num">{data.collectedToday}</b></div>
           <div>Paid today<b className="num">{rupees(data.paidToday)}</b></div>
         </div>
+        <a className="btn ghost how-link" href="#/how" aria-label="How it works"><IconHelpCircle size={18} aria-hidden="true" /> <span>How it works</span></a>
         <button className="btn ghost" onClick={signOut}><IconLogout size={18} aria-hidden="true" /> Sign out</button>
       </header>
 
@@ -114,6 +115,7 @@ export default function Dashboard({ onSignedOut }) {
                 <div>
                   <div className="n">{o.name}</div>
                   <div className="meta"><Items items={o.items} /></div>
+                  {o.note && <div className="meta note-line">Note: {o.note}</div>}
                   <div className="meta num">{k === 0 ? 'Next' : `${ordinal(k + 1)} in line`} · {waitedText(now - o.placedAt)}</div>
                 </div>
                 <button className="btn small" aria-expanded={askToken === o.token} disabled={pending}
