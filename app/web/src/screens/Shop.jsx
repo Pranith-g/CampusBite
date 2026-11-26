@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { IconLayoutGrid, IconLogout, IconReceipt, IconReceiptRefund, IconShoppingBag, IconToolsKitchen2, IconWallet } from '@tabler/icons-react';
+import { IconHelpCircle, IconLayoutGrid, IconLogout, IconReceipt, IconReceiptRefund, IconShoppingBag, IconToolsKitchen2, IconWallet } from '@tabler/icons-react';
 import { api } from '../api.js';
 import { go, useCart, usePolled, useRoute, useWide } from '../hooks.js';
 import { comboSaving, rupees } from '../format.js';
@@ -30,6 +30,7 @@ export default function Shop({ student, onSignedOut }) {
   const cart = useCart(student.id);
   const [signOutError, setSignOutError] = useState('');
   const [notice, setNotice] = useState('');
+
   const [favourites, setFavourites] = useState([]);
 
   // If the sign-in has expired, go back to the sign-in screen.
@@ -116,7 +117,7 @@ export default function Shop({ student, onSignedOut }) {
 
   const cartPanel = menu && (
     <Cart lines={lines} total={total} subtotal={subtotal} saving={saving} cart={cart} maxQty={menu.maxQty} onError={onError}
-          onStale={reloadMenu} onPaid={mine.refresh} wallet={wallet} />
+          onStale={reloadMenu} onPaid={mine.refresh} wallet={wallet} combos={menu.combos} dishes={byId} />
   );
 
   return (
@@ -125,13 +126,14 @@ export default function Shop({ student, onSignedOut }) {
         <div className="brand"><IconToolsKitchen2 size={20} aria-hidden="true" /> CampusBite</div>
         <nav className="tabs" aria-label="Sections">
           {tabs.map(({ id, label, Icon }) => (
-            <a key={id} href={`#/${id}`} aria-current={tab === id ? 'page' : undefined}>
+            <a key={id} href={`#/${id}`} aria-current={tab === id ? 'page' : undefined} data-cart-target={id === 'cart' ? '' : undefined}>
               <Icon size={22} stroke={1.75} aria-hidden="true" />
               <span>{label}</span>
             </a>
           ))}
         </nav>
         <div className="who">
+          <a className="btn ghost how-link" href="#/how" aria-label="How it works"><IconHelpCircle size={18} aria-hidden="true" /> <span>How it works</span></a>
           {wallet > 0 && (
             <a className="wallet-chip num" href="#/orders" aria-label={`Canteen wallet ${rupees(wallet)}`}>
               <IconWallet size={18} aria-hidden="true" /> {rupees(wallet)}
@@ -177,7 +179,7 @@ export default function Shop({ student, onSignedOut }) {
         {screen === 'credits' && <Credits items={menu?.items ?? []} />}
         {screen === 'cart' && cartPanel}
         {screen === 'menu' && (menu ? <Menu menu={menu} cart={cart} favourites={favourites} onFavourite={toggleFavourite} /> : <p className="quiet">Loading the menu…</p>)}
-        {screen === 'menu' && wide && <aside>{cartPanel}</aside>}
+        {screen === 'menu' && wide && <aside className="cart-panel" aria-label="Your cart">{cartPanel}</aside>}
       </main>
 
       {screen === 'menu' && !wide && count > 0 && (

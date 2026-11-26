@@ -12,7 +12,18 @@ const shortage = (line) => {
   return line.qty > line.left ? `Only ${line.left} left` : '';
 };
 
-export default function Cart({ lines, total, subtotal = total, saving, cart, maxQty, onError, onStale, onPaid, wallet = 0 }) {
+// The first combo the cart is part-way to: some of its dishes are in, some not.
+function comboHint(combos, qty) {
+  for (const c of combos) {
+    if (!c.available) continue;
+    const missing = c.items.filter((i) => (qty[i.id] || 0) < i.qty);
+    if (missing.length && missing.length < c.items.length) return { combo: c, missing };
+  }
+  return null;
+}
+
+export default function Cart({ lines, total, subtotal = total, saving, cart, maxQty, onError, onStale, onPaid, wallet = 0, combos = [], dishes }) {
+  const [note, setNote] = useState('');
   const [method, setMethod] = useState('upi');
   const walletShort = wallet < total;
   // The wallet stops being a choice once the cart costs more than it holds.
@@ -37,9 +48,10 @@ export default function Cart({ lines, total, subtotal = total, saving, cart, max
     setError('');
     try {
       const { order } = await api.placeOrder({
-        items: JSON.parse(wanted), payMethod: method, requestId: cart.requestId, expectedTotal: total,
+        items: JSON.parse(wanted), payMethod: method, requestId: cart.requestId, expectedTotal: total, note,
       });
       cart.clear();
+      setNote('');
       onPaid();
       go(`orders/${order.id}`);
     } catch (err) {
@@ -57,7 +69,7 @@ export default function Cart({ lines, total, subtotal = total, saving, cart, max
   if (!lines.length) {
     return (
       <section className="cart" aria-labelledby="cart-title">
-        <h2 id="cart-title">Your cart</h2>
+        <h2 id="cart-title" data-cart-target>Your cart</h2>
         <p className="empty">Your cart is empty. Tap Add on anything in the menu.</p>
       </section>
     );
@@ -65,7 +77,7 @@ export default function Cart({ lines, total, subtotal = total, saving, cart, max
 
   return (
     <section className="cart" aria-labelledby="cart-title">
-      <h2 id="cart-title">Your cart</h2>
+      <h2 id="cart-title" data-cart-target>Your cart</h2>
       <ul className="items">
         {lines.map((l) => {
           const max = Math.min(maxQty, l.left);
@@ -88,6 +100,23 @@ export default function Cart({ lines, total, subtotal = total, saving, cart, max
           );
         })}
       </ul>
+      {(() => {
+        const hint = comboHint(combos, cart.qty);
+        if (!hint) return null;
+        const names = hint.missing.map((i) => i.name).join(' + ');
+        return (
+          <div className="suggest">
+            <p><b>Make it a combo.</b> Add {names} and the {hint.combo.name} saves you {rupees(hint.combo.saving)}.</p>
+            <button className="btn" disabled={paying} onClick={() => hint.missing.forEach((i) =>
+              cart.change(i.id, i.qty - (cart.qty[i.id] || 0), Math.min(maxQty, dishes?.get(i.id)?.left ?? 0)))}>
+              Add {names}
+            </button>
+          </div>
+        );
+      })()}
+      <label className="note-label" htmlFor="cart-note">Note for the kitchen <span className="hint">· optional</span></label>
+      <input id="cart-note" type="text" maxLength={80} placeholder="e.g. less spicy, no onion" value={note}
+             disabled={paying} onChange={(e) => setNote(e.target.value)} />
 
       <dl className="sum num">
         {saving?.discount > 0 && (

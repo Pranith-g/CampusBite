@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { api } from '../api.js';
 import { usePolled } from '../hooks.js';
+import { IconCheck } from '@tabler/icons-react';
 import { PAY_METHODS, STATUS, clockTime, rupees } from '../format.js';
 import RefundCard from '../components/RefundCard.jsx';
 
@@ -45,6 +46,21 @@ export default function OrderStatus({ id, onError, onChosen, onOrderAgain }) {
         {order.status === 'collected' && <p>You have collected this order. Enjoy your food.</p>}
         {order.status === 'cancelled' && <p>Sorry, nothing in this order could be made, so it left the kitchen queue.</p>}
       </div>
+      {order.status !== 'cancelled' && (() => {
+        const at = { preparing: 1, ready: 2, collected: 3 }[order.status];
+        const steps = [['Paid', order.placedAt], ['Cooking', null], ['Ready to collect', order.readyAt], ['Collected', order.collectedAt]];
+        return (
+          <ol className="track" aria-label="Order progress">
+            {steps.map(([label, time], k) => (
+              <li key={label} className={k < at ? 'done' : k === at ? 'now' : ''} aria-current={k === at ? 'step' : undefined}>
+                <span className="dot">{k < at && <IconCheck size={14} aria-hidden="true" />}</span>
+                <span className="label">{label}</span>
+                <span className="time num">{time ? clockTime(time) : k === 1 && at === 1 ? 'now' : ''}</span>
+              </li>
+            ))}
+          </ol>
+        );
+      })()}
       {error && <p className="msg" role="alert">{error.message}</p>}
       {order.refunds.map((r) => <RefundCard key={r.id} refund={r} payMethod={order.payMethod} onChosen={chosen} />)}
 
@@ -59,6 +75,7 @@ export default function OrderStatus({ id, onError, onChosen, onOrderAgain }) {
         <div className="total"><dt>Paid by {PAY_METHODS[order.payMethod]}</dt><dd>{rupees(order.total)}</dd></div>
         {refunded > 0 && <div className="refunded"><dt>Refunded</dt><dd>−{rupees(refunded)}</dd></div>}
       </dl>
+      {order.note && <p className="order-note">Note for the kitchen: “{order.note}”</p>}
       {onOrderAgain && <button className="btn" onClick={() => onOrderAgain(order.items)}>Order this again</button>}
       <a className="btn" href="#/tokens">See the token board</a>
       <a className="btn ghost" href="#/menu">Back to the menu</a>
