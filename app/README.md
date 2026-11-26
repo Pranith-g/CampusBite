@@ -22,7 +22,14 @@ Then open http://localhost:4000. Sign in with a demo account from
 
 - Sign up with name, USN and a 4 to 6 digit PIN, or sign in. The sign-in page
   shows the live kitchen queue as a round dial (token numbers only)
-- Browse the menu with dish photos, add to cart
+- The whole menu on one page (Meals, Snacks, Drinks, Combos) with chips that
+  jump to each section, a search box, and "Bestseller" on the three dishes
+  ordered most this week. On a laptop the dishes sit side by side as picture
+  cards. Tap a dish to see it in full (photo, time, calories, matching combo)
+- Tapping Add sends a small picture of the dish into the cart
+- The cart grows with its items, suggests the dish that completes a combo, and
+  takes a note for the kitchen ("less spicy"); the owner sees the note
+- Order progress like food apps: Paid, Cooking, Ready to collect, Collected
 - Calories for each dish; protein is shown on high-protein dishes (15 g or
   more), with a "High protein" filter
 - Star favourite dishes and filter by them; "Order again" on past orders
@@ -70,9 +77,9 @@ Change them in `server/seed.js` to match your own canteen. The alert does not re
 
 ## Dish photos
 
-The photos in `web/public/food` are from Unsplash (unsplash.com) under the
-Unsplash License: free to use, including in apps, with no permission or
-payment needed. Credit is not required, but the photographers are still named
+The photos in `web/public/food` are from Unsplash (unsplash.com) and Pexels
+(pexels.com), under the Unsplash License and the Pexels License: free to use,
+including in apps, with no permission or payment needed. Credit is not required, but the photographers are still named
 in `web/src/photo-credits.json` and on the app's Photo credits page. They are
 not photos of this canteen's food. To use your own photo, replace the file
 with the same name (any size; it is cropped to fit).
