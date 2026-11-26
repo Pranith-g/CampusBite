@@ -58,6 +58,7 @@ const SCHEMA = `
     ready_at      INTEGER,
     collected_at  INTEGER,
     label         TEXT,                        -- name shown for sample orders
+    discount      INTEGER NOT NULL DEFAULT 0,  -- combo saving taken off the total
     UNIQUE (student_id, request_id)
   );
   CREATE TABLE IF NOT EXISTS order_items (
@@ -68,6 +69,11 @@ const SCHEMA = `
     prep_min  INTEGER NOT NULL,
     qty       INTEGER NOT NULL,
     ran_out   INTEGER NOT NULL DEFAULT 0   -- 1 when the dish ran out after paying
+  );
+  CREATE TABLE IF NOT EXISTS favourites (
+    student_id  INTEGER NOT NULL REFERENCES students(id),
+    item_id     INTEGER NOT NULL REFERENCES menu_items(id),
+    PRIMARY KEY (student_id, item_id)
   );
   CREATE TABLE IF NOT EXISTS refunds (
     id          INTEGER PRIMARY KEY,
@@ -93,7 +99,7 @@ const ADDED_COLUMNS = {
     sold_out: 'INTEGER NOT NULL DEFAULT 0',
   },
   order_items: { ran_out: 'INTEGER NOT NULL DEFAULT 0' },
-  orders: { slot: 'INTEGER NOT NULL DEFAULT 0', ready_at: 'INTEGER', collected_at: 'INTEGER', label: 'TEXT' },
+  orders: { slot: 'INTEGER NOT NULL DEFAULT 0', ready_at: 'INTEGER', collected_at: 'INTEGER', label: 'TEXT', discount: 'INTEGER NOT NULL DEFAULT 0' },
 };
 
 export function openDatabase(file) {

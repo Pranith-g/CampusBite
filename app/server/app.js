@@ -7,6 +7,10 @@ import { AppError } from './errors.js';
 import { board, handOver, markReady, ownerState } from './kitchen.js';
 import { COOKS, MAX_QTY, getOrder, kitchenLoad, listMenu, listOrders, placeOrder, quote } from './orders.js';
 import { chooseRefund, markRanOut, walletBalance } from './refunds.js';
+import { createOwnerSignUp, favourites, registerStudent, setFavourite } from './accounts.js';
+import { listCombos } from './combos.js';
+import { ownerSummary } from './summary.js';
+import { CANTEEN_CODE } from './seed.js';
 import { addSampleOrders } from './samples.js';
 import { listStock, updateStock } from './stock.js';
 
@@ -80,6 +84,7 @@ export function createServer(db, options) {
   const students = createAuth(db, 'student');
   const owners = createAuth(db, 'owner');
   const dist = resolve(options.dist);
+  const ownerSignUp = createOwnerSignUp(db, options.canteenCode || CANTEEN_CODE);
 
   // The canteen owner's routes. Only an owner sign-in opens them.
   async function ownerApi(req, res, route) {
@@ -89,6 +94,12 @@ export function createServer(db, options) {
       const { username, password } = await readBody(req);
       const session = owners.signIn(username, password);
       return send(res, 200, { owner: session.user }, { 'Set-Cookie': cookie(req, OWNER_COOKIE, session.token, session.maxAge) });
+    }
+    // Needs the canteen code. Signs the new owner in straight away.
+    if (route === 'POST /api/owner/sign-up') {
+      const { username, password } = ownerSignUp(await readBody(req));
+      const session = owners.signIn(username, password);
+      return send(res, 201, { owner: session.user }, { 'Set-Cookie': cookie(req, OWNER_COOKIE, session.token, session.maxAge) });
     }
     if (route === 'POST /api/owner/sign-out') {
       await readBody(req);
@@ -113,6 +124,7 @@ export function createServer(db, options) {
       const done = markRanOut(db, await readBody(req));
       return send(res, 200, { ...ownerState(db), done });
     }
+    if (route === 'GET /api/owner/summary') return send(res, 200, ownerSummary(db));
     if (route === 'GET /api/owner/stock') return send(res, 200, { items: listStock(db) });
     if (route === 'POST /api/owner/stock') {
       updateStock(db, await readBody(req));
@@ -137,6 +149,11 @@ export function createServer(db, options) {
       const session = students.signIn(usn, pin);
       return send(res, 200, { student: session.user }, { 'Set-Cookie': cookie(req, STUDENT_COOKIE, session.token, session.maxAge) });
     }
+    if (route === 'POST /api/sign-up') {
+      const { usn, pin } = registerStudent(db, await readBody(req));
+      const session = students.signIn(usn, pin);
+      return send(res, 201, { student: session.user }, { 'Set-Cookie': cookie(req, STUDENT_COOKIE, session.token, session.maxAge) });
+    }
     if (route === 'POST /api/sign-out') {
       await readBody(req);
       students.signOut(token);
@@ -145,7 +162,7 @@ export function createServer(db, options) {
     if (route === 'GET /api/me') return send(res, 200, { student: students.userFor(token) });
     if (route === 'GET /api/board') return send(res, 200, board(db));
     if (route === 'GET /api/menu') {
-      return send(res, 200, { items: listMenu(db), maxQty: MAX_QTY, cooks: COOKS, load: kitchenLoad(db) });
+      return send(res, 200, { items: listMenu(db), combos: listCombos(db), maxQty: MAX_QTY, cooks: COOKS, load: kitchenLoad(db) });
     }
 
     // Everything below needs a signed-in student.
@@ -157,6 +174,8 @@ export function createServer(db, options) {
       const body = await readBody(req);
       return send(res, 201, { order: placeOrder(db, student, body) });
     }
+    if (route === 'GET /api/favourites') return send(res, 200, { ids: favourites(db, student.id) });
+    if (route === 'POST /api/favourites') return send(res, 200, { ids: setFavourite(db, student.id, await readBody(req)) });
     if (route === 'GET /api/orders') {
       return send(res, 200, { orders: listOrders(db, student), wallet: walletBalance(db, student.id) });
     }

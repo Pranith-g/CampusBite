@@ -4,6 +4,7 @@
 import { AppError } from './errors.js';
 import { transaction } from './db.js';
 import { kitchenFull, nextSlot } from './kitchen.js';
+import { comboDiscount } from './combos.js';
 import { refundsFor, walletBalance } from './refunds.js';
 import { takeStock } from './stock.js';
 
@@ -53,12 +54,19 @@ function readLines(db, items) {
   });
 }
 
-const total = (lines) => lines.reduce((sum, l) => sum + l.price * l.qty, 0);
+const subtotal = (lines) => lines.reduce((sum, l) => sum + l.price * l.qty, 0);
+
+// The price of a cart: the dishes, less any combo savings.
+function price(db, lines) {
+  const sum = subtotal(lines);
+  const { discount, applied } = comboDiscount(db, lines);
+  return { subtotal: sum, discount, combos: applied, total: sum - discount };
+}
 
 // Price and time for a cart, before paying.
 export function quote(db, items) {
   const lines = readLines(db, items);
-  return { total: total(lines), etaMin: estimateMinutes(db, lines), kitchenFull: kitchenFull(db) };
+  return { ...price(db, lines), etaMin: estimateMinutes(db, lines), kitchenFull: kitchenFull(db) };
 }
 
 // Take the (pretend) payment and create the order.
@@ -75,7 +83,7 @@ export function placeOrder(db, student, body, label = null) {
     if (earlier) return getOrder(db, student, earlier.id);
 
     const lines = readLines(db, items);
-    const amount = total(lines);
+    const { total: amount, discount } = price(db, lines);
     if (expectedTotal !== undefined && expectedTotal !== amount) {
       throw new AppError(409, 'Prices changed. Check the new total and pay again.');
     }
@@ -88,15 +96,15 @@ export function placeOrder(db, student, body, label = null) {
     const eta = estimateMinutes(db, lines);
     const number = db.prepare('SELECT COALESCE(MAX(number), ?) + 1 AS n FROM orders').get(FIRST_NUMBER - 1).n;
     const { lastInsertRowid } = db.prepare(`
-      INSERT INTO orders (number, student_id, request_id, total, pay_method, eta_min, placed_at, slot, label)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`).run(number, student.id, requestId, amount, payMethod, eta, Date.now(), slot, label);
+      INSERT INTO orders (number, student_id, request_id, total, pay_method, eta_min, placed_at, slot, label, discount)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`).run(number, student.id, requestId, amount, payMethod, eta, Date.now(), slot, label, discount);
     const add = db.prepare('INSERT INTO order_items (order_id, item_id, name, price, prep_min, qty) VALUES (?, ?, ?, ?, ?, ?)');
     for (const l of lines) add.run(lastInsertRowid, l.id, l.name, l.price, l.prepMin, l.qty);
     return getOrder(db, student, Number(lastInsertRowid));
   });
 }
 
-const ORDER_COLUMNS = 'id, number, status, total, pay_method AS payMethod, eta_min AS etaMin, placed_at AS placedAt, ready_at AS readyAt';
+const ORDER_COLUMNS = 'id, number, status, total, discount, pay_method AS payMethod, eta_min AS etaMin, placed_at AS placedAt, ready_at AS readyAt';
 
 function withItems(db, order) {
   const items = db.prepare('SELECT item_id AS id, name, price, qty, ran_out AS ranOut FROM order_items WHERE order_id = ? ORDER BY rowid')

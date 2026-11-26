@@ -68,16 +68,21 @@ function ordersWith(db, status, sort) {
     .map((o) => ({ ...o, items: items.all(o.id).map((i) => ({ ...i, ranOut: Boolean(i.ranOut) })) }));
 }
 
+// FRONT, REAR and COUNT of the kitchen queue for a list of cooking orders.
+function queueOf(db, orders) {
+  const last = newest(db);
+  const rear = last ? last.slot : -1;
+  const front = orders.length ? orders[0].slot : (rear + 1) % KITCHEN_SLOTS;
+  return { capacity: KITCHEN_SLOTS, count: orders.length, front, rear, orders };
+}
+
 // Everything the owner screen shows.
 export function ownerState(db) {
   const kitchen = ordersWith(db, 'preparing', 'o.id');
   const shelf = ordersWith(db, 'ready', 'o.ready_at, o.id');
-  const last = newest(db);
-  const rear = last ? last.slot : -1;
-  const front = kitchen.length ? kitchen[0].slot : (rear + 1) % KITCHEN_SLOTS;
   const today = new Date().setHours(0, 0, 0, 0);
   return {
-    kitchen: { capacity: KITCHEN_SLOTS, count: kitchen.length, front, rear, orders: kitchen },
+    kitchen: queueOf(db, kitchen),
     shelf: { capacity: SHELF_SLOTS, count: shelf.length, orders: shelf },
     collectedToday: db.prepare('SELECT COUNT(*) AS n FROM orders WHERE collected_at >= ?').get(today).n,
     // Takings today, less what was refunded.
@@ -96,5 +101,7 @@ export function board(db) {
     preparing: numbers('preparing', 'id'),
     ready: numbers('ready', 'ready_at DESC, id DESC'),   // newest first
     capacity: KITCHEN_SLOTS,
+    // The queue for the round dial: token numbers and slots, never names.
+    kitchen: queueOf(db, db.prepare("SELECT number AS token, slot FROM orders WHERE status = 'preparing' ORDER BY id").all()),
   };
 }

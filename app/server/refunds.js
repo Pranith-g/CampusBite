@@ -7,6 +7,7 @@
 // kitchen queue.
 import { transaction } from './db.js';
 import { AppError } from './errors.js';
+import { comboDiscount } from './combos.js';
 import { removeFromKitchen } from './kitchen.js';
 
 export const REFUND_DAYS = 3;   // the latest a pretend refund to UPI or card arrives
@@ -27,7 +28,7 @@ export function markRanOut(db, body) {
   const { token, itemId } = body ?? {};
   if (!Number.isInteger(token) || !Number.isInteger(itemId)) throw new AppError(400, 'Which order and which dish?');
   return transaction(db, () => {
-    const order = db.prepare('SELECT id, student_id AS studentId, status, pay_method AS payMethod FROM orders WHERE number = ?').get(token);
+    const order = db.prepare('SELECT id, student_id AS studentId, status, total, pay_method AS payMethod FROM orders WHERE number = ?').get(token);
     if (!order) throw new AppError(404, `There is no token ${token}.`);
     if (order.status !== 'preparing') throw new AppError(409, `Token ${token} has already left the kitchen.`);
     const line = db.prepare('SELECT rowid, name, price, qty, ran_out AS ranOut FROM order_items WHERE order_id = ? AND item_id = ?')
@@ -39,7 +40,13 @@ export function markRanOut(db, body) {
     // It has run out for everyone, so new orders cannot pick it.
     db.prepare('UPDATE menu_items SET left_qty = 0 WHERE id = ?').run(itemId);
 
-    const amount = line.price * line.qty;
+    // Refund what was paid for this dish. If it was part of a combo, the combo
+    // saving is lost too, so the refund is the paid amount minus what the
+    // dishes still being made are worth on their own.
+    const remaining = db.prepare('SELECT item_id AS id, qty, price FROM order_items WHERE order_id = ? AND ran_out = 0').all(order.id);
+    const stillWorth = remaining.reduce((sum, l) => sum + l.price * l.qty, 0) - comboDiscount(db, remaining).discount;
+    const refunded = db.prepare('SELECT COALESCE(SUM(amount), 0) AS n FROM refunds WHERE order_id = ?').get(order.id).n;
+    const amount = Math.max(0, order.total - refunded - stillWorth);
     const what = `${line.qty} × ${line.name}`;
     const now = Date.now();
     // Money paid from the wallet goes straight back to it. Otherwise the

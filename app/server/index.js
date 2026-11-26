@@ -3,6 +3,8 @@
 //   HOST     0.0.0.0 lets other devices reach it. Default: this computer only,
 //            or 0.0.0.0 when a hosting service has set PORT.
 //   DB_FILE  where the database file lives
+//   CANTEEN_CODE  the code a canteen owner needs to make an account
+//                 (default in server/seed.js; set your own before going online)
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { openDatabase } from './db.js';
@@ -13,6 +15,6 @@ const port = Number(process.env.PORT) || 4000;
 const host = process.env.HOST || (process.env.PORT ? '0.0.0.0' : '127.0.0.1');
 
 const db = openDatabase(process.env.DB_FILE || join(root, 'data', 'app.db'));
-createServer(db, { dist: join(root, 'web', 'dist') }).listen(port, host, () => {
+createServer(db, { dist: join(root, 'web', 'dist'), canteenCode: process.env.CANTEEN_CODE }).listen(port, host, () => {
   console.log(`CampusBite app: http://localhost:${port}`);
 });

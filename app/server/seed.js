@@ -56,6 +56,18 @@ export const NUTRITION = {
   'Badam milk': [220, 9],
 };
 
+// Meal combos: these dishes together cost the combo price.
+export const COMBOS = [
+  { name: 'South Indian breakfast', items: [['Masala dosa', 1], ['Filter coffee', 1]], price: 52 },
+  { name: 'Snack break', items: [['Samosa (2)', 1], ['Masala chai', 1]], price: 28 },
+  { name: 'Mumbai street combo', items: [['Vada pav', 2], ['Fresh lime soda', 1]], price: 70 },
+  { name: 'Lunch combo', items: [['Veg thali', 1], ['Mango lassi', 1]], price: 99 },
+];
+
+// A canteen owner needs this code to make an owner account. Change it before
+// putting the app online, or set the CANTEEN_CODE setting on the server.
+export const CANTEEN_CODE = 'canteen-2026';
+
 // Every dish starts with this many. The owner changes it on the Stock screen.
 export const START_QTY = 60;
 

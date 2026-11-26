@@ -92,7 +92,9 @@ test('an order is priced by the server and gets a number and a time', async (t) 
   const res = await call('POST', '/api/orders', order({ total: 1, items: [{ id: 1, qty: 2, price: 1 }, { id: 11, qty: 1 }] }));
   assert.equal(res.status, 201);
   assert.equal(res.data.order.number, 101);
-  assert.equal(res.data.order.total, 2 * 45 + 15);
+  // Dosa + filter coffee is the South Indian breakfast combo: ₹60 for ₹52, once.
+  assert.equal(res.data.order.total, 2 * 45 + 15 - 8);
+  assert.equal(res.data.order.discount, 8);
   assert.equal(res.data.order.etaMin, 6);            // empty kitchen: slowest item only
   assert.equal(res.data.order.status, 'preparing');
 });

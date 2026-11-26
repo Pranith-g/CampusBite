@@ -153,7 +153,12 @@ test('the public board shows numbers only, newest ready first', async (t) => {
   await ready(owner, 101);
   await ready(owner, 102);
   const { data } = await app.browser()('GET', '/api/board');
-  assert.deepEqual(data, { preparing: [103], ready: [102, 101], capacity: 50 });
+  const { kitchen, ...numbers } = data;
+  assert.deepEqual(numbers, { preparing: [103], ready: [102, 101], capacity: 50 });
+  // The round dial gets token numbers and slots only, never names.
+  assert.deepEqual(kitchen.orders, [{ token: 103, slot: 2 }]);
+  assert.equal(kitchen.front, 2);
+  assert.equal(kitchen.rear, 2);
 });
 
 test('sample orders join the queue under sample names', async (t) => {

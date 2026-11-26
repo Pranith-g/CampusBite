@@ -41,11 +41,12 @@ async function start() {
   return { db, browser, student, other, owner, buy, ranOut, mine, kitchen, close: () => { server.close(); db.close(); } };
 }
 
-// Menu ids: 1 Masala dosa ₹45, 2 Idli vada ₹35, 11 Filter coffee ₹15.
+// Menu ids: 1 Masala dosa ₹45, 2 Idli vada ₹35, 11 Filter coffee ₹15, 12 Masala chai ₹12.
+// Masala chai is used beside other dishes so no combo changes the numbers.
 
 test('a dish that runs out is refunded and the rest of the order carries on', async (t) => {
   const app = await start(); t.after(app.close);
-  const { data } = await app.buy(app.student, [{ id: 1, qty: 2 }, { id: 11, qty: 1 }]);
+  const { data } = await app.buy(app.student, [{ id: 1, qty: 2 }, { id: 12, qty: 1 }]);
   const token = data.order.number;
 
   const res = await app.ranOut(token, 1);
@@ -68,7 +69,7 @@ test('a dish that runs out is refunded and the rest of the order carries on', as
 
 test('the student chooses the wallet and can spend it at the canteen', async (t) => {
   const app = await start(); t.after(app.close);
-  const token = (await app.buy(app.student, [{ id: 1, qty: 2 }, { id: 11, qty: 1 }])).data.order.number;
+  const token = (await app.buy(app.student, [{ id: 1, qty: 2 }, { id: 12, qty: 1 }])).data.order.number;
   await app.ranOut(token, 1);
   const refundId = (await app.mine()).orders[0].refunds[0].id;
 
@@ -93,7 +94,7 @@ test('the student chooses the wallet and can spend it at the canteen', async (t)
 
 test('a refund to UPI or card says when it arrives and leaves the wallet alone', async (t) => {
   const app = await start(); t.after(app.close);
-  const token = (await app.buy(app.student, [{ id: 2, qty: 1 }, { id: 11, qty: 1 }])).data.order.number;
+  const token = (await app.buy(app.student, [{ id: 2, qty: 1 }, { id: 12, qty: 1 }])).data.order.number;
   await app.ranOut(token, 2);
   const refundId = (await app.mine()).orders[0].refunds[0].id;
   const before = Date.now();
@@ -144,7 +145,7 @@ test('cancelling the newest order lets the next order reuse its slot', async (t)
 
 test('two dishes from one order make one refund to choose', async (t) => {
   const app = await start(); t.after(app.close);
-  const token = (await app.buy(app.student, [{ id: 1, qty: 1 }, { id: 2, qty: 1 }, { id: 11, qty: 1 }])).data.order.number;
+  const token = (await app.buy(app.student, [{ id: 1, qty: 1 }, { id: 2, qty: 1 }, { id: 12, qty: 1 }])).data.order.number;
   await app.ranOut(token, 1);
   await app.ranOut(token, 2);
   const refunds = (await app.mine()).orders[0].refunds;
@@ -155,7 +156,7 @@ test('two dishes from one order make one refund to choose', async (t) => {
 
 test('an order paid from the wallet is refunded to the wallet straight away', async (t) => {
   const app = await start(); t.after(app.close);
-  const first = (await app.buy(app.student, [{ id: 1, qty: 2 }, { id: 11, qty: 1 }])).data.order.number;
+  const first = (await app.buy(app.student, [{ id: 1, qty: 2 }, { id: 12, qty: 1 }])).data.order.number;
   await app.ranOut(first, 1);
   const refundId = (await app.mine()).orders[0].refunds[0].id;
   await app.student('POST', `/api/refunds/${refundId}`, { method: 'wallet' });   // wallet ₹90
@@ -170,7 +171,7 @@ test('an order paid from the wallet is refunded to the wallet straight away', as
 test('the kitchen estimate drops when a dish runs out', async (t) => {
   const app = await start(); t.after(app.close);
   const menu = async () => (await app.browser()('GET', '/api/menu')).data;
-  const token = (await app.buy(app.student, [{ id: 4, qty: 3 }, { id: 11, qty: 1 }])).data.order.number;   // 3 × 7 min + 1
+  const token = (await app.buy(app.student, [{ id: 4, qty: 3 }, { id: 12, qty: 1 }])).data.order.number;   // 3 × 7 min + 1
   assert.equal((await menu()).load, 22);
   await app.ranOut(token, 4);
   assert.equal((await menu()).load, 1);
@@ -178,7 +179,7 @@ test('the kitchen estimate drops when a dish runs out', async (t) => {
 
 test('only the owner can mark a dish run out, and only while it is cooking', async (t) => {
   const app = await start(); t.after(app.close);
-  const token = (await app.buy(app.student, [{ id: 1, qty: 1 }, { id: 11, qty: 1 }])).data.order.number;
+  const token = (await app.buy(app.student, [{ id: 1, qty: 1 }, { id: 12, qty: 1 }])).data.order.number;
   assert.equal((await app.student('POST', '/api/owner/ran-out', { token, itemId: 1 })).status, 401);
   assert.equal((await app.ranOut(token, 5)).status, 404);
   assert.equal((await app.ranOut(999, 1)).status, 404);
@@ -192,7 +193,7 @@ test('only the owner can mark a dish run out, and only while it is cooking', asy
 
 test('a student cannot choose for someone else\'s refund', async (t) => {
   const app = await start(); t.after(app.close);
-  const token = (await app.buy(app.student, [{ id: 1, qty: 1 }, { id: 11, qty: 1 }])).data.order.number;
+  const token = (await app.buy(app.student, [{ id: 1, qty: 1 }, { id: 12, qty: 1 }])).data.order.number;
   await app.ranOut(token, 1);
   const refundId = (await app.mine()).orders[0].refunds[0].id;
   assert.equal((await app.other('POST', `/api/refunds/${refundId}`, { method: 'wallet' })).status, 404);
