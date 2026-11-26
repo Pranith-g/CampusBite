@@ -10,6 +10,7 @@ const Items = ({ items }) => items.map((i, k) => (
 ));
 import KitchenDial from './KitchenDial.jsx';
 import Stock from './Stock.jsx';
+import Summary from './Summary.jsx';
 
 // ink below 60% full, turmeric from 60%, chilli when full
 const level = (q) => (q.count === q.capacity ? 'full' : q.count >= q.capacity * 0.6 ? 'busy' : '');
@@ -23,7 +24,9 @@ export default function Dashboard({ onSignedOut }) {
   const [message, setMessage] = useState('');
   const [notice, setNotice] = useState('');
   const [askToken, setAskToken] = useState(null);   // the order whose "Ran out?" list is open
-  const stockTab = useRoute() === 'owner/stock';
+  const route = useRoute();
+  const stockTab = route === 'owner/stock';
+  const todayTab = route === 'owner/today';
   const last = useRef({ key: '', at: 0 });
 
   // Run one action. A repeat within half a second is a double click, so a
@@ -76,10 +79,11 @@ export default function Dashboard({ onSignedOut }) {
       <header className="owner-bar">
         <div className="brand"><IconToolsKitchen2 size={20} aria-hidden="true" /> CampusBite</div>
         <nav className="owner-tabs" aria-label="Owner screens">
-          <a href="#/owner" aria-current={stockTab ? undefined : 'page'}>Orders</a>
+          <a href="#/owner" aria-current={stockTab || todayTab ? undefined : 'page'}>Orders</a>
           <a href="#/owner/stock" aria-current={stockTab ? 'page' : undefined}>
             Stock{data.outOfStock > 0 && <span className="num">{data.outOfStock} out</span>}
           </a>
+          <a href="#/owner/today" aria-current={todayTab ? 'page' : undefined}>Today</a>
         </nav>
         <div className="readouts">
           <div className={level(kitchen)}>Kitchen<b className="num">{kitchen.count} / {kitchen.capacity}</b></div>
@@ -98,7 +102,8 @@ export default function Dashboard({ onSignedOut }) {
         </div>
       )}
 
-      {stockTab ? <Stock onError={onError} onSaved={refresh} /> : (
+      {todayTab && <Summary onError={onError} />}
+      {stockTab ? <Stock onError={onError} onSaved={refresh} /> : !todayTab && (
       <main className="counter">
         <section className="panel incoming" aria-label="Incoming orders">
           <div className="panel-h"><h2>Incoming orders</h2><span className="num">{kitchen.count} waiting</span></div>

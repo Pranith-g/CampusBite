@@ -1,6 +1,6 @@
 import { STATUS, clockTime, itemText, rupees } from '../format.js';
 
-export default function Orders({ orders, error, wallet = 0 }) {
+export default function Orders({ orders, error, wallet = 0, onOrderAgain }) {
   return (
     <section aria-labelledby="orders-title">
       <h1 id="orders-title">My orders</h1>
@@ -27,6 +27,11 @@ export default function Orders({ orders, error, wallet = 0 }) {
                 <span className="num">{rupees(o.total)} · ordered {clockTime(o.placedAt)}</span>
               </span>
             </a>
+            {onOrderAgain && (
+              <button className="btn ghost again" onClick={() => onOrderAgain(o.items)} aria-label={`Order token ${o.number} again`}>
+                Order again
+              </button>
+            )}
           </li>
         ))}
       </ul>

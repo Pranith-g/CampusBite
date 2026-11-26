@@ -108,3 +108,22 @@
 .ran-out { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 12px; background: var(--surface-2); border: 1px solid var(--line-strong); border-radius: 10px; }
 .ran-out p { flex-basis: 100%; font-size: 13px; color: var(--ink-2); }
 .notice { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 16px; background: var(--leaf-soft); color: var(--ink); border-bottom: 1px solid var(--leaf-line); font-size: 14px; }
+
+/* ---------- Today: the end-of-day summary ---------- */
+.today { display: grid; gap: 16px; padding: 16px; max-width: 1180px; margin: 0 auto; }
+.today .panel { padding-bottom: 16px; }
+.today .panel-h span { font-size: 13px; color: var(--ink-3); }
+.tiles-today { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; padding: 0 20px; margin-top: 8px; }
+.tiles-today div, .today-split div { background: var(--surface-2); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; }
+.tiles-today dt, .today-split dt { font-size: 13px; color: var(--ink-3); }
+.tiles-today dd { font-size: 34px; font-weight: 800; font-stretch: 75%; line-height: 1.1; }
+.today-split { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; padding: 0 20px; margin-top: 8px; }
+.today-split dd { font-size: 22px; font-weight: 700; }
+.bars { display: grid; gap: 10px; padding: 4px 20px 0; }
+.bars li { display: grid; grid-template-columns: minmax(90px, 160px) minmax(0, 1fr) auto; gap: 12px; align-items: center; font-size: 14px; }
+.bar-label { color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bar-track { height: 12px; }
+.bar { display: block; height: 100%; min-width: 4px; background: var(--turmeric); border-radius: 0 4px 4px 0; }
+.bar-value { color: var(--ink); font-weight: 600; white-space: nowrap; }
+.today .none, .today .note { padding: 8px 20px 0; font-size: 14px; color: var(--ink-2); }
+@media (min-width: 900px) { .today { grid-template-columns: 1fr 1fr; } .today .panel:first-child, .today .panel:last-child { grid-column: 1 / -1; } }

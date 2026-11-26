@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { IconLayoutGrid, IconLogout, IconReceipt, IconReceiptRefund, IconShoppingBag, IconToolsKitchen2, IconWallet } from '@tabler/icons-react';
 import { api } from '../api.js';
 import { go, useCart, usePolled, useRoute, useWide } from '../hooks.js';
-import { rupees } from '../format.js';
+import { comboSaving, rupees } from '../format.js';
 import Board from './Board.jsx';
 import Cart from './Cart.jsx';
 import Credits from './Credits.jsx';
@@ -29,6 +29,8 @@ export default function Shop({ student, onSignedOut }) {
   const wide = useWide();
   const cart = useCart(student.id);
   const [signOutError, setSignOutError] = useState('');
+  const [notice, setNotice] = useState('');
+  const [favourites, setFavourites] = useState([]);
 
   // If the sign-in has expired, go back to the sign-in screen.
   const onError = useCallback((err) => {
@@ -49,6 +51,20 @@ export default function Shop({ student, onSignedOut }) {
   useEffect(() => { reloadMenu(); }, [route, reloadMenu]);
   const error = signOutError || menuError?.message;
 
+  // Favourite dishes: shown at once, then saved on the server.
+  useEffect(() => {
+    api.favourites().then((d) => setFavourites(d.ids)).catch(onError);
+  }, [onError]);
+  const toggleFavourite = async (id, on) => {
+    setFavourites((now) => (on ? [...new Set([...now, id])] : now.filter((x) => x !== id)));
+    try {
+      setFavourites((await api.setFavourite(id, on)).ids);
+    } catch (err) {
+      onError(err);
+      setNotice(err.message);
+    }
+  };
+
   const signOut = async () => {
     try {
       await api.signOut();
@@ -63,7 +79,25 @@ export default function Shop({ student, onSignedOut }) {
     .map(([id, qty]) => ({ ...byId.get(Number(id)), qty }))
     .filter((l) => l.name);
   const count = lines.reduce((n, l) => n + l.qty, 0);
-  const total = lines.reduce((sum, l) => sum + l.price * l.qty, 0);
+  const subtotal = lines.reduce((sum, l) => sum + l.price * l.qty, 0);
+  const saving = comboSaving(cart.qty, menu?.combos);
+  const total = subtotal - saving.discount;
+
+  // Put a past order's dishes back in the cart. Dishes that ran out or are
+  // out of stock now are left out, and the student is told.
+  const orderAgain = (items) => {
+    const missing = [];
+    let added = 0;
+    for (const i of items) {
+      const dish = byId.get(i.id);
+      if (!dish || dish.soldOut) { missing.push(i.name); continue; }
+      cart.change(i.id, i.qty, Math.min(menu.maxQty, dish.left));
+      added += 1;
+    }
+    if (!added) { setNotice('Nothing from that order is in stock right now.'); return; }
+    setNotice(missing.length ? `${missing.join(', ')} ${missing.length === 1 ? 'is' : 'are'} out of stock, so ${missing.length === 1 ? 'it was' : 'they were'} left out.` : '');
+    go('cart');
+  };
 
   const [page, orderId] = route.split('/');
   let screen = 'menu';
@@ -81,7 +115,7 @@ export default function Shop({ student, onSignedOut }) {
   ];
 
   const cartPanel = menu && (
-    <Cart lines={lines} total={total} cart={cart} maxQty={menu.maxQty} onError={onError}
+    <Cart lines={lines} total={total} subtotal={subtotal} saving={saving} cart={cart} maxQty={menu.maxQty} onError={onError}
           onStale={reloadMenu} onPaid={mine.refresh} wallet={wallet} />
   );
 
@@ -123,6 +157,12 @@ export default function Shop({ student, onSignedOut }) {
         ))}
       </div>
 
+      {notice && (
+        <div className="notice" role="status">
+          <span>{notice}</span>
+          <button className="btn ghost" onClick={() => setNotice('')}>OK</button>
+        </div>
+      )}
       {error && (
         <div className="banner" role="alert">
           <span>{error}</span>
@@ -131,12 +171,12 @@ export default function Shop({ student, onSignedOut }) {
       )}
 
       <main className={wide && screen === 'menu' ? 'page split' : 'page'}>
-        {screen === 'orders' && <Orders orders={orders} error={mine.error} wallet={wallet} />}
-        {screen === 'order' && <OrderStatus key={orderId} id={orderId} onError={onError} onChosen={mine.refresh} />}
+        {screen === 'orders' && <Orders orders={orders} error={mine.error} wallet={wallet} onOrderAgain={menu ? orderAgain : undefined} />}
+        {screen === 'order' && <OrderStatus key={orderId} id={orderId} onError={onError} onChosen={mine.refresh} onOrderAgain={menu ? orderAgain : undefined} />}
         {screen === 'tokens' && <Board orders={orders ?? []} onError={onError} />}
         {screen === 'credits' && <Credits items={menu?.items ?? []} />}
         {screen === 'cart' && cartPanel}
-        {screen === 'menu' && (menu ? <Menu menu={menu} cart={cart} /> : <p className="quiet">Loading the menu…</p>)}
+        {screen === 'menu' && (menu ? <Menu menu={menu} cart={cart} favourites={favourites} onFavourite={toggleFavourite} /> : <p className="quiet">Loading the menu…</p>)}
         {screen === 'menu' && wide && <aside>{cartPanel}</aside>}
       </main>
 

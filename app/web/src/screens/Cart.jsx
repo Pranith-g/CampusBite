@@ -12,7 +12,7 @@ const shortage = (line) => {
   return line.qty > line.left ? `Only ${line.left} left` : '';
 };
 
-export default function Cart({ lines, total, cart, maxQty, onError, onStale, onPaid, wallet = 0 }) {
+export default function Cart({ lines, total, subtotal = total, saving, cart, maxQty, onError, onStale, onPaid, wallet = 0 }) {
   const [method, setMethod] = useState('upi');
   const walletShort = wallet < total;
   // The wallet stops being a choice once the cart costs more than it holds.
@@ -90,6 +90,14 @@ export default function Cart({ lines, total, cart, maxQty, onError, onStale, onP
       </ul>
 
       <dl className="sum num">
+        {saving?.discount > 0 && (
+          <>
+            <div><dt>Dishes</dt><dd>{rupees(subtotal)}</dd></div>
+            {saving.applied.map((c) => (
+              <div key={c.name} className="saved"><dt>{c.name} combo{c.times > 1 ? ` × ${c.times}` : ''}</dt><dd>−{rupees(c.saving)}</dd></div>
+            ))}
+          </>
+        )}
         <div className="total"><dt>Total</dt><dd>{rupees(total)}</dd></div>
         <div><dt>Estimated time</dt><dd>{quote ? `about ${quote.etaMin} min` : 'checking…'}</dd></div>
       </dl>

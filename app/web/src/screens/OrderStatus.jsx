@@ -9,7 +9,7 @@ const queueText = (ahead) => {
   return `${ahead} ${ahead === 1 ? 'order is' : 'orders are'} ahead of yours.`;
 };
 
-export default function OrderStatus({ id, onError, onChosen }) {
+export default function OrderStatus({ id, onError, onChosen, onOrderAgain }) {
   const load = useCallback(() => api.order(id), [id]);
   const { data, error, refresh } = usePolled(load, 3000, onError);
   const chosen = async () => { await refresh(); onChosen?.(); };
@@ -55,9 +55,11 @@ export default function OrderStatus({ id, onError, onChosen }) {
             <dt>{i.qty} × {i.name}{i.ranOut && <span className="tag">Ran out</span>}</dt><dd>{rupees(i.price * i.qty)}</dd>
           </div>
         ))}
+        {order.discount > 0 && <div className="saved"><dt>Combo saving</dt><dd>−{rupees(order.discount)}</dd></div>}
         <div className="total"><dt>Paid by {PAY_METHODS[order.payMethod]}</dt><dd>{rupees(order.total)}</dd></div>
         {refunded > 0 && <div className="refunded"><dt>Refunded</dt><dd>−{rupees(refunded)}</dd></div>}
       </dl>
+      {onOrderAgain && <button className="btn" onClick={() => onOrderAgain(order.items)}>Order this again</button>}
       <a className="btn" href="#/tokens">See the token board</a>
       <a className="btn ghost" href="#/menu">Back to the menu</a>
     </section>
